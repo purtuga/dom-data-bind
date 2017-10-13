@@ -1,0 +1,24 @@
+{
+  "name": "dom-data-bind",
+  "version": "1.0.0",
+  "description": "DOM Data Bind utility. Bind data to DOM",
+  "main": "./src/DomDataBind.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/paultavares/dom-data-bind.git"
+  },
+  "keywords": [
+    "DOM",
+    "Bind"
+  ],
+  "author": "Paul Tavares",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/paultavares/dom-data-bind#readme",
+  "devDependencies": {
+    "common-micro-libs": "github:purtuga/common-micro-libs#master",
+    "webpack": "^3.7.1"
+  }
+}
