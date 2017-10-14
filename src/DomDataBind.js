@@ -95,7 +95,7 @@ function getBindingsFromDom(binder, ele) {
     arrayForEach(getNodeAttrNames(ele), attrName => {
         directives.some(Directive => {
             if (Directive.is(attrName)) {
-                bindings.push(Directive.create(ele));
+                bindings.push(Directive.create(ele, binder));
                 return true;
             }
         });

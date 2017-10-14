@@ -96,7 +96,8 @@
     "styles": {
         "border": "3px solid red"
     },
-    "showExtra": false
+    "ifExtra": false,
+    "showExtra": true
 }
 </textarea>
         <div id="dataError">{{dataError}}</div>
@@ -114,8 +115,10 @@
     <div>{{ address.city }}</div>
 </div>
 <hr/>
-<div class="bg-green padding margin" b-if="showExtra">This is shown because data.showExtra is: {{ showExtra }}</div>
-<div class="bg-blue" b-if="!showExtra">This is shown because data.showExtra is: {{ showExtra }}</div>
+<div b-show="showExtra">
+    <div class="bg-green padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+    <div class="bg-blue" b-if="!ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+</div>
 <hr/>
 <div b:class="{ border: true, padding: true }">
     <div>{{ address.street }}</div>

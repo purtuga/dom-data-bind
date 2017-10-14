@@ -6,6 +6,11 @@ import { PRIVATE } from "../utils"
  *
  * @class Directive
  * @extends Compose
+ *
+ * @param {HTMLElement} ele
+ *  The HTML element that contains the directive
+ * @param {DomDataBind} binder
+ *  The instance of DomDataBind that called the Directive
  */
 const Directive = Compose.extend({
     /**
