@@ -19,6 +19,9 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/paultavares/dom-data-bind#readme",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
     "common-micro-libs": "github:purtuga/common-micro-libs#master",
     "observable-data": "github:purtuga/observable-data#master",
     "webpack": "^3.7.1",
