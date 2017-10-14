@@ -60,10 +60,13 @@
             margin: 2em;
         }
         .bg-blue {
-            background: lightblue;
+            background: lightskyblue;
         }
         .bg-red {
             background: lightcoral;
+        }
+        .bg-green {
+            background: lightgreen;
         }
     </style>
 </head>
@@ -87,11 +90,13 @@
         "padding": false,
         "margin": false,
         "bg-blue": false,
-        "bg-red": false
+        "bg-red": false,
+        "bg-green": false
     },
     "styles": {
         "border": "3px solid red"
-    }
+    },
+    "showExtra": false
 }
 </textarea>
         <div id="dataError">{{dataError}}</div>
@@ -105,11 +110,15 @@
         padding: '0.5em'
     }">{{ firstName }}</div>
 <div>{{ lastName }}</div>
-<div b:class="{ border: true, padding: true }">
-    <div>{{ address.street }}</div>
-</div>
 <div b:class="locationClasses">
     <div>{{ address.city }}</div>
+</div>
+<hr/>
+<div class="bg-green padding margin" b-if="showExtra">This is shown because data.showExtra is: {{ showExtra }}</div>
+<div class="bg-blue" b-if="!showExtra">This is shown because data.showExtra is: {{ showExtra }}</div>
+<hr/>
+<div b:class="{ border: true, padding: true }">
+    <div>{{ address.street }}</div>
 </div>
 </textarea>
     </div>

@@ -9,29 +9,26 @@ import Directive                from "./Directive"
 import {
     PRIVATE,
     escapeString,
-    bindCallTo } from "../utils"
+    getAttribute,
+    removeAttribute,
+    createValueGetter  } from "../utils"
 
 //============================================
 const DIRECTIVE             = "b:class";
-const ELEMENT_PROTOTYPE     = Element.prototype;
-
-const getAttribute          = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
-const removeAttribute       = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const ClassDirective = Directive.extend({
     init(ele) {
-        let cssClassList = {};
+        let cssClassList        = {};
         let updateAlreadyQueued = false;
-        let domEleUpdateQueued = false;
-        let dataForGetter = {};
-        const eleClassList  = ele.classList;
-        const addClass      = eleClassList.add.bind(eleClassList);
-        const removeClass   = eleClassList.remove.bind(eleClassList);
-        const containsClass = eleClassList.contains.bind(eleClassList);
-        const directive = this.directive;
-        const directiveValue = getAttribute(ele, directive);
-        let tokenValueGetter = new Function("d", `with (d) {return ${ directiveValue };}`);
+        let domEleUpdateQueued  = false;
+        let dataForGetter       = {};
+        const eleClassList      = ele.classList;
+        const addClass          = eleClassList.add.bind(eleClassList);
+        const removeClass       = eleClassList.remove.bind(eleClassList);
+        const containsClass     = eleClassList.contains.bind(eleClassList);
+        const directive         = this.directive;
+        let tokenValueGetter    = createValueGetter(getAttribute(ele, DIRECTIVE));
         const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);

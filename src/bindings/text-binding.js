@@ -5,7 +5,7 @@ import {
     unsetDependencyTracker,
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
 
-import { PRIVATE } from "../utils"
+import { PRIVATE, createValueGetter } from "../utils"
 
 //===========================================================
 
@@ -13,7 +13,7 @@ export default Compose.extend({
     init(ele, tokenText) {
         let tokenValueGetterData    = {};
         let updateAlreadyQueued     = false;
-        const tokenValueGetter      = new Function("d", `with (d) {return ${ tokenText };}`);
+        const tokenValueGetter      = createValueGetter(tokenText);
         const updater               = data => {
             if (data) {
                 stopDependeeNotifications(updater);

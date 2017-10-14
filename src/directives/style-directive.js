@@ -8,15 +8,13 @@ import {
 import {
     PRIVATE,
     escapeString,
-    bindCallTo }    from "../utils"
-import Directive    from "./Directive"
+    getAttribute,
+    removeAttribute,
+    createValueGetter } from "../utils"
+import Directive        from "./Directive"
 
 //============================================
 const DIRECTIVE             = "b:style";
-const ELEMENT_PROTOTYPE     = Element.prototype;
-
-const getAttribute          = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
-const removeAttribute       = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const StyleDirective = Directive.extend({
@@ -27,8 +25,7 @@ const StyleDirective = Directive.extend({
         let dataForGetter       = {};
         const eleStyleList      = ele.style;
         const directive         = this.directive;
-        const directiveValue    = getAttribute(ele, directive);
-        let tokenValueGetter    = new Function("d", `with (d) {return ${ directiveValue };}`);
+        let tokenValueGetter    = createValueGetter(getAttribute(ele, DIRECTIVE));
         const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);
