@@ -132,7 +132,7 @@
         return (...args) => {
             lastCallArgs = args;
             if (isQueued) {
-                return;
+                clearTimeout(isQueued);
             }
             isQueued = setTimeout(() => {
                 isQueued = null;

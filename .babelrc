@@ -1,5 +1,8 @@
 {
     "presets": [
-        ["env", { "targets": { "uglify": true },  "forceAllTransforms": true}]
+        ["env", {
+            "modules": false,
+            "uglify": true
+        }]
     ]
 }

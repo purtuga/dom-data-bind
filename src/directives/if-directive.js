@@ -1,12 +1,11 @@
-import Compose from "common-micro-libs/src/jsutils/Compose"
-
 import { escapeString } from "../utils"
+import Directive from "./Directive"
 
 //============================================
 const DIRECTIVE             = "b:class";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
-const IfDirective = Compose.extend({
+const IfDirective = Directive.extend({
     init(ele) {
         const state = {
             value: getAttribute(ele, DIRECTIVE)

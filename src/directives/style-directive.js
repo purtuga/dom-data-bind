@@ -1,5 +1,4 @@
-import Compose      from "common-micro-libs/src/jsutils/Compose"
-import nextTick     from "common-micro-libs/src/jsutils/nextTick"
+import nextTick from "common-micro-libs/src/jsutils/nextTick"
 import {
     watchProp,
     observableAssign,
@@ -9,7 +8,8 @@ import {
 import {
     PRIVATE,
     escapeString,
-    bindCallTo } from "../utils"
+    bindCallTo }    from "../utils"
+import Directive    from "./Directive"
 
 //============================================
 const DIRECTIVE             = "b:style";
@@ -19,7 +19,7 @@ const getAttribute          = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
 const removeAttribute       = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
-const StyleDirective = Compose.extend({
+const StyleDirective = Directive.extend({
     init(ele) {
         let cssStyleList        = {};
         let updateAlreadyQueued = false;
@@ -75,10 +75,6 @@ const StyleDirective = Compose.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             cssStyleList = dataForGetter = tokenValueGetter = null;
         });
-    },
-
-    render(data) {
-        PRIVATE.get(this).updater(data);
     },
 
     get directive() {

@@ -1,4 +1,3 @@
-import Compose      from "common-micro-libs/src/jsutils/Compose"
 import nextTick     from "common-micro-libs/src/jsutils/nextTick"
 import {
     watchProp,
@@ -6,6 +5,7 @@ import {
     setDependencyTracker,
     unsetDependencyTracker,
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
+import Directive                from "./Directive"
 import {
     PRIVATE,
     escapeString,
@@ -19,7 +19,7 @@ const getAttribute          = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
 const removeAttribute       = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
-const ClassDirective = Compose.extend({
+const ClassDirective = Directive.extend({
     init(ele) {
         let cssClassList = {};
         let updateAlreadyQueued = false;
@@ -81,10 +81,6 @@ const ClassDirective = Compose.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             cssClassList = dataForGetter = tokenValueGetter = null;
         });
-    },
-
-    render(data) {
-        PRIVATE.get(this).updater(data);
     },
 
     get directive() {
