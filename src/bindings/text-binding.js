@@ -1,4 +1,4 @@
-import Compose from "common-micro-libs/src/jsutils/Compose"
+import Compose  from "common-micro-libs/src/jsutils/Compose"
 import nextTick from "common-micro-libs/src/jsutils/nextTick"
 import {
     setDependencyTracker,
@@ -11,13 +11,18 @@ import { PRIVATE } from "../utils"
 
 export default Compose.extend({
     init(ele, tokenText) {
-        const tokenValueGetter = new Function("d", `with (d) {return ${ tokenText };}`);
-        let tokenValueGetterData = {};
-        const updater = data => {
+        let tokenValueGetterData    = {};
+        let updateAlreadyQueued     = false;
+        const tokenValueGetter      = new Function("d", `with (d) {return ${ tokenText };}`);
+        const updater               = data => {
             if (data) {
                 stopDependeeNotifications(updater);
                 tokenValueGetterData = data;
             }
+            if (updateAlreadyQueued) {
+                return;
+            }
+            updateAlreadyQueued = true;
             nextTick(() => {
                 setDependencyTracker(updater);
                 try {
@@ -27,6 +32,7 @@ export default Compose.extend({
                     console.error(e);
                 }
                 unsetDependencyTracker(updater);
+                updateAlreadyQueued = false;
             });
         };
         const state = { updater };
@@ -35,7 +41,7 @@ export default Compose.extend({
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            this.getFactory().getDestroyCallback(state, PRIVATE)();
         });
     },
 

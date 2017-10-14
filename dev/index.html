@@ -39,8 +39,28 @@
             right: 0;
             top: 0;
             width: 57%;
+            padding: 1em;
+            border: 1em solid lightgrey;
+            min-height: 43em;
         }
 
+
+        .border {
+            border: 1px solid red;
+        }
+
+        .padding {
+            padding: 1em;
+        }
+        .margin {
+            margin: 2em;
+        }
+        .bg-blue {
+            background: lightblue;
+        }
+        .bg-red {
+            background: lightcoral;
+        }
     </style>
 </head>
 <body>
@@ -51,17 +71,39 @@
 <textarea>
 {
     "firstName": "Paul",
-    "lastName": "Tavares"
+    "lastName": "Tavares",
+    "address": {
+        "street": "23 central park west",
+        "city": "New York",
+        "state": "New York",
+        "country": "USA"
+    },
+    "locationClasses": {
+        "border": false,
+        "padding": false,
+        "margin": false,
+        "bg-blue": false,
+        "bg-red": false
+    }
 }
+
 </textarea>
     </div>
+
     <div id="template">
         <h2>template</h2>
 <textarea>
 <div>{{ firstName }}</div>
 <div>{{ lastName }}</div>
+<div b:class="{ border: true, padding: true }">
+    <div>{{ address.street }}</div>
+</div>
+<div b:class="locationClasses">
+    <div>{{ address.city }}</div>
+</div>
 </textarea>
     </div>
+
     <div id="out"></div>
 </div>
 
@@ -117,8 +159,8 @@
         currentBinding = DomDataBind.create(outEle.firstChild, getData());
     }
 
-    dataTextarea.addEventListener("keyup", debounce(getData, 100));
-    templateTextarea.addEventListener("keyup", debounce(createDomBinding, 100));
+    dataTextarea.addEventListener("keyup", debounce(getData, 1000));
+    templateTextarea.addEventListener("keyup", debounce(createDomBinding, 1000));
 
     createDomBinding();
 

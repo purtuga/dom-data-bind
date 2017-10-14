@@ -15,5 +15,10 @@ module.exports = {
             path.resolve(__dirname, "dev")
         ],
         port: 9568
+    },
+    resolve: {
+        modules: [
+            path.resolve(__dirname, "node_modules")
+        ]
     }
 };

@@ -1,16 +1,18 @@
-import Compose      from "common-micro-libs/src/jsutils/Compose"
+import Compose              from "common-micro-libs/src/jsutils/Compose"
 
-import { makeObservable } from "observable-data/src/ObservableObject"
+import { makeObservable }   from "observable-data/src/ObservableObject"
 
-import { PRIVATE } from "./utils"
-import TextBinding from "./bindings/text-binding"
+import {
+    PRIVATE,
+    bindCallTo }            from "./utils"
+import TextBinding          from "./bindings/text-binding"
+import ClassDirective       from "./directives/class-directive"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const ARRAY_PROTOTYPE           = Array.prototype;
 
 // Local aliases
-const bindCallTo            = Function.call.bind.bind(Function.call);
 const arraySlice            = bindCallTo(ARRAY_PROTOTYPE.slice);
 const arrayForEach          = bindCallTo(ARRAY_PROTOTYPE.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
@@ -36,6 +38,11 @@ const DomDataBind = Compose.extend({
 
         const bindings = state.bindings = getBindingsFromDom(ele);
         arrayForEach(bindings, binding => binding.render(data));
+
+        this.onDestroy(() => {
+            arrayForEach(bindings, binding => binding.destroy());
+            this.getFactory().getDestroyCallback(state, PRIVATE)();
+        })
     }
 });
 export default DomDataBind;
@@ -61,14 +68,14 @@ function getBindingsFromDom(ele) {
     const children = arraySlice(ele.childNodes);
 
     // Process Element level Directives
-    // arrayForEach(getNodeAttrNames(ele), attrName => {
-    //     [ CssClassDirective ].some(DirectiveClass => {
-    //         if (DirectiveClass.is(attrName)) {
-    //             bindings.push(new DirectiveClass(ele));
-    //             return true;
-    //         }
-    //     });
-    // });
+    arrayForEach(getNodeAttrNames(ele), attrName => {
+        [ ClassDirective ].some(Directive => {
+            if (Directive.is(attrName)) {
+                bindings.push(Directive.create(ele));
+                return true;
+            }
+        });
+    });
 
     if (!children.length) {
         return [];
