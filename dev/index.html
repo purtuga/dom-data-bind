@@ -29,6 +29,10 @@
         #data textarea {
             height: 25em;
         }
+        #dataError {
+            color: red;
+            min-height: 1.2em;
+        }
 
         #template textarea {
             height: 15em;
@@ -64,7 +68,7 @@
     </style>
 </head>
 <body>
-<h1>Dom Data Bind</h1>
+<h1>Dom Data Bind - Development Workbench</h1>
 <div id="ui">
     <div id="data">
         <h2>Data</h2>
@@ -84,16 +88,22 @@
         "margin": false,
         "bg-blue": false,
         "bg-red": false
+    },
+    "styles": {
+        "border": "3px solid red"
     }
 }
-
 </textarea>
+        <div id="dataError">{{dataError}}</div>
     </div>
 
     <div id="template">
         <h2>template</h2>
 <textarea>
-<div>{{ firstName }}</div>
+<div b:style="{
+        border: styles.border,
+        padding: '0.5em'
+    }">{{ firstName }}</div>
 <div>{{ lastName }}</div>
 <div b:class="{ border: true, padding: true }">
     <div>{{ address.street }}</div>
@@ -131,17 +141,22 @@
             }, ms || 0);
         };
     };
+    const devData = {
+        dataError: ""
+    };
 
     let data                = {};
     let currentBinding;
 
     function getData() {
         let newData;
+        devData.dataError = "";
         try {
             newData = JSON.parse(dataTextarea.value);
         }
         catch(e) {
             console.error(e);
+            devData.dataError = e.message;
             newData = {};
         }
 
@@ -161,9 +176,8 @@
 
     dataTextarea.addEventListener("keyup", debounce(getData, 1000));
     templateTextarea.addEventListener("keyup", debounce(createDomBinding, 1000));
-
     createDomBinding();
-
+    DomDataBind.create(uiFind("#dataError"), devData);
 </script>
 </body>
 </html>

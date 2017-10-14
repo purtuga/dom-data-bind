@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/DomDataBind.js',
+    entry: './src/index.js',
     output: {
         library: "DomDataBind",
         libraryTarget: "umd",

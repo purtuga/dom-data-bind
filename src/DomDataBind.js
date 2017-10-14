@@ -6,7 +6,6 @@ import {
     PRIVATE,
     bindCallTo }            from "./utils"
 import TextBinding          from "./bindings/text-binding"
-import ClassDirective       from "./directives/class-directive"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
@@ -24,28 +23,52 @@ const setNodeValue          = (node, value) => node ? node.nodeValue = value : "
 const isTextNode            = e => e && e.nodeType === 3;
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 
-
+/**
+ * Base DOM element binder providing only the interpolation of Text node binding any
+ * token found to the data provided on input
+ *
+ * @class DomDataBind
+ * @extends Compose
+ *
+ * @param {HTMLElement} ele
+ *  The HTML element that will be parse and to which `data` will be bound.
+ *
+ * @param {Object} data
+ *  An object whose data will be used to bind to `ele`.
+ *
+ */
 const DomDataBind = Compose.extend({
     init(ele, data = {}) {
+        const Factory = this.getFactory();
         const state = {
             ele,
-            data
+            data,
+            directives: Factory.directives.slice(0)
         };
 
         PRIVATE.set(this, state);
 
         makeObservable(data, null, true);
 
-        const bindings = state.bindings = getBindingsFromDom(ele);
+        const bindings = state.bindings = getBindingsFromDom(this, ele);
         arrayForEach(bindings, binding => binding.render(data));
 
         this.onDestroy(() => {
             arrayForEach(bindings, binding => binding.destroy());
-            this.getFactory().getDestroyCallback(state, PRIVATE)();
+            Factory.getDestroyCallback(state, PRIVATE)();
         })
     }
 });
 export default DomDataBind;
+
+/**
+ * A list of Directives to be used
+ *
+ * @name DomDataBind.directives
+ * @type {Array}
+ */
+DomDataBind.directives = [];
+
 
 function getNodeAttrNames(node){
     if (!node.hasAttributes()) {
@@ -63,13 +86,14 @@ function getNodeAttrNames(node){
 }
 
 
-function getBindingsFromDom(ele) {
+function getBindingsFromDom(binder, ele) {
+    const { directives } = PRIVATE.get(binder);
     const bindings = [];
     const children = arraySlice(ele.childNodes);
 
     // Process Element level Directives
     arrayForEach(getNodeAttrNames(ele), attrName => {
-        [ ClassDirective ].some(Directive => {
+        directives.some(Directive => {
             if (Directive.is(attrName)) {
                 bindings.push(Directive.create(ele));
                 return true;
@@ -103,7 +127,7 @@ function getBindingsFromDom(ele) {
         }
 
         if (child.childNodes.length) {
-            bindings.push(...getBindingsFromDom(child));
+            bindings.push(...getBindingsFromDom(binder, child));
         }
     }
 

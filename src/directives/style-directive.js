@@ -12,26 +12,23 @@ import {
     bindCallTo } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b:class";
+const DIRECTIVE             = "b:style";
 const ELEMENT_PROTOTYPE     = Element.prototype;
 
 const getAttribute          = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
 const removeAttribute       = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
-const ClassDirective = Compose.extend({
+const StyleDirective = Compose.extend({
     init(ele) {
-        let cssClassList = {};
+        let cssStyleList        = {};
         let updateAlreadyQueued = false;
-        let domEleUpdateQueued = false;
-        let dataForGetter = {};
-        const eleClassList  = ele.classList;
-        const addClass      = eleClassList.add.bind(eleClassList);
-        const removeClass   = eleClassList.remove.bind(eleClassList);
-        const containsClass = eleClassList.contains.bind(eleClassList);
-        const directive = this.directive;
-        const directiveValue = getAttribute(ele, directive);
-        let tokenValueGetter = new Function("d", `with (d) {return ${ directiveValue };}`);
+        let domEleUpdateQueued  = false;
+        let dataForGetter       = {};
+        const eleStyleList      = ele.style;
+        const directive         = this.directive;
+        const directiveValue    = getAttribute(ele, directive);
+        let tokenValueGetter    = new Function("d", `with (d) {return ${ directiveValue };}`);
         const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);
@@ -44,7 +41,7 @@ const ClassDirective = Compose.extend({
             nextTick(() => {
                 setDependencyTracker(updater);
                 try {
-                    observableAssign(cssClassList, tokenValueGetter(dataForGetter));
+                    observableAssign(cssStyleList, tokenValueGetter(dataForGetter));
                 }
                 catch(e) {
                     console.error(e);
@@ -53,18 +50,15 @@ const ClassDirective = Compose.extend({
                 updateAlreadyQueued = false;
             });
         };
-        const applyClassesToDomEle = () => {
+        const applyStylesToDomEle = () => {
             if (domEleUpdateQueued) {
                 return;
             }
             domEleUpdateQueued = true;
             nextTick(() => {
-                Object.keys(cssClassList).forEach(className => {
-                    if (cssClassList[className] && !containsClass(className)) {
-                        addClass(className);
-                    }
-                    else if (containsClass(className)) {
-                        removeClass(className);
+                Object.keys(cssStyleList).forEach(styleProp => {
+                    if (eleStyleList[styleProp] !== cssStyleList[styleProp]) {
+                        eleStyleList[styleProp] = cssStyleList[styleProp];
                     }
                 });
                 domEleUpdateQueued = false;
@@ -72,14 +66,14 @@ const ClassDirective = Compose.extend({
         };
         const inst = { updater };
 
-        inst.classObjEv = watchProp(cssClassList, cssClassList, applyClassesToDomEle);
+        inst.classObjEv = watchProp(cssStyleList, cssStyleList, applyStylesToDomEle);
         removeAttribute(ele, directive);
         PRIVATE.set(this, inst);
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            cssClassList = dataForGetter = tokenValueGetter = null;
+            cssStyleList = dataForGetter = tokenValueGetter = null;
         });
     },
 
@@ -91,17 +85,17 @@ const ClassDirective = Compose.extend({
         return DIRECTIVE;
     }
 });
-export default ClassDirective;
+export default StyleDirective;
 
 /**
  * Static method that allows to check if a given string matches this directive's string
  *
- * @method ClassDirective#is
+ * @method StyleDirective#is
  *
  * @param {String} directive
  *
  * @returns {boolean}
  */
-ClassDirective.is = function(directive) {
+StyleDirective.is = function(directive) {
     return matchesDirective.test(directive.trim());
 };
