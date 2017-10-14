@@ -7,5 +7,13 @@ module.exports = {
         libraryTarget: "umd",
         filename: 'DomDataBind.js',
         path: path.resolve(__dirname, 'dist')
+    },
+    devtool: "source-map",
+    devServer: {
+        contentBase: [
+            path.resolve(__dirname, "dist"),
+            path.resolve(__dirname, "dev")
+        ],
+        port: 9568
     }
 };
