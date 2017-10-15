@@ -25,28 +25,20 @@ const Directive = Compose.extend({
         if (inst && inst.updater) {
             inst.updater(data);
         }
-    },
-
-    /**
-     * The directive string as used in the HTML element
-     *
-     * @type {String}
-     */
-    get directive() {
-        return "";
     }
 });
 export default Directive;
 
+
 /**
- * Static method that allows to check if a given string matches this directive's string
+ * Checks a given element has an element attribute that matches the Directive.
+ * If a match is found, the html Element's attribute that was matched must be
+ * returned.
  *
- * @method Directive#is
+ * @param {HTMLElement} ele
  *
- * @param {String} directive
- *
- * @returns {boolean}
+ * @returns {String}
  */
-Directive.is = function(/*directive*/) {
-    return false;
+Directive.has = function (/*ele*/) {
+    return "";
 };

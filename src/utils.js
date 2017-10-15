@@ -11,10 +11,27 @@ export const PRIVATE = dataStore.create();
 
 export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
+export const hasAttribute       = bindCallTo(ELEMENT_PROTOTYPE.hasAttribute);
 export const getAttribute       = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
 export const setAttribute       = bindCallTo(ELEMENT_PROTOTYPE.setAttribute);
 export const removeAttribute    = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
 export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
 export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
-export const createValueGetter  = evalCode => new FUNCTION("d", `with (d) {return ${ evalCode };}`)
+export const createValueGetter  = evalCode => new FUNCTION("d", `with (d) {return ${ evalCode };}`);
+
+
+export function getNodeAttrNames(node){
+    if (!node.hasAttributes()) {
+        return [];
+    }
+
+    const attrs = node.attributes;
+    let attrNames = [];
+
+    for(let i = attrs.length - 1; i >= 0; i--) {
+        attrNames.push(attrs[i].name);
+    }
+
+    return attrNames;
+}

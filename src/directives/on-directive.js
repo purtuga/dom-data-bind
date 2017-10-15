@@ -5,7 +5,8 @@ import {
     escapeString,
     getAttribute,
     removeAttribute,
-    createValueGetter } from "../utils"
+    createValueGetter,
+    getNodeAttrNames } from "../utils"
 
 //============================================
 const DIRECTIVE             = "b:on.";
@@ -54,23 +55,13 @@ const OnDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             tokenValueGetter = evListener = null;
         });
-    },
-
-    get directive() {
-        return DIRECTIVE;
     }
 });
+
 export default OnDirective;
 
-/**
- * Static method that allows to check if a given string matches this directive's string
- *
- * @method OnDirective#is
- *
- * @param {String} directive
- *
- * @returns {boolean}
- */
-OnDirective.is = function(directive) {
-    return matchesDirective.test(directive.trim());
+OnDirective.has = function (ele) {
+    let directiveAttr = "";
+    getNodeAttrNames(ele).some(attr => matchesDirective.test(attr) && (directiveAttr = attr));
+    return directiveAttr;
 };

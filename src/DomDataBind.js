@@ -2,8 +2,8 @@ import Compose              from "common-micro-libs/src/jsutils/Compose"
 import { makeObservable }   from "observable-data/src/ObservableObject"
 import {
     PRIVATE,
-    bindCallTo }            from "./utils"
-import TextBinding          from "./bindings/text-binding"
+    bindCallTo  }   from "./utils"
+import TextBinding  from "./bindings/text-binding"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
@@ -68,39 +68,28 @@ export default DomDataBind;
 DomDataBind.directives = [];
 
 
-function getNodeAttrNames(node){
-    if (!node.hasAttributes()) {
-        return [];
-    }
-
-    const attrs = node.attributes;
-    let attrNames = [];
-
-    for(let i = attrs.length - 1; i >= 0; i--) {
-        attrNames.push(attrs[i].name);
-    }
-
-    return attrNames;
-}
-
-
 function getBindingsFromDom(binder, ele) {
     const { directives } = PRIVATE.get(binder);
     const bindings = [];
     const children = arraySlice(ele.childNodes);
 
     // Process Element level Directives
-    arrayForEach(getNodeAttrNames(ele), attrName => {
-        directives.some(Directive => {
-            if (Directive.is(attrName)) {
-                bindings.push(Directive.create(ele, attrName, binder));
-                return true;
-            }
-        });
+    directives.some(Directive => {
+        const attrName = Directive.has(ele);
+
+        if (!attrName) {
+            return;
+        }
+
+        bindings.push(Directive.create(ele, attrName, binder));
+
+        // if (!ele.parentNode) {
+        //     return true;
+        // }
     });
 
-    if (!children.length) {
-        return [];
+    if (!children.length/* || !ele.parentNode*/) {
+        return bindings;
     }
 
     let child;

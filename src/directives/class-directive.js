@@ -11,7 +11,8 @@ import {
     escapeString,
     getAttribute,
     removeAttribute,
-    createValueGetter  } from "../utils"
+    createValueGetter,
+    hasAttribute  } from "../utils"
 
 //============================================
 const DIRECTIVE             = "b:class";
@@ -77,23 +78,11 @@ const ClassDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             cssClassList = dataForGetter = tokenValueGetter = null;
         });
-    },
-
-    get directive() {
-        return DIRECTIVE;
     }
 });
+
 export default ClassDirective;
 
-/**
- * Static method that allows to check if a given string matches this directive's string
- *
- * @method ClassDirective#is
- *
- * @param {String} directive
- *
- * @returns {boolean}
- */
-ClassDirective.is = function(directive) {
-    return matchesDirective.test(directive.trim());
+ClassDirective.has = function (ele) {
+    return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
 };

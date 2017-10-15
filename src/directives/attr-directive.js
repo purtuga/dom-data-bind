@@ -10,7 +10,8 @@ import {
     getAttribute,
     removeAttribute,
     setAttribute,
-    createValueGetter } from "../utils"
+    createValueGetter,
+    getNodeAttrNames } from "../utils"
 
 //============================================
 const DIRECTIVE             = "b:attr.";
@@ -62,23 +63,13 @@ const AttrDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
         });
-    },
-
-    get directive() {
-        return DIRECTIVE;
     }
 });
+
 export default AttrDirective;
 
-/**
- * Static method that allows to check if a given string matches this directive's string
- *
- * @method AttrDirective#is
- *
- * @param {String} directive
- *
- * @returns {boolean}
- */
-AttrDirective.is = function(directive) {
-    return matchesDirective.test(directive.trim());
+AttrDirective.has = function (ele) {
+    let directiveAttr = "";
+    getNodeAttrNames(ele).some(attr => matchesDirective.test(attr) && (directiveAttr = attr));
+    return directiveAttr;
 };

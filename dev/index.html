@@ -120,14 +120,16 @@
 <div b:style="{
         border: styles.border,
         padding: '0.5em'
-    }">{{ firstName }}</div>
+    }">b:style binding: {{ firstName }}</div>
 <div>{{ lastName }}</div>
 <div b:class="cssClasses">
     <div>{{ address.city }}</div>
 </div>
 <hr/>
+<div>b-if binding below - currently {{ ifExtra ? 'Shown' : 'Hidden' }}</div>
+<div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
 <div b-show="showExtra">
-    <div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+    b-show binding
     <div class=""  b:class="{ 'bg-green': cssClasses['bg-green'] }" b-if="!ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
 </div>
 <hr/>

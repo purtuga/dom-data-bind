@@ -6,7 +6,7 @@ import {
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    escapeString,
+    hasAttribute,
     getAttribute,
     removeAttribute,
     createComment,
@@ -15,11 +15,10 @@ import {
     createValueGetter } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b-if";
-const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
+const DIRECTIVE = "b-if";
 
 const IfDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, binder) {
         let dataForTokenValueGetter = {};
         let updateAlreadyQueued     = false;
         let showElement             = true;
@@ -68,23 +67,11 @@ const IfDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
         });
-    },
-
-    get directive() {
-        return DIRECTIVE;
     }
 });
+
 export default IfDirective;
 
-/**
- * Static method that allows to check if a given string matches this directive's string
- *
- * @method IfDirective#is
- *
- * @param {String} directive
- *
- * @returns {boolean}
- */
-IfDirective.is = function(directive) {
-    return matchesDirective.test(directive.trim());
+IfDirective.has = function (ele) {
+    return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
 };

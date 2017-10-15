@@ -7,15 +7,14 @@ import {
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
 import {
     PRIVATE,
-    escapeString,
     getAttribute,
     removeAttribute,
-    createValueGetter } from "../utils"
+    createValueGetter,
+    hasAttribute } from "../utils"
 import Directive        from "./Directive"
 
 //============================================
 const DIRECTIVE             = "b:style";
-const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const StyleDirective = Directive.extend({
     init(ele, directiveAttr) {
@@ -71,23 +70,11 @@ const StyleDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             cssStyleList = dataForGetter = tokenValueGetter = null;
         });
-    },
-
-    get directive() {
-        return DIRECTIVE;
     }
 });
+
 export default StyleDirective;
 
-/**
- * Static method that allows to check if a given string matches this directive's string
- *
- * @method StyleDirective#is
- *
- * @param {String} directive
- *
- * @returns {boolean}
- */
-StyleDirective.is = function(directive) {
-    return matchesDirective.test(directive.trim());
+StyleDirective.has = function (ele) {
+    return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
 };
