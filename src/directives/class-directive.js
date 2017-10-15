@@ -18,7 +18,7 @@ const DIRECTIVE             = "b:class";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const ClassDirective = Directive.extend({
-    init(ele) {
+    init(ele, directiveAttr) {
         let cssClassList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
@@ -27,8 +27,7 @@ const ClassDirective = Directive.extend({
         const addClass          = eleClassList.add.bind(eleClassList);
         const removeClass       = eleClassList.remove.bind(eleClassList);
         const containsClass     = eleClassList.contains.bind(eleClassList);
-        const directive         = this.directive;
-        let tokenValueGetter    = createValueGetter(getAttribute(ele, DIRECTIVE));
+        let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
         const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);
@@ -70,7 +69,7 @@ const ClassDirective = Directive.extend({
         const inst = { updater };
 
         inst.classObjEv = watchProp(cssClassList, cssClassList, applyClassesToDomEle);
-        removeAttribute(ele, directive);
+        removeAttribute(ele, directiveAttr);
         PRIVATE.set(this, inst);
 
         this.onDestroy(() => {

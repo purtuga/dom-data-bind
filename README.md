@@ -46,16 +46,60 @@ Directives that use a dash (`-`) control flow. Directives that use a colon (`:`)
 
 ### b-if
 
+Usage:
+
+```
+tbd...
+```
+
 Conditionally render an element and it's bindings.
 
 ### b-show
+
+Usage:
+
+```
+tbd...
+```
 
 Conditionally show or hide an element (uses  `style.display`).
 
 ### b:class
 
+Usage:
+
+```
+tbd...
+```
+
 Conditionally toggle css class names on an element.
 
 ### b:style
 
+Usage:
+
+```
+tbd...
+```
+
 Conditionally toggle css styles on an element.
+
+### b:attr
+
+Usage:
+
+```
+tbd...
+```
+
+Bind a value to an Element's attribute. 
+
+### b:on
+
+Usage:
+
+```
+tbd...
+```
+
+Bind a function to a event.

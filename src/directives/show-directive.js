@@ -17,13 +17,13 @@ const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 const HIDDEN                = "none";
 
 const ShowDirective = Directive.extend({
-    init(ele) {
+    init(ele, directiveAttr) {
         let dataForTokenValueGetter = {};
         let updateAlreadyQueued     = false;
         let showElement             = true;
         const eleStyleList          = ele.style;
         const eleDisplayStyle       = eleStyleList.display;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, DIRECTIVE));
+        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const updater               = data => {
             if (data) {
                 stopDependeeNotifications(updater);
@@ -55,7 +55,7 @@ const ShowDirective = Directive.extend({
         const inst = { updater };
 
         PRIVATE.set(this, inst);
-        removeAttribute(ele, DIRECTIVE);
+        removeAttribute(ele, directiveAttr);
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);

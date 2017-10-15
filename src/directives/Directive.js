@@ -9,6 +9,8 @@ import { PRIVATE }  from "../utils"
  *
  * @param {HTMLElement} ele
  *  The HTML element that contains the directive
+ * @param {String} directiveAttr
+ *  The directive html element attribute as found in the element.
  * @param {DomDataBind} binder
  *  The instance of DomDataBind that called the Directive
  */

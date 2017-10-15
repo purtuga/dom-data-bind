@@ -52,12 +52,14 @@
         .border {
             border: 1px solid red;
         }
-
         .padding {
             padding: 1em;
         }
         .margin {
             margin: 2em;
+        }
+        .pre {
+            white-space: pre;
         }
         .bg-blue {
             background: lightskyblue;
@@ -77,29 +79,37 @@
         <h2>Data</h2>
 <textarea>
 {
-    "firstName": "Paul",
-    "lastName": "Tavares",
-    "address": {
-        "street": "23 central park west",
-        "city": "New York",
-        "state": "New York",
-        "country": "USA"
+    firstName: "Paul",
+    lastName: "Tavares",
+    address: {
+        street: "23 central park west ",
+        city: "New York",
+        state: "New York",
+        country: "USA"
     },
-    "cssClasses": {
-        "border": false,
-        "padding": false,
-        "margin": false,
+    cssClasses: {
+        border: false ,
+        padding: false,
+        margin: false,
         "bg-blue": false,
         "bg-red": false,
         "bg-green": true
     },
-    "styles": {
-        "border": "3px solid red"
+    styles: {
+        border: "3px solid red"
     },
-    "ifExtra": false,
-    "showExtra": true,
-    "headerTitleTag": "Some Title"
+    ifExtra: false,
+    showExtra: true,
+    headerTitleTag: "Some Title",
+    onBinding: {
+        click(ev) {
+            ev.target.textContent = ev.target.textContent +
+                "\r\nClick: " +
+                (new Date()).getTime();
+        }
+    }
 }
+
 </textarea>
         <div id="dataError">{{dataError}}</div>
     </div>
@@ -125,6 +135,7 @@
     <div>{{ address.street }}</div>
 </div>
 <h3 b:attr.title="headerTitleTag">Title on this one</h3>
+<div b:on.click="onBinding.click" class="pre">CLICK ME!</div>
 </textarea>
     </div>
 
@@ -165,8 +176,9 @@
     function getData() {
         let newData;
         devData.dataError = "";
+        let fn = new Function('return (' + dataTextarea.value + ');');
         try {
-            newData = JSON.parse(dataTextarea.value);
+            newData = fn();
         }
         catch(e) {
             console.error(e);

@@ -5,6 +5,7 @@ import StyleDirective   from "./directives/style-directive"
 import IfDirective      from "./directives/if-directive"
 import ShowDirective    from "./directives/show-directive"
 import AttrDirective    from "./directives/attr-directive"
+import OnDirective      from "./directives/on-directive"
 
 const DomDataBindAll = DomDataBind.extend();
 DomDataBindAll.directives = [
@@ -12,7 +13,8 @@ DomDataBindAll.directives = [
     ClassDirective,
     StyleDirective,
     ShowDirective,
-    AttrDirective
+    AttrDirective,
+    OnDirective
 ];
 
 export default DomDataBindAll;
@@ -22,5 +24,6 @@ export {
     IfDirective,
     ClassDirective,
     StyleDirective,
-    ShowDirective
+    ShowDirective,
+    OnDirective
 };

@@ -18,14 +18,13 @@ const DIRECTIVE             = "b:style";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const StyleDirective = Directive.extend({
-    init(ele) {
+    init(ele, directiveAttr) {
         let cssStyleList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
         let dataForGetter       = {};
         const eleStyleList      = ele.style;
-        const directive         = this.directive;
-        let tokenValueGetter    = createValueGetter(getAttribute(ele, DIRECTIVE));
+        let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
         const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);
@@ -64,7 +63,7 @@ const StyleDirective = Directive.extend({
         const inst = { updater };
 
         inst.classObjEv = watchProp(cssStyleList, cssStyleList, applyStylesToDomEle);
-        removeAttribute(ele, directive);
+        removeAttribute(ele, directiveAttr);
         PRIVATE.set(this, inst);
 
         this.onDestroy(() => {

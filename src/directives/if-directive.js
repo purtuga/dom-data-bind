@@ -19,13 +19,13 @@ const DIRECTIVE             = "b-if";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const IfDirective = Directive.extend({
-    init(ele) {
+    init(ele, directiveAttr) {
         let dataForTokenValueGetter = {};
         let updateAlreadyQueued     = false;
         let showElement             = true;
         const eleParentNode         = ele.parentNode;
         const isVisible             = () => !!ele.parentNode;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, DIRECTIVE));
+        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const placeholderEle        = createComment("");
         const updater               = data => {
             if (data) {
@@ -58,7 +58,7 @@ const IfDirective = Directive.extend({
         const inst = { updater };
 
         PRIVATE.set(this, inst);
-        removeAttribute(ele, DIRECTIVE);
+        removeAttribute(ele, directiveAttr);
 
         insertBefore(eleParentNode, placeholderEle, ele);
         removeChild(eleParentNode, ele);
