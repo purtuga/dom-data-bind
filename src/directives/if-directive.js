@@ -22,8 +22,8 @@ const IfDirective = Directive.extend({
         let dataForTokenValueGetter = {};
         let updateAlreadyQueued     = false;
         let showElement             = true;
+        let clonedEleBinder;
         const eleParentNode         = ele.parentNode;
-        const isVisible             = () => !!ele.parentNode;
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const placeholderEle        = createComment("");
         const updater               = data => {
@@ -46,11 +46,19 @@ const IfDirective = Directive.extend({
                 unsetDependencyTracker(updater);
                 updateAlreadyQueued = false;
 
-                if (showElement && !isVisible()) {
-                    insertBefore(eleParentNode, ele, placeholderEle);
+                if (showElement && !clonedEleBinder) {
+                    const clonedEle = ele.cloneNode(true);
+                    insertBefore(eleParentNode, clonedEle, placeholderEle);
+                    clonedEleBinder = binder.getFactory().create(clonedEle, dataForTokenValueGetter);
+                    clonedEleBinder.onDestroy(() => {
+                        if (!clonedEleBinder.isDestroyed) {
+                            removeChild(eleParentNode, clonedEle);
+                        }
+                    });
                 }
-                else if (isVisible())  {
-                    removeChild(eleParentNode, ele);
+                else if (!showElement && clonedEleBinder)  {
+                    clonedEleBinder.destroy();
+                    clonedEleBinder = inst.ifBinder = null;
                 }
             });
         };

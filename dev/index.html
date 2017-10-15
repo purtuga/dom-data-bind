@@ -130,7 +130,7 @@
 <div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
 <div b-show="showExtra">
     b-show binding
-    <div class=""  b:class="{ 'bg-green': cssClasses['bg-green'] }" b-if="!ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+    <div class=""  b:class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
 </div>
 <hr/>
 <div b:class="{ border: true, padding: true }">

@@ -52,6 +52,8 @@ const DomDataBind = Compose.extend({
         arrayForEach(bindings, binding => binding.render(data));
 
         this.onDestroy(() => {
+            // Don't remove original ele
+            delete state.ele;
             arrayForEach(bindings, binding => binding.destroy());
             Factory.getDestroyCallback(state, PRIVATE)();
         })
@@ -83,12 +85,14 @@ function getBindingsFromDom(binder, ele) {
 
         bindings.push(Directive.create(ele, attrName, binder));
 
-        // if (!ele.parentNode) {
-        //     return true;
-        // }
+        // If this Directive removed the element from its parent, then
+        // don't do any more processing.
+        if (!ele.parentNode) {
+            return true;
+        }
     });
 
-    if (!children.length/* || !ele.parentNode*/) {
+    if (!children.length || !ele.parentNode) {
         return bindings;
     }
 

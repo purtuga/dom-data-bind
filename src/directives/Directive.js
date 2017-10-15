@@ -2,7 +2,9 @@ import Compose      from "common-micro-libs/src/jsutils/Compose"
 import { PRIVATE }  from "../utils"
 
 /**
- * A DOM element directive
+ * A DOM element directive.
+ * NOte that any directive that removes the original DOM element from its parent
+ * will prevent all subsequent directives from running.
  *
  * @class Directive
  * @extends Compose
