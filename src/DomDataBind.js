@@ -1,7 +1,5 @@
 import Compose              from "common-micro-libs/src/jsutils/Compose"
-
 import { makeObservable }   from "observable-data/src/ObservableObject"
-
 import {
     PRIVATE,
     bindCallTo }            from "./utils"
@@ -95,7 +93,7 @@ function getBindingsFromDom(binder, ele) {
     arrayForEach(getNodeAttrNames(ele), attrName => {
         directives.some(Directive => {
             if (Directive.is(attrName)) {
-                bindings.push(Directive.create(ele, binder));
+                bindings.push(Directive.create(ele, attrName, binder));
                 return true;
             }
         });

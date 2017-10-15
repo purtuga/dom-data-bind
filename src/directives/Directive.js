@@ -1,5 +1,5 @@
 import Compose      from "common-micro-libs/src/jsutils/Compose"
-import { PRIVATE } from "../utils"
+import { PRIVATE }  from "../utils"
 
 /**
  * A DOM element directive

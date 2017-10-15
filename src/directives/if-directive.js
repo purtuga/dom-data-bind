@@ -3,8 +3,7 @@ import {
     setDependencyTracker,
     unsetDependencyTracker,
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
-
-import Directive from "./Directive"
+import Directive                from "./Directive"
 import {
     PRIVATE,
     escapeString,

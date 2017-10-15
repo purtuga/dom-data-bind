@@ -9,21 +9,19 @@ import {
     escapeString,
     getAttribute,
     removeAttribute,
+    setAttribute,
     createValueGetter } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b-show";
-const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
-const HIDDEN                = "none";
+const DIRECTIVE             = "b:attr.";
+const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
-const ShowDirective = Directive.extend({
-    init(ele) {
+const AttrDirective = Directive.extend({
+    init(ele, directiveAttr) {
         let dataForTokenValueGetter = {};
         let updateAlreadyQueued     = false;
-        let showElement             = true;
-        const eleStyleList          = ele.style;
-        const eleDisplayStyle       = eleStyleList.display;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, DIRECTIVE));
+        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        const htmlAttr              = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
         const updater               = data => {
             if (data) {
                 stopDependeeNotifications(updater);
@@ -35,8 +33,10 @@ const ShowDirective = Directive.extend({
             updateAlreadyQueued = true;
             nextTick(() => {
                 setDependencyTracker(updater);
+                const currentValue = getAttribute(ele, htmlAttr);
+                let newValue;
                 try {
-                    showElement = tokenValueGetter(dataForTokenValueGetter);
+                    newValue = tokenValueGetter(dataForTokenValueGetter);
                 }
                 catch(e) {
                     console.error(e);
@@ -44,18 +44,18 @@ const ShowDirective = Directive.extend({
                 unsetDependencyTracker(updater);
                 updateAlreadyQueued = false;
 
-                if (showElement) {
-                    eleStyleList.display = eleDisplayStyle;
+                if (newValue && currentValue !== newValue) {
+                    setAttribute(ele, htmlAttr, newValue);
                 }
-                else if (eleStyleList.display !== HIDDEN)  {
-                    eleStyleList.display = HIDDEN;
+                else if (currentValue && !newValue) {
+                    removeAttribute(ele, htmlAttr);
                 }
             });
         };
         const inst = { updater };
 
         PRIVATE.set(this, inst);
-        removeAttribute(ele, DIRECTIVE);
+        removeAttribute(ele, directiveAttr);
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);
@@ -68,17 +68,17 @@ const ShowDirective = Directive.extend({
         return DIRECTIVE;
     }
 });
-export default ShowDirective;
+export default AttrDirective;
 
 /**
  * Static method that allows to check if a given string matches this directive's string
  *
- * @method ShowDirective#is
+ * @method AttrDirective#is
  *
  * @param {String} directive
  *
  * @returns {boolean}
  */
-ShowDirective.is = function(directive) {
+AttrDirective.is = function(directive) {
     return matchesDirective.test(directive.trim());
 };

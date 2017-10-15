@@ -85,19 +85,20 @@
         "state": "New York",
         "country": "USA"
     },
-    "locationClasses": {
+    "cssClasses": {
         "border": false,
         "padding": false,
         "margin": false,
         "bg-blue": false,
         "bg-red": false,
-        "bg-green": false
+        "bg-green": true
     },
     "styles": {
         "border": "3px solid red"
     },
     "ifExtra": false,
-    "showExtra": true
+    "showExtra": true,
+    "headerTitleTag": "Some Title"
 }
 </textarea>
         <div id="dataError">{{dataError}}</div>
@@ -111,18 +112,19 @@
         padding: '0.5em'
     }">{{ firstName }}</div>
 <div>{{ lastName }}</div>
-<div b:class="locationClasses">
+<div b:class="cssClasses">
     <div>{{ address.city }}</div>
 </div>
 <hr/>
 <div b-show="showExtra">
-    <div class="bg-green padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
-    <div class="bg-blue" b-if="!ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+    <div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+    <div class=""  b:class="{ 'bg-green': cssClasses['bg-green'] }" b-if="!ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
 </div>
 <hr/>
 <div b:class="{ border: true, padding: true }">
     <div>{{ address.street }}</div>
 </div>
+<h3 b:attr.title="headerTitleTag">Title on this one</h3>
 </textarea>
     </div>
 
