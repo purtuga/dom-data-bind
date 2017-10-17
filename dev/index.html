@@ -107,6 +107,16 @@
                 "\r\nClick: " +
                 (new Date()).getTime();
         }
+    },
+    each: {
+        list1: [
+            { name: "paul", color: "red" },
+            { name: "jack", color: "blue" }
+        ],
+        list2: {
+            name: "paul",
+            color: "red"
+        }
     }
 }
 
@@ -130,7 +140,7 @@
 <div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
 <div b-show="showExtra">
     b-show binding
-    <div class=""  b:class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
+    <div class="" b:class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
 </div>
 <hr/>
 <div b:class="{ border: true, padding: true }">
@@ -138,6 +148,12 @@
 </div>
 <h3 b:attr.title="headerTitleTag">Title on this one</h3>
 <div b:on.click="onBinding.click" class="pre">CLICK ME!</div>
+<hr/>
+<h3>b-loop directive</h3>
+<h4>Object:</h4>
+<div b-each="item in each.list2">
+    <span style="display: inline-block; width: 1em; height: 1em;"></span> Iteration: {{ item }}
+</div>
 </textarea>
     </div>
 

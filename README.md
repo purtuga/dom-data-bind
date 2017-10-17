@@ -103,3 +103,13 @@ tbd...
 ```
 
 Bind a function to a event.
+
+### b-each
+
+Usage:
+
+```
+tbd...
+```
+
+Loop through a list using the HTML element as the template for each item.

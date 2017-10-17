@@ -51,7 +51,9 @@ const IfDirective = Directive.extend({
                     insertBefore(eleParentNode, clonedEle, placeholderEle);
                     clonedEleBinder = binder.getFactory().create(clonedEle, dataForTokenValueGetter);
                     clonedEleBinder.onDestroy(() => {
-                        if (!clonedEleBinder.isDestroyed) {
+                        // We do this check because a directive could have
+                        // removed the element from its parent.
+                        if (eleParentNode.contains(clonedEle)) {
                             removeChild(eleParentNode, clonedEle);
                         }
                     });
@@ -74,6 +76,7 @@ const IfDirective = Directive.extend({
             stopDependeeNotifications(updater);
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
+            removeChild(eleParentNode, placeholderEle);
         });
     }
 });
