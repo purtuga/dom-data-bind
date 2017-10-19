@@ -1,10 +1,12 @@
 import nextTick     from "common-micro-libs/src/jsutils/nextTick"
 import objectExtend from "common-micro-libs/src/jsutils/objectExtend"
+import arrayFindBy  from "common-micro-libs/src/jsutils/arrayFindBy"
 import {
     setDependencyTracker,
     unsetDependencyTracker,
     stopDependeeNotifications,
-    watchProp }                 from "observable-data/src/ObservableObject"
+    watchProp,
+    observableAssign }                 from "observable-data/src/ObservableObject"
 import Directive                from "./Directive"
 import {
     PRIVATE,
@@ -18,10 +20,12 @@ import {
     isPureObject } from "../utils"
 
 //============================================
-const DIRECTIVE = "b-each";
+const DIRECTIVE     = "b-each";
+const KEY_DIRECTIVE = "b:key";
 
 /**
- * Directive to loop through an array or object
+ * Directive to loop through an array or object. In addition, it also support an
+ * internal binding directive called `b:key`
  *
  * @class EachDirective
  * @extends Directive
@@ -42,21 +46,53 @@ const EachDirective = Directive.extend({
         let tokenValueGetter            = createValueGetter(listVar);
         let listObj;
         let listObjEv;
-        const placeholderEle            = createComment("");
-        const iterateOverList           = () => {
-            if (isPureObject(listObj)) {
-                Object.keys(listObj).forEach((objKey, index) => {
-                    const thisEle = ele.cloneNode(true);
-                    const thisData = { $data: dataForTokenValueGetter };
-                    const iteratorArgValues = [ listObj[objKey], objKey, index ];
-
-                    iteratorArgs.forEach(argName => thisData[argName] = iteratorArgValues.shift());
-                    insertBefore(eleParentNode, thisEle, placeholderEle);
-                    binder.getFactory().create(thisEle, thisData);
-                });
+        let childEleBinders         = [];
+        const placeholderEle        = createComment("");
+        const getDataForIteration   = iteratorArgValues => {
+            return iteratorArgs.reduce((rowData, argName) => {
+                rowData[argName] = iteratorArgValues.shift();
+                return rowData;
+            }, { $data: dataForTokenValueGetter.$data || dataForTokenValueGetter });
+        };
+        const getIterationKey   = rowData => {
+            if (hasAttribute(ele, KEY_DIRECTIVE)) {
+                return createValueGetter(getAttribute(ele, KEY_DIRECTIVE))(rowData);
             }
         };
-        const updater                   = data => {
+        const iterateOverList   = () => {
+            const attachedElements = [];
+
+            if (isPureObject(listObj)) {
+                Object.keys(listObj).forEach((objKey, index) => {
+                    const rowData       = getDataForIteration([listObj[objKey], objKey, index ]);
+                    const rowKey        = getIterationKey(rowData);
+                    let rowEleBinder    = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
+
+                    // If a binder already exists for this key, then just update its data
+                    if (rowEleBinder) {
+                        delete rowData.$data;
+                        observableAssign(rowEleBinder._loop.rowData, rowData);
+                        attachedElements.push(rowEleBinder);
+                        return;
+                    }
+
+                    const rowEle = ele.cloneNode(true);
+
+                    removeAttribute(rowEle, KEY_DIRECTIVE);
+                    insertBefore(eleParentNode, rowEle, placeholderEle);
+                    rowEleBinder = binder.getFactory().create(rowEle, rowData);
+                    rowEleBinder._loop = { rowEle, rowData, rowKey };
+                    childEleBinders.push(rowEleBinder);
+                    attachedElements.push(rowEleBinder);
+                    rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
+                });
+            }
+
+            // Clean up old Binders that are no longer being used/displayed
+            childEleBinders.splice(0, childEleBinders.length, ...attachedElements).forEach(childBinder => childBinder.destroy());
+
+        };
+        const updater = data => {
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -113,6 +149,7 @@ const EachDirective = Directive.extend({
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
             removeChild(eleParentNode, placeholderEle);
+            childEleBinders.splice(0).forEach(binder => binder.destroy());
         });
     }
 });
