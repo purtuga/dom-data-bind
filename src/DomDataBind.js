@@ -72,7 +72,6 @@ DomDataBind.directives = [];
 function getBindingsFromDom(binder, ele) {
     const { directives } = PRIVATE.get(binder);
     const bindings = [];
-    const children = arraySlice(ele.childNodes);
 
     // Process Element level Directives
     directives.some(Directive => {
@@ -90,6 +89,8 @@ function getBindingsFromDom(binder, ele) {
             return true;
         }
     });
+
+    const children = arraySlice(ele.childNodes);
 
     if (!children.length || !ele.parentNode) {
         return bindings;

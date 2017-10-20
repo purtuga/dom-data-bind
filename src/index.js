@@ -7,6 +7,7 @@ import ShowDirective    from "./directives/show-directive"
 import AttrDirective    from "./directives/attr-directive"
 import OnDirective      from "./directives/on-directive"
 import EachDirective    from "./directives/each-directive"
+import HtmlDirective    from "./directives/html-directive"
 
 const DomDataBindAll = DomDataBind.extend();
 DomDataBindAll.directives = [
@@ -16,7 +17,8 @@ DomDataBindAll.directives = [
     StyleDirective,
     ShowDirective,
     AttrDirective,
-    OnDirective
+    OnDirective,
+    HtmlDirective
 ];
 
 export default DomDataBindAll;
@@ -28,5 +30,6 @@ export {
     ClassDirective,
     StyleDirective,
     ShowDirective,
-    OnDirective
+    OnDirective,
+    HtmlDirective
 };
