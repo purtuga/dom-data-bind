@@ -1,6 +1,11 @@
-const path = require('path');
+const path              = require('path');
+const webpack           = require('webpack');
+const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
+const isProduction      = process.env.NODE_ENV === "production";
 
-module.exports = {
+console.log(`MODE: ${ isProduction ? "PRODUCTION" : "DEVELOPMENT" }`);
+
+let config = module.exports = {
     entry: './src/index.js',
     output: {
         library: "DomDataBind",
@@ -14,7 +19,7 @@ module.exports = {
             path.resolve(__dirname, "dist"),
             path.resolve(__dirname, "dev")
         ],
-        port: 9568
+        port: 9598
     },
     resolve: {
         modules: [
@@ -22,12 +27,34 @@ module.exports = {
         ]
     },
     module: {
-        rules: [
-            // {
-            //     test: /\.js$/,
-            //     // exclude: /node_modules/,
-            //     loader: "babel-loader"
-            // }
-        ]
-    }
+        rules: []
+    },
+    plugins: []
 };
+
+//---------------------------------------
+//    PRODUCTION
+//---------------------------------------
+if (isProduction) {
+    config.module.rules.push(
+        {
+            test: /\.js$/,
+            loader: "babel-loader"
+        }
+    );
+
+    config.plugins.push(
+        new UglifyJSPlugin({
+            sourceMap: true,
+            output: {
+                comments: false
+            }
+        }),
+
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        })
+    )
+}
