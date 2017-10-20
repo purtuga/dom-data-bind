@@ -142,12 +142,16 @@
     b-show binding
     <div class="" b:class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
 </div>
+
+
 <hr/>
 <div b:class="{ border: true, padding: true }">
     <div>{{ address.street }}</div>
 </div>
 <h3 b:attr.title="headerTitleTag">Title on this one</h3>
 <div b:on.click="onBinding.click" class="pre">CLICK ME!</div>
+
+
 <hr/>
 <h3>b-loop directive</h3>
 <h4>Object:</h4>
@@ -156,9 +160,25 @@
 </div>
 
 <h4>Array:</h4>
-<div b-each="item in each.list1" b:key="item.key">
-    <span style="display: inline-block; width: 1em; height: 1em;" b:style="{ background: item.color }"></span> name: {{ item.name }} (has access to top-level data: {{firstName}})
-</div>
+<table>
+    <thead>
+        <tr>
+            <th>Key</th>
+            <th>name</th>
+            <th>color</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr b-each="item of each.list1"
+            b:key="item.key">
+            <td style="border-left-width:5px; border-left-style: solid;"
+                b:style="{ 'border-left-color': item.color }">{{ item.key }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.color }}</td>
+        </tr>
+    </tbody>
+</table>
+
 </textarea>
     </div>
 
@@ -195,6 +215,23 @@
 
     let data                = {};
     let currentBinding;
+
+    function sortBy(arr, attr) {
+        arr.sort(function (a, b) {
+            let attrA = a[attr];
+            let attrB = b[attr];
+
+            if (attrA > attrB) {
+                return 1;
+            }
+
+            if (attrA < attrB) {
+                return -1;
+            }
+
+            return 0;
+        });
+    }
 
     function getData() {
         let newData;

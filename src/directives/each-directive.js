@@ -39,7 +39,7 @@ const KEY_DIRECTIVE = "b:key";
  */
 const EachDirective = Directive.extend({
     init(ele, directiveAttr, binder) {
-        let dataForTokenValueGetter     = { };
+        let dataForTokenValueGetter     = {};
         let updateAlreadyQueued         = false;
         const eleParentNode             = ele.parentNode;
         const [ iteratorArgs, listVar ] = parseDirectiveValue(getAttribute(ele, directiveAttr).trim());
@@ -58,6 +58,18 @@ const EachDirective = Directive.extend({
             if (hasAttribute(ele, KEY_DIRECTIVE)) {
                 return createValueGetter(getAttribute(ele, KEY_DIRECTIVE))(rowData);
             }
+        };
+        const positionChildren  = () => {
+            childEleBinders.forEach((childBinder, index) => {
+                const childInstance = childBinder._loop;
+                if (childInstance.pos === index) {
+                    return;
+                }
+
+                let nextSibling = childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle;
+                insertBefore(eleParentNode, childInstance.rowEle, nextSibling);
+                childInstance.pos = index;
+            });
         };
         const iterateOverList   = () => {
             const attachedElements  = [];
@@ -101,20 +113,24 @@ const EachDirective = Directive.extend({
                 insertBefore(eleParentNode, rowEle, placeholderEle);
 
                 rowEleBinder        = binder.getFactory().create(rowEle, rowData);
-                rowEleBinder._loop  = { rowEle, rowData, rowKey };
+                rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedElements.length };
                 childEleBinders.push(rowEleBinder);
                 attachedElements.push(rowEleBinder);
 
                 rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
             });
 
-            // Clean up old Binders that are no longer being used/displayed
-            childEleBinders.splice(0, childEleBinders.length, ...attachedElements).forEach(childBinder => {
-                if (childEleBinders.indexOf(childBinder) === -1) {
-                    childBinder.destroy();
-                }
-            });
+            // store the new attached set of elements in their new positions, and
+            // clean up old Binders that are no longer being used/displayed
+            childEleBinders
+                .splice(0, childEleBinders.length, ...attachedElements)
+                .forEach(childBinder => {
+                    if (childEleBinders.indexOf(childBinder) === -1) {
+                        childBinder.destroy();
+                    }
+                });
 
+            positionChildren();
         };
         const updater = data => {
             if (data) {
