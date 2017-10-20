@@ -52,8 +52,7 @@ const DomDataBind = Compose.extend({
         arrayForEach(bindings, binding => binding.render(data));
 
         this.onDestroy(() => {
-            // Don't remove original ele
-            delete state.ele;
+            delete state.ele; // Don't attempt to destroy (remove) the original DOM element
             arrayForEach(bindings, binding => binding.destroy());
             Factory.getDestroyCallback(state, PRIVATE)();
         })
@@ -62,7 +61,7 @@ const DomDataBind = Compose.extend({
 export default DomDataBind;
 
 /**
- * A list of Directives to be used
+ * A list of Directives to be used.
  *
  * @name DomDataBind.directives
  * @type {Array}
@@ -116,8 +115,7 @@ function getBindingsFromDom(binder, ele) {
             }
 
         }
-
-        if (child.childNodes.length) {
+        else if (!isTextNode(child)) {
             bindings.push(...getBindingsFromDom(binder, child));
         }
     }

@@ -44,6 +44,8 @@ const OnDirective = Directive.extend({
                 evListener.remove();
             }
 
+            // FIXME: handle expressions in event token value
+
             evListener = inst.evListener = domAddEventListener(ele, eventName, eventCallback);
         };
         const inst = { updater };

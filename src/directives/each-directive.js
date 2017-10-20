@@ -1,13 +1,13 @@
 import nextTick     from "common-micro-libs/src/jsutils/nextTick"
-import objectExtend from "common-micro-libs/src/jsutils/objectExtend"
 import arrayFindBy  from "common-micro-libs/src/jsutils/arrayFindBy"
 import {
     setDependencyTracker,
     unsetDependencyTracker,
     stopDependeeNotifications,
     watchProp,
-    observableAssign }                 from "observable-data/src/ObservableObject"
-import Directive                from "./Directive"
+    observableAssign }                  from "observable-data/src/ObservableObject"
+import { mixin as makeArrayObservable } from "observable-data/src/ObservableArray"
+import Directive                        from "./Directive"
 import {
     PRIVATE,
     hasAttribute,
@@ -60,36 +60,60 @@ const EachDirective = Directive.extend({
             }
         };
         const iterateOverList   = () => {
-            const attachedElements = [];
+            const attachedElements  = [];
+            let isArray             = false;
+            let data;
 
-            if (isPureObject(listObj)) {
-                Object.keys(listObj).forEach((objKey, index) => {
-                    const rowData       = getDataForIteration([listObj[objKey], objKey, index ]);
-                    const rowKey        = getIterationKey(rowData);
-                    let rowEleBinder    = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
-
-                    // If a binder already exists for this key, then just update its data
-                    if (rowEleBinder) {
-                        delete rowData.$data;
-                        observableAssign(rowEleBinder._loop.rowData, rowData);
-                        attachedElements.push(rowEleBinder);
-                        return;
-                    }
-
-                    const rowEle = ele.cloneNode(true);
-
-                    removeAttribute(rowEle, KEY_DIRECTIVE);
-                    insertBefore(eleParentNode, rowEle, placeholderEle);
-                    rowEleBinder = binder.getFactory().create(rowEle, rowData);
-                    rowEleBinder._loop = { rowEle, rowData, rowKey };
-                    childEleBinders.push(rowEleBinder);
-                    attachedElements.push(rowEleBinder);
-                    rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
-                });
+            if (Array.isArray(listObj)) {
+                isArray = true;
+                data = listObj;
+            }
+            else if (isPureObject(listObj)) {
+                data = Object.keys(listObj);
+            } else {
+                return;
             }
 
+            data.forEach((item, index) => {
+                let rowData;
+
+                if (isArray) {
+                    rowData = getDataForIteration([ item, index ]);
+                }
+                else {
+                    rowData = getDataForIteration([ data[item], item, index ]);
+                }
+
+                const rowKey        = getIterationKey(rowData);
+                let rowEleBinder    = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
+
+                // If a binder already exists for this key, then just update its data
+                if (rowEleBinder) {
+                    delete rowData.$data;
+                    observableAssign(rowEleBinder._loop.rowData, rowData);
+                    attachedElements.push(rowEleBinder);
+                    return;
+                }
+
+                const rowEle = ele.cloneNode(true);
+
+                removeAttribute(rowEle, KEY_DIRECTIVE);
+                insertBefore(eleParentNode, rowEle, placeholderEle);
+
+                rowEleBinder        = binder.getFactory().create(rowEle, rowData);
+                rowEleBinder._loop  = { rowEle, rowData, rowKey };
+                childEleBinders.push(rowEleBinder);
+                attachedElements.push(rowEleBinder);
+
+                rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
+            });
+
             // Clean up old Binders that are no longer being used/displayed
-            childEleBinders.splice(0, childEleBinders.length, ...attachedElements).forEach(childBinder => childBinder.destroy());
+            childEleBinders.splice(0, childEleBinders.length, ...attachedElements).forEach(childBinder => {
+                if (childEleBinders.indexOf(childBinder) === -1) {
+                    childBinder.destroy();
+                }
+            });
 
         };
         const updater = data => {
@@ -117,21 +141,29 @@ const EachDirective = Directive.extend({
                     return;
                 }
                 else if (listObj) {
-                    // FIXME: stop listening for changes on the prior object
-                    // listObjev.off();
+                    listObj = null;
+
+                    if (listObjEv) {
+                        listObjEv.off();
+                        listObjEv = null;
+                    }
                 }
 
                 if (!newList) {
                     return;
                 }
 
-                listObj     = newList;
-                listObjEv   = inst.listObjEv = watchProp(listObj, null, iterateOverList);
+                listObj = newList;
+
+                if (Array.isArray(listObj)) {
+                    makeArrayObservable(listObj);
+                    listObjEv = listObj.on("change", iterateOverList);
+                }
+                else if (isPureObject(listObj)) {
+                    listObjEv = inst.listObjEv = watchProp(listObj, listObj, iterateOverList);
+                }
+
                 iterateOverList();
-
-                // listObjEv = inst.listObjEv =
-
-
             });
         };
         const inst = { updater };
@@ -141,8 +173,6 @@ const EachDirective = Directive.extend({
 
         insertBefore(eleParentNode, placeholderEle, ele);
         removeChild(eleParentNode, ele);
-
-        // iteratorArgs.forEach(argName => dataForTokenValueGetter[argName]);
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);

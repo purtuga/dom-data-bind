@@ -110,8 +110,8 @@
     },
     each: {
         list1: [
-            { name: "paul", color: "red" },
-            { name: "jack", color: "blue" }
+            { key: 1, name: "paul", color: "red" },
+            { key: 2, name: "jack", color: "blue" }
         ],
         list2: {
             name: "paul",
@@ -152,7 +152,12 @@
 <h3>b-loop directive</h3>
 <h4>Object:</h4>
 <div b-each="(item, key) in each.list2" b:key="key">
-    <span style="display: inline-block; width: 1em; height: 1em;"></span> Iteration: {{ key }} == {{ item }} (has access to top-level data: {{firstName}})
+    Iteration: {{ key }} == {{ item }} (has access to top-level data: {{firstName}})
+</div>
+
+<h4>Array:</h4>
+<div b-each="item in each.list1" b:key="item.key">
+    <span style="display: inline-block; width: 1em; height: 1em;" b:style="{ background: item.color }"></span> name: {{ item.name }} (has access to top-level data: {{firstName}})
 </div>
 </textarea>
     </div>
