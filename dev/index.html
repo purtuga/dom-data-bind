@@ -177,6 +177,9 @@
             <td>{{ item.name }}</td>
             <td>{{ item.color }}</td>
         </tr>
+        <tr b-if="!each.list1.len">
+            <td colspan="100">No data</td>
+        </tr>
     </tbody>
 </table>
 

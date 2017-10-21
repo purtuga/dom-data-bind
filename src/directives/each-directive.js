@@ -74,6 +74,7 @@ const EachDirective = Directive.extend({
         const iterateOverList   = () => {
             const attachedElements  = [];
             let isArray             = false;
+            let newChildElements    = document.createDocumentFragment();
             let data;
 
             if (Array.isArray(listObj)) {
@@ -110,15 +111,23 @@ const EachDirective = Directive.extend({
                 const rowEle = ele.cloneNode(true);
 
                 removeAttribute(rowEle, KEY_DIRECTIVE);
-                insertBefore(eleParentNode, rowEle, placeholderEle);
+                newChildElements.appendChild(rowEle);
 
                 rowEleBinder        = binder.getFactory().create(rowEle, rowData);
                 rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedElements.length };
+
                 childEleBinders.push(rowEleBinder);
                 attachedElements.push(rowEleBinder);
 
                 rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
             });
+
+            // Insert new Elements to DOM
+            if (newChildElements.hasChildNodes()) {
+                insertBefore(eleParentNode, newChildElements, placeholderEle);
+            }
+
+            newChildElements = null;
 
             // store the new attached set of elements in their new positions, and
             // clean up old Binders that are no longer being used/displayed
