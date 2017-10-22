@@ -10,7 +10,7 @@ $ npm install purtuga/dom-data-bind
 
 ## Usage
 
-```
+```javascript
 import DomDataBind from "dom-data-bind"
 
 const data = {
@@ -29,6 +29,18 @@ divBinder.destroy();
 
 ```
 
+### As a HTML drop-in
+
+```html
+<script type="text/javascript" src="dom-data-bind/dist/DomDataBind"></script>
+<script>
+    var binder = DomDataBind.default.create(document.getElementById("bind"), myData);
+</script>
+```
+
+__NOTE:__ DomDataBind exports several modules. The default one includes all Directives by default and is likely the one you would use.
+
+
 ## Template Token Interpolation
 
 Tokens are defined using the double mustache (curly braces): `{{ }}`. These will be evaluated within the context of the `data` provided on input.
@@ -37,7 +49,7 @@ Tokens are defined using the double mustache (curly braces): `{{ }}`. These will
 
 All directives start with the letter `b`. Example:
 
-```
+```html
 <div b-if="visible" b:class="{ important: isImportant }">
 </div>
 ```
@@ -48,7 +60,7 @@ Directives that use a dash (`-`) provide flow control. Directives that use a col
 
 Usage:
 
-```
+```html
 <div b-if="showDiv">...</div>
 ```
 
@@ -59,7 +71,7 @@ Conditionally render an element and it's bindings based on the `truthy` of an ex
 
 Usage:
 
-```
+```html
 <div b-show="isVisible">...</div>
 ```
 
@@ -69,7 +81,7 @@ Conditionally show or hide an element (uses  `style.display`). Unlike `b-if`, th
 
 Usage:
 
-```
+```html
 <div b:class="{ 'make-element-red': transaction.atError }">...</div>
 ```
 
@@ -79,7 +91,7 @@ Conditionally toggle css class names on an element. Class names are defiend in a
 
 Usage:
 
-```
+```html
 <div b:style="{ 'background-color': divStyles.bgcolor }">...</div>
 ```
 
@@ -89,7 +101,7 @@ Similar to `b:class` but with element styles directly (`style` attribute. Condit
 
 Usage:
 
-```
+```html
 <div b:attr.title="page1.title">...</div>
 ```
 
@@ -99,7 +111,7 @@ Bind a value to an Element's attribute. The attribute name is defined by using a
 
 Usage:
 
-```
+```html
 <a b:on.click>...</>
 ```
 
@@ -109,12 +121,13 @@ Bind a function to a event.
 
 Usage:
 
-```
-// Arrays:
+```html
+<!-- Arrays -->
 <div b-each="item in itemsArray">{{ item }}</div>
 <div b-each="(item, index) in itemsArray">...</div>
 
-// Objects:
+
+<!-- Objects -->
 <div b-each="value in itemsObject">{{ value }}</div>
 <div b-each="(value, key) in itemsObject">...</div>
 ```
@@ -125,7 +138,7 @@ Loop through a list using the HTML element as the template for each item.
 
 Usage:
 
-```
+```html
 <div b-html="ele.markup"></div>
 ```
 
