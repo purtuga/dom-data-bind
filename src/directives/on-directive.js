@@ -1,5 +1,4 @@
 import domAddEventListener  from "common-micro-libs/src/domutils/domAddEventListener"
-import { observableAssign } from "observable-data/src/ObservableObject"
 import Directive            from "./Directive"
 import {
     PRIVATE,
@@ -30,7 +29,7 @@ const OnDirective = Directive.extend({
                 return;
             }
 
-            dataForTokenValueGetter.$ev = null;
+            delete dataForTokenValueGetter.$ev;
 
             if ("function" === typeof tokenValue) {
                 tokenValue(domEv);
@@ -39,10 +38,10 @@ const OnDirective = Directive.extend({
         const updater = data => {
             if (data) {
                 if (data.$data) {
-                    observableAssign(dataForTokenValueGetter, data);
+                    dataForTokenValueGetter = data;
                 }
                 else {
-                    observableAssign(dataForTokenValueGetter.$data, data);
+                    dataForTokenValueGetter.$data = data;
                 }
             }
         };

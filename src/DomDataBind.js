@@ -75,13 +75,11 @@ function getBindingsFromDom(binder, ele) {
 
     // Process Element level Directives
     directives.some(Directive => {
-        const attrName = Directive.has(ele);
+        let attrName;
 
-        if (!attrName) {
-            return;
+        while ((attrName = Directive.has(ele)) && ele.parentNode) {
+            bindings.push(Directive.create(ele, attrName, binder));
         }
-
-        bindings.push(Directive.create(ele, attrName, binder));
 
         // If this Directive removed the element from its parent, then
         // don't do any more processing.
