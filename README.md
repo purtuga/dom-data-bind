@@ -112,10 +112,12 @@ Bind a value to an Element's attribute. The attribute name is defined by using a
 Usage:
 
 ```html
-<a b:on.click>...</>
+<a b:on.click="doClick">...</>
+<!-- or: just evaluate an expression -->
+<a b:on.click="isDone ? runClick($ev) : validateClick($ev)"></a>
 ```
 
-Bind a function to a event.
+Bind a function to a event or evaluate an expression.  When evaluating an expression, the DOM event object is available as `$ev`
 
 ### b-each
 

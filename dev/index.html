@@ -107,6 +107,9 @@
             ev.target.textContent = ev.target.textContent +
                 "\r\nClick: " +
                 (new Date()).getTime();
+        },
+        click2(msg, $ev) {
+            $ev.target.textContent = $ev.target.textContent + msg;
         }
     },
     each: {
@@ -120,6 +123,8 @@
         }
     }
 }
+
+
 
 </textarea>
         <div id="dataError">{{dataError}}</div>
@@ -136,6 +141,7 @@
 <div b:class="cssClasses">
     <div>{{ address.city }}</div>
 </div>
+
 <hr/>
 <div>b-if binding below - currently {{ ifExtra ? 'Shown' : 'Hidden' }}</div>
 <div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
@@ -150,7 +156,11 @@
     <div>{{ address.street }}</div>
 </div>
 <h3 b:attr.title="headerTitleTag">Title on this one</h3>
+
+<hr/>
 <div b:on.click="onBinding.click" class="pre">CLICK ME!</div>
+
+<div b:on.click="onBinding.click2('time is: ' + Date.now(), $ev)" class="pre">CLICK ME as an expression!</div>
 
 
 <hr/>
@@ -188,6 +198,9 @@
 <hr/>
 <h3>b-html directive</h3>
 <div b-html="markup"></div>
+
+
+
 
 
 </textarea>

@@ -16,46 +16,36 @@ const OnDirective = Directive.extend({
     init(ele, directiveAttr) {
         let dataForTokenValueGetter = {};
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
-        let eventCallback;
-        let evListener;
         const eventName         = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
-        const updater           = data => {
-            if (data) {
-                dataForTokenValueGetter = data;
-            }
-
-            let newEventCallback;
+        const eventHandler      = domEv => {
+            let tokenValue;
 
             try {
-                newEventCallback = tokenValueGetter(dataForTokenValueGetter);
+                tokenValue = tokenValueGetter({ $data: dataForTokenValueGetter, $ev: domEv });
             }
             catch(e) {
                 console.error(e);
                 return;
             }
 
-            if (evListener && newEventCallback === eventCallback) {
-                return;
+            if ("function" === typeof tokenValue) {
+                tokenValue(domEv);
             }
-
-            eventCallback = newEventCallback;
-
-            if (evListener) {
-                evListener.remove();
+        };
+        const updater           = data => {
+            if (data) {
+                dataForTokenValueGetter = data;
             }
-
-            // FIXME: handle expressions in event token value
-
-            evListener = inst.evListener = domAddEventListener(ele, eventName, eventCallback);
         };
         const inst = { updater };
 
         PRIVATE.set(this, inst);
         removeAttribute(ele, directiveAttr);
+        inst.evListener = domAddEventListener(ele, eventName, eventHandler);
 
         this.onDestroy(() => {
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            tokenValueGetter = evListener = null;
+            tokenValueGetter = null;
         });
     }
 });
