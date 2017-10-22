@@ -121,6 +121,9 @@
             name: "paul",
             color: "red"
         }
+    },
+    appendToEle: function(item, $ev){
+        $ev.target.textContent += "| " + item.name + Date.now();
     }
 }
 
@@ -184,7 +187,9 @@
             b:key="item.key">
             <td style="border-left-width:5px; border-left-style: solid;"
                 b:style="{ 'border-left-color': item.color }">{{ item.key }}</td>
-            <td>{{ item.name }}</td>
+            <td>
+               <a b:on.click="appendToEle(item, $ev)">{{ item.name }}</a>
+            </td>
             <td>{{ item.color }}</td>
         </tr>
         <tr b-if="!each.list1.len">
