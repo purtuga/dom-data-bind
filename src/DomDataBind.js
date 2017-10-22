@@ -1,5 +1,5 @@
-import Compose              from "common-micro-libs/src/jsutils/Compose"
-import { makeObservable }   from "observable-data/src/ObservableObject"
+import Compose          from "common-micro-libs/src/jsutils/Compose"
+import { observeAll }   from "observable-data"
 import {
     PRIVATE,
     bindCallTo  }   from "./utils"
@@ -46,7 +46,7 @@ const DomDataBind = Compose.extend({
 
         PRIVATE.set(this, state);
 
-        makeObservable(data, null, true);
+        observeAll(data);
 
         const bindings = state.bindings = getBindingsFromDom(this, ele);
         arrayForEach(bindings, binding => binding.render(data));
