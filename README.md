@@ -42,64 +42,65 @@ All directives start with the letter `b`. Example:
 </div>
 ```
 
-Directives that use a dash (`-`) control flow. Directives that use a colon (`:`) bind data to attributes. 
+Directives that use a dash (`-`) provide flow control. Directives that use a colon (`:`) bind data to attributes. 
 
 ### b-if
 
 Usage:
 
 ```
-tbd...
+<div b-if="showDiv">...</div>
 ```
 
-Conditionally render an element and it's bindings.
+Conditionally render an element and it's bindings based on the `truthy` of an expression.
+
 
 ### b-show
 
 Usage:
 
 ```
-tbd...
+<div b-show="isVisible">...</div>
 ```
 
-Conditionally show or hide an element (uses  `style.display`).
+Conditionally show or hide an element (uses  `style.display`). Unlike `b-if`, this directive will process the element's children
 
 ### b:class
 
 Usage:
 
 ```
-tbd...
+<div b:class="{ 'make-element-red': transaction.atError }">...</div>
 ```
 
-Conditionally toggle css class names on an element.
+Conditionally toggle css class names on an element. Class names are defiend in an object as the `key` and it will be applied if the value of that key evaluates to `truthy` and removed if it evaluates to `falsey`.
 
 ### b:style
 
 Usage:
 
 ```
-tbd...
+<div b:style="{ 'background-color': divStyles.bgcolor }">...</div>
 ```
 
-Conditionally toggle css styles on an element.
+Similar to `b:class` but with element styles directly (`style` attribute. Conditionally toggle css styles on an element.
 
-### b:attr
+### b:attr.{attr}
 
 Usage:
 
 ```
-tbd...
+<div b:attr.title="page1.title">...</div>
 ```
 
-Bind a value to an Element's attribute. 
+Bind a value to an Element's attribute. The attribute name is defined by using a period followed by the attribute name.   
 
-### b:on
+### b:on.{event}
 
 Usage:
 
 ```
-tbd...
+<a b:on.click>...</>
 ```
 
 Bind a function to a event.
@@ -109,7 +110,24 @@ Bind a function to a event.
 Usage:
 
 ```
-tbd...
+// Arrays:
+<div b-each="item in itemsArray">{{ item }}</div>
+<div b-each="(item, index) in itemsArray">...</div>
+
+// Objects:
+<div b-each="value in itemsObject">{{ value }}</div>
+<div b-each="(value, key) in itemsObject">...</div>
 ```
 
 Loop through a list using the HTML element as the template for each item.
+
+### b-html
+
+Usage:
+
+```
+<div b-html="ele.markup"></div>
+```
+
+Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting markup directly into the page can be dangerous and lead to XSS attacks. 
+
