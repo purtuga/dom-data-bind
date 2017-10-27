@@ -1,6 +1,6 @@
 # dom-data-bind
 
-Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables so that as it changes, DOM is updated automatically.
+Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables (using [ObservableData](https://github.com/purtuga/observable-data)) so that as it changes, DOM is updated automatically.
 
 ## Install
 
@@ -111,7 +111,7 @@ Bind a value to an Element's attribute. The attribute name is defined by using a
 Usage:
 
 ```html
-<a _on.click="doClick">...</>
+<a _on.click="doClick">...</a>
 <!-- or: just evaluate an expression -->
 <a _on.click="isDone ? runClick($ev) : validateClick($ev)"></a>
 ```
@@ -144,4 +144,8 @@ Usage:
 ```
 
 Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting markup directly into the page can be dangerous and lead to XSS attacks. 
+
+# License
+
+[MIT](LICENSE)
 
