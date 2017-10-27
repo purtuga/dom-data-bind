@@ -20,8 +20,8 @@ import {
     isPureObject } from "../utils"
 
 //============================================
-const DIRECTIVE     = "b-each";
-const KEY_DIRECTIVE = "b:key";
+const DIRECTIVE     = "_each";
+const KEY_DIRECTIVE = "_key";
 
 /**
  * Directive to loop through an array or object. In addition, it also support an

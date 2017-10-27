@@ -15,7 +15,7 @@ import {
     createValueGetter } from "../utils"
 
 //============================================
-const DIRECTIVE = "b-if";
+const DIRECTIVE = "_if";
 
 const IfDirective = Directive.extend({
     init(ele, directiveAttr, binder) {

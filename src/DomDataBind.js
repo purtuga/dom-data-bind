@@ -22,8 +22,11 @@ const isTextNode            = e => e && e.nodeType === 3;
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 
 /**
- * Base DOM element binder providing only the interpolation of Text node binding any
- * token found to the data provided on input
+ * Bind data to a DOM element and automatically persist changes in that data to the UI.
+ * By default, this constructor provides interpolation of Text tokens found in the DOM
+ * structure (represented with double curly braces: `{{ }}`). Directives can be used
+ * by extending this constructor and adding them to the [directives]{@link DomDataBind.directives}
+ * static property.
  *
  * @class DomDataBind
  * @extends Compose

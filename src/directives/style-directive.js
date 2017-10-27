@@ -14,7 +14,7 @@ import {
 import Directive        from "./Directive"
 
 //============================================
-const DIRECTIVE             = "b:style";
+const DIRECTIVE             = "_style";
 
 const StyleDirective = Directive.extend({
     init(ele, directiveAttr) {

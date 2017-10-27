@@ -136,40 +136,40 @@
     <div id="template">
         <h2>template</h2>
 <textarea>
-<div b:style="{
+<div _style="{
         border: styles.border,
         padding: '0.5em'
-    }">b:style binding: {{ firstName }}</div>
+    }">_style binding: {{ firstName }}</div>
 <div>{{ lastName }}</div>
-<div b:class="cssClasses">
+<div _class="cssClasses">
     <div>{{ address.city }}</div>
 </div>
 
 <hr/>
-<div>b-if binding below - currently {{ ifExtra ? 'Shown' : 'Hidden' }}</div>
-<div class="bg-blue padding margin" b-if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
-<div b-show="showExtra">
-    b-show binding
-    <div class="" b:class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
+<div>_if binding below - currently {{ ifExtra ? 'Shown' : 'Hidden' }}</div>
+<div class="bg-blue padding margin" _if="ifExtra">This is shown because data.showExtra is: {{ ifExtra }}</div>
+<div _show="showExtra">
+    _show binding
+    <div class="" _class="{ 'bg-green': cssClasses['bg-green'] }">This is shown because data.showExtra is: {{ showExtra }}</div>
 </div>
 
 
 <hr/>
-<div b:class="{ border: true, padding: true }">
+<div _class="{ border: true, padding: true }">
     <div>{{ address.street }}</div>
 </div>
-<h3 b:attr.title="headerTitleTag">Title on this one</h3>
+<h3 _attr.title="headerTitleTag">Title on this one</h3>
 
 <hr/>
-<div b:on.click="onBinding.click" class="pre">CLICK ME!</div>
+<div _on.click="onBinding.click" class="pre">CLICK ME!</div>
 
-<div b:on.click="onBinding.click2('time is: ' + Date.now(), $ev)" class="pre">CLICK ME as an expression!</div>
+<div _on.click="onBinding.click2('time is: ' + Date.now(), $ev)" class="pre">CLICK ME as an expression!</div>
 
 
 <hr/>
-<h3>b-loop directive</h3>
+<h3>_loop directive</h3>
 <h4>Object:</h4>
-<div b-each="(item, key) in each.list2" b:key="key">
+<div _each="(item, key) in each.list2" _key="key">
     Iteration: {{ key }} == {{ item }} (has access to top-level data: {{firstName}})
 </div>
 
@@ -183,16 +183,16 @@
         </tr>
     </thead>
     <tbody>
-        <tr b-each="item of each.list1"
-            b:key="item.key">
+        <tr _each="item of each.list1"
+            _key="item.key">
             <td style="border-left-width:5px; border-left-style: solid;"
-                b:style="{ 'border-left-color': item.color }">{{ item.key }}</td>
+                _style="{ 'border-left-color': item.color }">{{ item.key }}</td>
             <td>
-               <a b:on.click="appendToEle(item, $ev)">{{ item.name }}</a>
+               <a _on.click="appendToEle(item, $ev)">{{ item.name }}</a>
             </td>
             <td>{{ item.color }}</td>
         </tr>
-        <tr b-if="!each.list1.len">
+        <tr _if="!each.list1.len">
             <td colspan="100">No data</td>
         </tr>
     </tbody>
@@ -201,8 +201,8 @@
 
 
 <hr/>
-<h3>b-html directive</h3>
-<div b-html="markup"></div>
+<h3>_html directive</h3>
+<div _html="markup"></div>
 
 
 

@@ -12,8 +12,7 @@ import {
     hasAttribute } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b-html";
-const HIDDEN                = "none";
+const DIRECTIVE             = "_html";
 
 const HtmlDirective = Directive.extend({
     init(ele, directiveAttr) {
@@ -46,7 +45,7 @@ const HtmlDirective = Directive.extend({
                     return;
                 }
 
-                ele.innerHTML = newHtmlMarkup;
+                ele.innerHTML = htmlMarkup = newHtmlMarkup;
             });
         };
         const inst = { updater };

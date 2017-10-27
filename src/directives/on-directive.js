@@ -9,7 +9,7 @@ import {
     getNodeAttrNames } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b:on.";
+const DIRECTIVE             = "_on.";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const OnDirective = Directive.extend({

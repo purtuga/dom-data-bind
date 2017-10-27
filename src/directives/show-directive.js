@@ -12,7 +12,7 @@ import {
     hasAttribute } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b-show";
+const DIRECTIVE             = "_show";
 const HIDDEN                = "none";
 
 const ShowDirective = Directive.extend({

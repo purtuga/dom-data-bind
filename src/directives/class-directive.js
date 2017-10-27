@@ -15,7 +15,7 @@ import {
     hasAttribute  } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b:class";
+const DIRECTIVE             = "_class";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const ClassDirective = Directive.extend({

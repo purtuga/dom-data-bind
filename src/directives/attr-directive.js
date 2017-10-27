@@ -14,7 +14,7 @@ import {
     getNodeAttrNames } from "../utils"
 
 //============================================
-const DIRECTIVE             = "b:attr.";
+const DIRECTIVE             = "_attr.";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const AttrDirective = Directive.extend({

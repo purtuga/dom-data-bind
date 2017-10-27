@@ -47,101 +47,100 @@ Tokens are defined using the double mustache (curly braces): `{{ }}`. These will
 
 ## Directives
 
-All directives start with the letter `b`. Example:
+All directives start with the underscore character (`_`). Example:
 
 ```html
-<div b-if="visible" b:class="{ important: isImportant }">
+<div _if="visible" _class="{ important: isImportant }">
 </div>
 ```
 
-Directives that use a dash (`-`) provide flow control. Directives that use a colon (`:`) bind data to attributes. 
 
-### b-if
+### _if
 
 Usage:
 
 ```html
-<div b-if="showDiv">...</div>
+<div _if="showDiv">...</div>
 ```
 
 Conditionally render an element and it's bindings based on the `truthy` of an expression.
 
 
-### b-show
+### _show
 
 Usage:
 
 ```html
-<div b-show="isVisible">...</div>
+<div _show="isVisible">...</div>
 ```
 
-Conditionally show or hide an element (uses  `style.display`). Unlike `b-if`, this directive will process the element's children
+Conditionally show or hide an element (uses  `style.display`). Unlike `_if`, this directive will process the element's children
 
-### b:class
+### _class
 
 Usage:
 
 ```html
-<div b:class="{ 'make-element-red': transaction.atError }">...</div>
+<div _class="{ 'make-element-red': transaction.atError }">...</div>
 ```
 
-Conditionally toggle css class names on an element. Class names are defiend in an object as the `key` and it will be applied if the value of that key evaluates to `truthy` and removed if it evaluates to `falsey`.
+Conditionally toggle css class names on an element. Class names are defined in an object as the `key` and it will be applied if the value of that key evaluates to `truthy` and removed if it evaluates to `falsey`.
 
-### b:style
+### _style
 
 Usage:
 
 ```html
-<div b:style="{ 'background-color': divStyles.bgcolor }">...</div>
+<div _style="{ 'background-color': divStyles.bgcolor }">...</div>
 ```
 
-Similar to `b:class` but with element styles directly (`style` attribute. Conditionally toggle css styles on an element.
+Similar to `_class` but with element styles directly (`style` attribute. Conditionally toggle css styles on an element.
 
-### b:attr.{attr}
+### _attr.{attr}
 
 Usage:
 
 ```html
-<div b:attr.title="page1.title">...</div>
+<div _attr.title="page1.title">...</div>
 ```
 
 Bind a value to an Element's attribute. The attribute name is defined by using a period followed by the attribute name.   
 
-### b:on.{event}
+### _on.{event}
 
 Usage:
 
 ```html
-<a b:on.click="doClick">...</>
+<a _on.click="doClick">...</>
 <!-- or: just evaluate an expression -->
-<a b:on.click="isDone ? runClick($ev) : validateClick($ev)"></a>
+<a _on.click="isDone ? runClick($ev) : validateClick($ev)"></a>
 ```
 
 Bind a function to a event or evaluate an expression.  When evaluating an expression, the DOM event object is available as `$ev`
 
-### b-each
+### _each
 
 Usage:
 
 ```html
 <!-- Arrays -->
-<div b-each="item in itemsArray">{{ item }}</div>
-<div b-each="(item, index) in itemsArray">...</div>
+<div _each="item in itemsArray">{{ item }}</div>
+<div _each="(item, index) in itemsArray">...</div>
 
 
 <!-- Objects -->
-<div b-each="value in itemsObject">{{ value }}</div>
-<div b-each="(value, key) in itemsObject">...</div>
+<div _each="value in itemsObject">{{ value }}</div>
+<div _each="(value, key) in itemsObject">...</div>
 ```
 
 Loop through a list using the HTML element as the template for each item.
 
-### b-html
+### _html
 
 Usage:
 
 ```html
-<div b-html="ele.markup"></div>
+<div _html="ele.markup"></div>
 ```
 
 Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting markup directly into the page can be dangerous and lead to XSS attacks. 
