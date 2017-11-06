@@ -30,6 +30,9 @@ const ClassDirective = Directive.extend({
         const containsClass     = eleClassList.contains.bind(eleClassList);
         let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
         const updater = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForGetter = data;
@@ -39,6 +42,9 @@ const ClassDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 try {
                     observableAssign(cssClassList, tokenValueGetter(dataForGetter));

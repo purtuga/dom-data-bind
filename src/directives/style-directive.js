@@ -25,6 +25,9 @@ const StyleDirective = Directive.extend({
         const eleStyleList      = ele.style;
         let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
         const updater = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForGetter = data;
@@ -34,6 +37,9 @@ const StyleDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 try {
                     observableAssign(cssStyleList, tokenValueGetter(dataForGetter));

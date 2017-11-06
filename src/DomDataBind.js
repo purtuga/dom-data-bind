@@ -56,6 +56,10 @@ const DomDataBind = Compose.extend({
 
         this.onDestroy(() => {
             delete state.ele; // Don't attempt to destroy (remove) the original DOM element
+            delete state.data;
+            delete state.directives;
+            delete state.bindings;
+
             arrayForEach(bindings, binding => binding.destroy());
             Factory.getDestroyCallback(state, PRIVATE)();
         })

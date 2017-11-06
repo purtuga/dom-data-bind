@@ -24,6 +24,9 @@ const AttrDirective = Directive.extend({
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const htmlAttr              = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
         const updater               = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -33,6 +36,9 @@ const AttrDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 const currentValue = getAttribute(ele, htmlAttr);
                 let newValue;

@@ -21,6 +21,9 @@ const HtmlDirective = Directive.extend({
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         let htmlMarkup              = "";
         const updater               = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -30,6 +33,9 @@ const HtmlDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 let newHtmlMarkup = "";
                 try {

@@ -36,6 +36,9 @@ const OnDirective = Directive.extend({
             }
         };
         const updater = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 if (data.$data) {
                     dataForTokenValueGetter = data;

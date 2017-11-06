@@ -1,11 +1,11 @@
 # dom-data-bind
 
-Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables (using [ObservableData](https://github.com/purtuga/observable-data)) so that as it changes, DOM is updated automatically.
+Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables (using [ObservableData](https://github.com/purtuga/observable-data)) so that as it changes, DOM is updated automatically. Updates are always applied async (`nextTick`) in order to minimize DOM interactions. 
 
 ## Install
 
-```
-$ npm install purtuga/dom-data-bind
+```bash
+$ npm install purtuga/dom-data-bind --save-dev
 ```
 
 ## Usage
@@ -116,7 +116,7 @@ Usage:
 <a _on.click="isDone ? runClick($ev) : validateClick($ev)"></a>
 ```
 
-Bind a function to a event or evaluate an expression.  When evaluating an expression, the DOM event object is available as `$ev`
+Bind a function to a event or evaluate an expression.  When evaluating an expression, the DOM event object is available as `$ev`.
 
 ### _each
 

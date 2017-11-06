@@ -44,6 +44,7 @@ const EachDirective = Directive.extend({
         const eleParentNode             = ele.parentNode;
         const [ iteratorArgs, listVar ] = parseDirectiveValue(getAttribute(ele, directiveAttr).trim());
         let tokenValueGetter            = createValueGetter(listVar);
+        let isDedicatedParent;
         let listObj;
         let listObjEv;
         let childEleBinders         = [];
@@ -119,7 +120,7 @@ const EachDirective = Directive.extend({
                 childEleBinders.push(rowEleBinder);
                 attachedElements.push(rowEleBinder);
 
-                rowEleBinder.onDestroy(() => removeChild(eleParentNode, rowEle));
+                rowEleBinder.onDestroy(() => rowEle.parentNode && removeChild(eleParentNode, rowEle));
             });
 
             // Insert new Elements to DOM
@@ -141,7 +142,26 @@ const EachDirective = Directive.extend({
 
             positionChildren();
         };
+        const destroyChildBinders = () => {
+            const callDestroyOnBinders = childEleBinders.splice(0).forEach(binder => binder.destroy());
+
+            if (isDedicatedParent) {
+                eleParentNode.textContent = "";
+                eleParentNode.appendChild(placeholderEle);
+                nextTick(callDestroyOnBinders);
+            }
+            else {
+                callDestroyOnBinders();
+            }
+
+        };
+        const isEmptyList = list => {
+            return (Array.isArray(list) && !list.length) || (isPureObject(list) && !Object.keys(list).length);
+        };
         const updater = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -151,6 +171,9 @@ const EachDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 let newList;
                 try {
@@ -174,7 +197,8 @@ const EachDirective = Directive.extend({
                     }
                 }
 
-                if (!newList) {
+                if (!newList || isEmptyList(newList)) {
+                    destroyChildBinders();
                     return;
                 }
 
@@ -195,16 +219,18 @@ const EachDirective = Directive.extend({
 
         PRIVATE.set(this, inst);
         removeAttribute(ele, directiveAttr);
-
         insertBefore(eleParentNode, placeholderEle, ele);
         removeChild(eleParentNode, ele);
+        isDedicatedParent = Array.prototype.every.call(eleParentNode.childNodes, node => {
+            return node === placeholderEle || (node.nodeType === 3 && !node.textContent.trim());
+        });
 
         this.onDestroy(() => {
             stopDependeeNotifications(updater);
             this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
             removeChild(eleParentNode, placeholderEle);
-            childEleBinders.splice(0).forEach(binder => binder.destroy());
+            destroyChildBinders();
         });
     }
 });

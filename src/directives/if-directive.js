@@ -27,6 +27,9 @@ const IfDirective = Directive.extend({
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const placeholderEle        = createComment("");
         const updater               = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -36,6 +39,9 @@ const IfDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 try {
                     showElement = tokenValueGetter(dataForTokenValueGetter);

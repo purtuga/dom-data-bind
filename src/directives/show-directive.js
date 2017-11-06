@@ -24,6 +24,9 @@ const ShowDirective = Directive.extend({
         const eleDisplayStyle       = eleStyleList.display;
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const updater               = data => {
+            if (this.isDestroyed) {
+                return;
+            }
             if (data) {
                 stopDependeeNotifications(updater);
                 dataForTokenValueGetter = data;
@@ -33,6 +36,9 @@ const ShowDirective = Directive.extend({
             }
             updateAlreadyQueued = true;
             nextTick(() => {
+                if (this.isDestroyed) {
+                    return;
+                }
                 setDependencyTracker(updater);
                 try {
                     showElement = tokenValueGetter(dataForTokenValueGetter);
