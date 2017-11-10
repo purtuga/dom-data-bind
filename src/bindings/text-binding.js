@@ -11,13 +11,15 @@ import { PRIVATE, createValueGetter } from "../utils"
 
 export default Compose.extend({
     init(ele, tokenText) {
-        let tokenValueGetterData    = {};
+        let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         const tokenValueGetter      = createValueGetter(tokenText);
         const updater               = data => {
             if (data) {
-                stopDependeeNotifications(updater);
-                tokenValueGetterData = data;
+                if (dataForTokenValueGetter) {
+                    stopDependeeNotifications(updater);
+                }
+                dataForTokenValueGetter = data;
             }
             if (updateAlreadyQueued) {
                 return;
@@ -26,7 +28,7 @@ export default Compose.extend({
             nextTick(() => {
                 setDependencyTracker(updater);
                 try {
-                    ele.nodeValue = tokenValueGetter(tokenValueGetterData);
+                    ele.nodeValue = tokenValueGetter(dataForTokenValueGetter || null);
                 }
                 catch(e) {
                     console.error(e);

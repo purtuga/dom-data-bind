@@ -19,7 +19,7 @@ const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const AttrDirective = Directive.extend({
     init(ele, directiveAttr) {
-        let dataForTokenValueGetter = {};
+        let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         const htmlAttr              = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
@@ -28,7 +28,9 @@ const AttrDirective = Directive.extend({
                 return;
             }
             if (data) {
-                stopDependeeNotifications(updater);
+                if (dataForTokenValueGetter) {
+                    stopDependeeNotifications(updater);
+                }
                 dataForTokenValueGetter = data;
             }
             if (updateAlreadyQueued) {
@@ -43,7 +45,7 @@ const AttrDirective = Directive.extend({
                 const currentValue = getAttribute(ele, htmlAttr);
                 let newValue;
                 try {
-                    newValue = tokenValueGetter(dataForTokenValueGetter);
+                    newValue = tokenValueGetter(dataForTokenValueGetter || {});
                 }
                 catch(e) {
                     console.error(e);

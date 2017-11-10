@@ -16,7 +16,7 @@ const DIRECTIVE             = "_html";
 
 const HtmlDirective = Directive.extend({
     init(ele, directiveAttr) {
-        let dataForTokenValueGetter = {};
+        let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
         let htmlMarkup              = "";
@@ -25,7 +25,9 @@ const HtmlDirective = Directive.extend({
                 return;
             }
             if (data) {
-                stopDependeeNotifications(updater);
+                if (dataForTokenValueGetter) {
+                    stopDependeeNotifications(updater);
+                }
                 dataForTokenValueGetter = data;
             }
             if (updateAlreadyQueued) {
@@ -39,7 +41,7 @@ const HtmlDirective = Directive.extend({
                 setDependencyTracker(updater);
                 let newHtmlMarkup = "";
                 try {
-                    newHtmlMarkup = tokenValueGetter(dataForTokenValueGetter);
+                    newHtmlMarkup = tokenValueGetter(dataForTokenValueGetter || {});
                 }
                 catch(e) {
                     console.error(e);

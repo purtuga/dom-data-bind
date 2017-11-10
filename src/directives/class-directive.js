@@ -16,14 +16,13 @@ import {
 
 //============================================
 const DIRECTIVE             = "_class";
-const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }$`);
 
 const ClassDirective = Directive.extend({
     init(ele, directiveAttr) {
         let cssClassList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
-        let dataForGetter       = {};
+        let dataForGetter       = null;
         const eleClassList      = ele.classList;
         const addClass          = eleClassList.add.bind(eleClassList);
         const removeClass       = eleClassList.remove.bind(eleClassList);
@@ -34,7 +33,9 @@ const ClassDirective = Directive.extend({
                 return;
             }
             if (data) {
-                stopDependeeNotifications(updater);
+                if (dataForGetter) {
+                    stopDependeeNotifications(updater);
+                }
                 dataForGetter = data;
             }
             if (updateAlreadyQueued) {
@@ -47,7 +48,7 @@ const ClassDirective = Directive.extend({
                 }
                 setDependencyTracker(updater);
                 try {
-                    observableAssign(cssClassList, tokenValueGetter(dataForGetter));
+                    observableAssign(cssClassList, tokenValueGetter(dataForGetter || {}));
                 }
                 catch(e) {
                     console.error(e);

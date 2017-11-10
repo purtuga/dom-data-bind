@@ -17,7 +17,7 @@ const HIDDEN                = "none";
 
 const ShowDirective = Directive.extend({
     init(ele, directiveAttr) {
-        let dataForTokenValueGetter = {};
+        let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let showElement             = true;
         const eleStyleList          = ele.style;
@@ -28,7 +28,9 @@ const ShowDirective = Directive.extend({
                 return;
             }
             if (data) {
-                stopDependeeNotifications(updater);
+                if (dataForTokenValueGetter) {
+                    stopDependeeNotifications(updater);
+                }
                 dataForTokenValueGetter = data;
             }
             if (updateAlreadyQueued) {
@@ -41,7 +43,7 @@ const ShowDirective = Directive.extend({
                 }
                 setDependencyTracker(updater);
                 try {
-                    showElement = tokenValueGetter(dataForTokenValueGetter);
+                    showElement = tokenValueGetter(dataForTokenValueGetter || {});
                 }
                 catch(e) {
                     console.error(e);

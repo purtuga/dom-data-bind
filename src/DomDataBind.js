@@ -79,9 +79,7 @@ DomDataBind.directives = [];
 function getBindingsFromDom(binder, ele) {
     const { directives } = PRIVATE.get(binder);
     const bindings = [];
-
-    // Process Element level Directives
-    directives.some(Directive => {
+    const directiveIterator = Directive => {
         let attrName;
 
         while ((attrName = Directive.has(ele)) && ele.parentNode) {
@@ -93,16 +91,8 @@ function getBindingsFromDom(binder, ele) {
         if (!ele.parentNode) {
             return true;
         }
-    });
-
-    const children = arraySlice(ele.childNodes);
-
-    if (!children.length || !ele.parentNode) {
-        return bindings;
-    }
-
-    let child;
-    while ((child = children.shift())) {
+    };
+    const processChildNode = child => {
         if (isTextNode(child) && hasToken(child)) {
             const reTokenMatch = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
             let childTokenMatches = reTokenMatch.exec(getNodeValue(child));
@@ -124,6 +114,20 @@ function getBindingsFromDom(binder, ele) {
         else if (!isTextNode(child)) {
             bindings.push(...getBindingsFromDom(binder, child));
         }
+    };
+
+    // Process Element level Directives
+    directives.some(directiveIterator);
+
+    let childNode;
+    const children = arraySlice(ele.childNodes);
+
+    if (!children.length || !ele.parentNode) {
+        return bindings;
+    }
+
+    while ((childNode = children.shift())) {
+        processChildNode(childNode);
     }
 
     return bindings;

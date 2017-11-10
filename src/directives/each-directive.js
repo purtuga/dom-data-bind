@@ -17,7 +17,8 @@ import {
     insertBefore,
     removeChild,
     createValueGetter,
-    isPureObject } from "../utils"
+    isPureObject,
+    arrayForEach } from "../utils"
 
 //============================================
 const DIRECTIVE     = "_each";
@@ -41,6 +42,7 @@ const EachDirective = Directive.extend({
     init(ele, directiveAttr, binder) {
         let dataForTokenValueGetter     = {};
         let updateAlreadyQueued         = false;
+        const BinderFactory             = binder.getFactory();
         const eleParentNode             = ele.parentNode;
         const [ iteratorArgs, listVar ] = parseDirectiveValue(getAttribute(ele, directiveAttr).trim());
         let tokenValueGetter            = createValueGetter(listVar);
@@ -55,11 +57,9 @@ const EachDirective = Directive.extend({
                 return rowData;
             }, { $data: dataForTokenValueGetter.$data || dataForTokenValueGetter });
         };
-        const getIterationKey   = rowData => {
-            if (hasAttribute(ele, KEY_DIRECTIVE)) {
-                return createValueGetter(getAttribute(ele, KEY_DIRECTIVE))(rowData);
-            }
-        };
+        const getIterationKey   = hasAttribute(ele, KEY_DIRECTIVE) ?
+            createValueGetter(getAttribute(ele, KEY_DIRECTIVE)) :
+            () => {};
         const positionChildren  = () => {
             childEleBinders.forEach((childBinder, index) => {
                 const childInstance = childBinder._loop;
@@ -75,20 +75,8 @@ const EachDirective = Directive.extend({
         const iterateOverList   = () => {
             const attachedElements  = [];
             let isArray             = false;
-            let newChildElements    = document.createDocumentFragment();
             let data;
-
-            if (Array.isArray(listObj)) {
-                isArray = true;
-                data = listObj;
-            }
-            else if (isPureObject(listObj)) {
-                data = Object.keys(listObj);
-            } else {
-                return;
-            }
-
-            data.forEach((item, index) => {
+            const dataItemIterator  = (item, index) => {
                 let rowData;
 
                 if (isArray) {
@@ -99,7 +87,11 @@ const EachDirective = Directive.extend({
                 }
 
                 const rowKey        = getIterationKey(rowData);
-                let rowEleBinder    = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
+                let rowEleBinder;
+
+                if (rowKey) {
+                    rowEleBinder = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
+                }
 
                 // If a binder already exists for this key, then just update its data
                 if (rowEleBinder) {
@@ -111,24 +103,29 @@ const EachDirective = Directive.extend({
 
                 const rowEle = ele.cloneNode(true);
 
-                removeAttribute(rowEle, KEY_DIRECTIVE);
-                newChildElements.appendChild(rowEle);
+                insertBefore(eleParentNode, rowEle, placeholderEle);
 
-                rowEleBinder        = binder.getFactory().create(rowEle, rowData);
+
+                rowEleBinder        = BinderFactory.create(rowEle, rowData);
                 rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedElements.length };
 
                 childEleBinders.push(rowEleBinder);
                 attachedElements.push(rowEleBinder);
 
                 rowEleBinder.onDestroy(() => rowEle.parentNode && removeChild(eleParentNode, rowEle));
-            });
+            };
 
-            // Insert new Elements to DOM
-            if (newChildElements.hasChildNodes()) {
-                insertBefore(eleParentNode, newChildElements, placeholderEle);
+            if (Array.isArray(listObj)) {
+                isArray = true;
+                data = listObj;
+            }
+            else if (isPureObject(listObj)) {
+                data = Object.keys(listObj);
+            } else {
+                return;
             }
 
-            newChildElements = null;
+            arrayForEach(data, dataItemIterator);
 
             // store the new attached set of elements in their new positions, and
             // clean up old Binders that are no longer being used/displayed
@@ -148,7 +145,7 @@ const EachDirective = Directive.extend({
             if (isDedicatedParent) {
                 eleParentNode.textContent = "";
                 eleParentNode.appendChild(placeholderEle);
-                nextTick(callDestroyOnBinders);
+                setTimeout(callDestroyOnBinders);
             }
             else {
                 callDestroyOnBinders();
@@ -157,6 +154,55 @@ const EachDirective = Directive.extend({
         };
         const isEmptyList = list => {
             return (Array.isArray(list) && !list.length) || (isPureObject(list) && !Object.keys(list).length);
+        };
+        const applyUpdateToDom = () => {
+            if (this.isDestroyed) {
+                return;
+            }
+            setDependencyTracker(updater);
+            let newList;
+            try {
+                newList = tokenValueGetter(dataForTokenValueGetter);
+            }
+            catch(e) {
+                console.error(e);
+            }
+            unsetDependencyTracker(updater);
+            updateAlreadyQueued = false;
+
+            if (newList === listObj) {
+                return;
+            }
+            else if (listObj) {
+                listObj = null;
+
+                if (listObjEv) {
+                    listObjEv.off();
+                    listObjEv = null;
+                }
+            }
+
+            if (!newList) {
+                destroyChildBinders();
+                return;
+            }
+
+            listObj = newList;
+
+            if (Array.isArray(listObj)) {
+                makeArrayObservable(listObj);
+                listObjEv = listObj.on("change", iterateOverList);
+            }
+            else if (isPureObject(listObj)) {
+                listObjEv = inst.listObjEv = watchProp(listObj, listObj, iterateOverList);
+            }
+
+            if (isEmptyList(newList)) {
+                destroyChildBinders();
+            }
+            else {
+                iterateOverList();
+            }
         };
         const updater = data => {
             if (this.isDestroyed) {
@@ -170,54 +216,12 @@ const EachDirective = Directive.extend({
                 return;
             }
             updateAlreadyQueued = true;
-            nextTick(() => {
-                if (this.isDestroyed) {
-                    return;
-                }
-                setDependencyTracker(updater);
-                let newList;
-                try {
-                    newList = tokenValueGetter(dataForTokenValueGetter);
-                }
-                catch(e) {
-                    console.error(e);
-                }
-                unsetDependencyTracker(updater);
-                updateAlreadyQueued = false;
-
-                if (newList === listObj) {
-                    return;
-                }
-                else if (listObj) {
-                    listObj = null;
-
-                    if (listObjEv) {
-                        listObjEv.off();
-                        listObjEv = null;
-                    }
-                }
-
-                if (!newList || isEmptyList(newList)) {
-                    destroyChildBinders();
-                    return;
-                }
-
-                listObj = newList;
-
-                if (Array.isArray(listObj)) {
-                    makeArrayObservable(listObj);
-                    listObjEv = listObj.on("change", iterateOverList);
-                }
-                else if (isPureObject(listObj)) {
-                    listObjEv = inst.listObjEv = watchProp(listObj, listObj, iterateOverList);
-                }
-
-                iterateOverList();
-            });
+            nextTick(applyUpdateToDom);
         };
         const inst = { updater };
 
         PRIVATE.set(this, inst);
+        removeAttribute(ele, KEY_DIRECTIVE);
         removeAttribute(ele, directiveAttr);
         insertBefore(eleParentNode, placeholderEle, ele);
         removeChild(eleParentNode, ele);

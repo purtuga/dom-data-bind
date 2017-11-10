@@ -21,7 +21,7 @@ const StyleDirective = Directive.extend({
         let cssStyleList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
-        let dataForGetter       = {};
+        let dataForGetter       = null;
         const eleStyleList      = ele.style;
         let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
         const updater = data => {
@@ -29,7 +29,9 @@ const StyleDirective = Directive.extend({
                 return;
             }
             if (data) {
-                stopDependeeNotifications(updater);
+                if (dataForGetter) {
+                    stopDependeeNotifications(updater);
+                }
                 dataForGetter = data;
             }
             if (updateAlreadyQueued) {
@@ -42,7 +44,7 @@ const StyleDirective = Directive.extend({
                 }
                 setDependencyTracker(updater);
                 try {
-                    observableAssign(cssStyleList, tokenValueGetter(dataForGetter));
+                    observableAssign(cssStyleList, tokenValueGetter(dataForGetter || {}));
                 }
                 catch(e) {
                     console.error(e);
