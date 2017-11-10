@@ -77,8 +77,8 @@ DomDataBind.directives = [];
 
 
 function getBindingsFromDom(binder, ele) {
-    const { directives } = PRIVATE.get(binder);
-    const bindings = [];
+    const { directives }    = PRIVATE.get(binder);
+    const bindings          = [];
     const directiveIterator = Directive => {
         let attrName;
 
@@ -98,18 +98,23 @@ function getBindingsFromDom(binder, ele) {
             let childTokenMatches = reTokenMatch.exec(getNodeValue(child));
 
             while (childTokenMatches) {
-                const tokenText     = childTokenMatches[1];
-                const tokenTextNode = nodeSplitText(child, childTokenMatches.index);
+                // If no need to split the text node, then just create a binding for it and exit
+                if (child.textContent === "{{" + childTokenMatches[1] + "}}") {
+                    bindings.push(TextBinding.create(child, childTokenMatches[1]));
+                    childTokenMatches = null;
+                }
+                else {
+                    const tokenTextNode = nodeSplitText(child, childTokenMatches.index);
 
-                // Throw the remainder of the text node into the list of children so that it can be processed
-                children.push(nodeSplitText(tokenTextNode, childTokenMatches[0].length));
+                    // Throw the remainder of the text node into the list of children so that it can be processed
+                    children.push(nodeSplitText(tokenTextNode, childTokenMatches[0].length));
 
-                // Blank out the txt node and then set its value via TextBinding
-                setNodeValue(tokenTextNode, "");
-                bindings.push(TextBinding.create(tokenTextNode, tokenText));
-                childTokenMatches = reTokenMatch.exec(getNodeValue(child));
+                    // Blank out the txt node and then set its value via TextBinding
+                    setNodeValue(tokenTextNode, "");
+                    bindings.push(TextBinding.create(tokenTextNode, childTokenMatches[1]));
+                    childTokenMatches = reTokenMatch.exec(getNodeValue(child));
+                }
             }
-
         }
         else if (!isTextNode(child)) {
             bindings.push(...getBindingsFromDom(binder, child));

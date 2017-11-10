@@ -9,8 +9,7 @@ const ARRAY_PROTOTYPE       = Array.prototype;
 const VALUE_GETTERS         = new Map();
 const _bind                 = FUNCTION.bind.call.bind(FUNCTION.bind);
 
-export const PRIVATE = dataStore.create();
-
+export const PRIVATE            = dataStore.create();
 export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
 export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";
