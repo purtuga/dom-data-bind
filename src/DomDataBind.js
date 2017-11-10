@@ -1,4 +1,5 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
+import nextTick         from "common-micro-libs/src/jsutils/nextTick"
 import { observeAll }   from "observable-data"
 import {
     PRIVATE,
@@ -52,10 +53,9 @@ const DomDataBind = Compose.extend({
         observeAll(data);
 
         const bindings = state.bindings = getBindingsFromDom(this, ele);
-        arrayForEach(bindings, binding => binding.render(data));
+        nextTick(() => arrayForEach(bindings, binding => binding.render(data)));
 
         this.onDestroy(() => {
-            delete state.ele; // Don't attempt to destroy (remove) the original DOM element
             delete state.data;
             delete state.directives;
             delete state.bindings;

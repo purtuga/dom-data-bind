@@ -1,5 +1,5 @@
 import nextTick     from "common-micro-libs/src/jsutils/nextTick"
-import arrayFindBy  from "common-micro-libs/src/jsutils/arrayFindBy"
+import Map          from "common-micro-libs/src/jsutils/es6-Map"
 import {
     setDependencyTracker,
     unsetDependencyTracker,
@@ -51,6 +51,7 @@ const EachDirective = Directive.extend({
         let listObj;
         let listObjEv;
         let childEleBinders         = [];
+        const keyToBinderMap        = new Map();
         const placeholderEle        = createComment("");
         const getDataForIteration   = iteratorArgValues => {
             return iteratorArgs.reduce((rowData, argName) => {
@@ -74,7 +75,7 @@ const EachDirective = Directive.extend({
             });
         };
         const iterateOverList   = () => {
-            const attachedElements  = [];
+            const attachedEleBinder = [];
             let isArray             = false;
             let data;
             const dataItemIterator  = (item, index) => {
@@ -87,18 +88,18 @@ const EachDirective = Directive.extend({
                     rowData = getDataForIteration([ data[item], item, index ]);
                 }
 
-                const rowKey        = getIterationKey(rowData);
+                const rowKey = getIterationKey(rowData);
                 let rowEleBinder;
 
                 if (rowKey) {
-                    rowEleBinder = arrayFindBy(childEleBinders, binder => rowKey && binder._loop.rowKey === rowKey);
+                    rowEleBinder = keyToBinderMap.get(rowKey);
                 }
 
                 // If a binder already exists for this key, then just update its data
                 if (rowEleBinder) {
                     delete rowData.$data;
                     observableAssign(rowEleBinder._loop.rowData, rowData);
-                    attachedElements.push(rowEleBinder);
+                    attachedEleBinder.push(rowEleBinder);
                     return;
                 }
 
@@ -108,12 +109,21 @@ const EachDirective = Directive.extend({
 
 
                 rowEleBinder        = BinderFactory.create(rowEle, rowData);
-                rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedElements.length };
+                rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
+
+                if (rowKey) {
+                    keyToBinderMap.set(rowKey, rowEleBinder);
+                }
 
                 childEleBinders.push(rowEleBinder);
-                attachedElements.push(rowEleBinder);
+                attachedEleBinder.push(rowEleBinder);
 
-                rowEleBinder.onDestroy(() => rowEle.parentNode && removeChild(eleParentNode, rowEle));
+                rowEleBinder.onDestroy(() => {
+                    rowEle.parentNode && removeChild(eleParentNode, rowEle);
+                    if (rowKey) {
+                        keyToBinderMap.delete(rowKey);
+                    }
+                });
             };
 
             if (Array.isArray(listObj)) {
@@ -131,7 +141,7 @@ const EachDirective = Directive.extend({
             // store the new attached set of elements in their new positions, and
             // clean up old Binders that are no longer being used/displayed
             childEleBinders
-                .splice(0, childEleBinders.length, ...attachedElements)
+                .splice(0, childEleBinders.length, ...attachedEleBinder)
                 .forEach(childBinder => {
                     if (childEleBinders.indexOf(childBinder) === -1) {
                         childBinder.destroy();
@@ -237,6 +247,7 @@ const EachDirective = Directive.extend({
             deferExec(() => {
                 stopDependeeNotifications(updater);
                 this.getFactory().getDestroyCallback(inst, PRIVATE)();
+                keyToBinderMap.clear();
             });
         });
     }
