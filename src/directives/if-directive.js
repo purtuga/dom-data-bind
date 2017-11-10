@@ -12,7 +12,8 @@ import {
     createComment,
     insertBefore,
     removeChild,
-    createValueGetter } from "../utils"
+    createValueGetter,
+    deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE = "_if";
@@ -61,7 +62,7 @@ const IfDirective = Directive.extend({
                     clonedEleBinder.onDestroy(() => {
                         // We do this check because a directive could have
                         // removed the element from its parent.
-                        if (eleParentNode.contains(clonedEle)) {
+                        if (clonedEle.parentNode) {
                             removeChild(eleParentNode, clonedEle);
                         }
                     });
@@ -81,10 +82,12 @@ const IfDirective = Directive.extend({
         removeChild(eleParentNode, ele);
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
             removeChild(eleParentNode, placeholderEle);
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
         });
     }
 });

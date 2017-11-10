@@ -11,7 +11,8 @@ import {
     removeAttribute,
     setAttribute,
     createValueGetter,
-    getNodeAttrNames } from "../utils"
+    getNodeAttrNames,
+    deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE             = "_attr.";
@@ -67,9 +68,11 @@ const AttrDirective = Directive.extend({
         removeAttribute(ele, directiveAttr);
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
         });
     }
 });

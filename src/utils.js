@@ -22,6 +22,28 @@ export const removeAttribute    = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
 export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
 export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
+export const deferExec          = (() => {
+    let isQueued;
+    let callbacks       = [];
+    const execCallbacks = () => {
+        isQueued = null;
+        callbacks = [];
+        let queue = callbacks;
+        let size = callbacks.length;
+        while (--size !== -1) {
+            queue[size]();
+        }
+    };
+
+    return (cb, msDelay = 1) => {
+        callbacks.push(cb);
+
+        if (!isQueued) {
+            isQueued = setTimeout(execCallbacks, msDelay);
+        }
+    }
+})();
+
 
 export function createValueGetter(evalCode) {
     if (VALUE_GETTERS.has(evalCode)) {

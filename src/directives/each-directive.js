@@ -18,7 +18,8 @@ import {
     removeChild,
     createValueGetter,
     isPureObject,
-    arrayForEach } from "../utils"
+    arrayForEach,
+    deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE     = "_each";
@@ -140,7 +141,7 @@ const EachDirective = Directive.extend({
             positionChildren();
         };
         const destroyChildBinders = () => {
-            const callDestroyOnBinders = childEleBinders.splice(0).forEach(binder => binder.destroy());
+            const callDestroyOnBinders = () => childEleBinders.splice(0).forEach(binder => binder.destroy());
 
             if (isDedicatedParent) {
                 eleParentNode.textContent = "";
@@ -230,11 +231,13 @@ const EachDirective = Directive.extend({
         });
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
             removeChild(eleParentNode, placeholderEle);
             destroyChildBinders();
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
         });
     }
 });

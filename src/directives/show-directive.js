@@ -9,7 +9,8 @@ import {
     getAttribute,
     removeAttribute,
     createValueGetter,
-    hasAttribute } from "../utils"
+    hasAttribute,
+    deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE             = "_show";
@@ -65,8 +66,10 @@ const ShowDirective = Directive.extend({
         removeAttribute(ele, directiveAttr);
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
             dataForTokenValueGetter = tokenValueGetter = null;
         });
     }

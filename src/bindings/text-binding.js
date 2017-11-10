@@ -5,7 +5,7 @@ import {
     unsetDependencyTracker,
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
 
-import { PRIVATE, createValueGetter } from "../utils"
+import { PRIVATE, createValueGetter, deferExec } from "../utils"
 
 //===========================================================
 
@@ -42,8 +42,10 @@ export default Compose.extend({
         PRIVATE.set(this, state);
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(state, PRIVATE)();
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(state, PRIVATE)();
+            });
         });
     },
 

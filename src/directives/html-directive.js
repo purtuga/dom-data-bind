@@ -9,7 +9,8 @@ import {
     getAttribute,
     removeAttribute,
     createValueGetter,
-    hasAttribute } from "../utils"
+    hasAttribute,
+    deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE             = "_html";
@@ -63,10 +64,12 @@ const HtmlDirective = Directive.extend({
         ele.innerHTML = "";
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
             dataForTokenValueGetter = tokenValueGetter = null;
             htmlMarkup = undefined;
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
         });
     }
 });

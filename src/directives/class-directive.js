@@ -12,7 +12,8 @@ import {
     getAttribute,
     removeAttribute,
     createValueGetter,
-    hasAttribute  } from "../utils"
+    hasAttribute,
+    deferExec  } from "../utils"
 
 //============================================
 const DIRECTIVE             = "_class";
@@ -81,9 +82,11 @@ const ClassDirective = Directive.extend({
         PRIVATE.set(this, inst);
 
         this.onDestroy(() => {
-            stopDependeeNotifications(updater);
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
             cssClassList = dataForGetter = tokenValueGetter = null;
+            deferExec(() => {
+                stopDependeeNotifications(updater);
+                this.getFactory().getDestroyCallback(inst, PRIVATE)();
+            });
         });
     }
 });
