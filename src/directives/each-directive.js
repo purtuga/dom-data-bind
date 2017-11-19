@@ -18,12 +18,12 @@ import {
     removeChild,
     createValueGetter,
     isPureObject,
-    arrayForEach,
     deferExec } from "../utils"
 
 //============================================
 const DIRECTIVE     = "_each";
 const KEY_DIRECTIVE = "_key";
+
 
 /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -107,7 +107,6 @@ const EachDirective = Directive.extend({
 
                 insertBefore(eleParentNode, rowEle, placeholderEle);
 
-
                 rowEleBinder        = BinderFactory.create(rowEle, rowData);
                 rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
 
@@ -136,7 +135,9 @@ const EachDirective = Directive.extend({
                 return;
             }
 
-            arrayForEach(data, dataItemIterator);
+            for (let i = 0, t = data.length; i < t; i++) {
+                dataItemIterator(data[i], i);
+            }
 
             // store the new attached set of elements in their new positions, and
             // clean up old Binders that are no longer being used/displayed

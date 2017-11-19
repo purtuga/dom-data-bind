@@ -11,6 +11,7 @@ const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const ARRAY_PROTOTYPE           = Array.prototype;
 
 // Local aliases
+const _NodeFilter           = NodeFilter;
 const arraySlice            = bindCallTo(ARRAY_PROTOTYPE.slice);
 const arrayForEach          = bindCallTo(ARRAY_PROTOTYPE.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
@@ -50,9 +51,8 @@ const DomDataBind = Compose.extend({
 
         PRIVATE.set(this, state);
 
-        observeAll(data);
-
         const bindings = state.bindings = getBindingsFromDom(this, ele);
+        observeAll(data);
         nextTick(() => arrayForEach(bindings, binding => binding.render(data)));
 
         this.onDestroy(() => {
@@ -75,25 +75,43 @@ export default DomDataBind;
  */
 DomDataBind.directives = [];
 
-
 function getBindingsFromDom(binder, ele) {
     const { directives }    = PRIVATE.get(binder);
     const bindings          = [];
+    const domWalker         = document.createTreeWalker(
+        ele,
+        _NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT,
+        {
+            acceptNode(node) {
+                if (node.nodeType === 1 && !node.attributes.length) {
+                    return _NodeFilter.FILTER_SKIP;
+                }
+                if (node.nodeType === 3 && (!node.nodeValue || node.nodeValue.indexOf("{{") === -1)) {
+                    return _NodeFilter.FILTER_SKIP;
+                }
+
+                return _NodeFilter.FILTER_ACCEPT;
+            }
+        },
+        false
+    );
+    let domEle = domWalker.currentNode;
+    let priorDomEle = domEle;
     const directiveIterator = Directive => {
         let attrName;
 
-        while ((attrName = Directive.has(ele)) && ele.parentNode) {
-            bindings.push(Directive.create(ele, attrName, binder));
+        while ((attrName = Directive.has(domEle)) && domEle.parentNode) {
+            bindings.push(Directive.create(domEle, attrName, binder));
         }
 
         // If this Directive removed the element from its parent, then
         // don't do any more processing.
-        if (!ele.parentNode) {
+        if (!domEle.parentNode) {
             return true;
         }
     };
-    const processChildNode = child => {
-        if (isTextNode(child) && hasToken(child)) {
+    const processTextNode = child => {
+        if (hasToken(child)) {
             const reTokenMatch = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
             let childTokenMatches = reTokenMatch.exec(getNodeValue(child));
 
@@ -106,8 +124,8 @@ function getBindingsFromDom(binder, ele) {
                 else {
                     const tokenTextNode = nodeSplitText(child, childTokenMatches.index);
 
-                    // Throw the remainder of the text node into the list of children so that it can be processed
-                    children.push(nodeSplitText(tokenTextNode, childTokenMatches[0].length));
+                    // Split again at the end of token, so that we have a dedicated text node for the token value.
+                    nodeSplitText(tokenTextNode, childTokenMatches[0].length);
 
                     // Blank out the txt node and then set its value via TextBinding
                     setNodeValue(tokenTextNode, "");
@@ -116,23 +134,25 @@ function getBindingsFromDom(binder, ele) {
                 }
             }
         }
-        else if (!isTextNode(child)) {
-            bindings.push(...getBindingsFromDom(binder, child));
-        }
     };
 
-    // Process Element level Directives
-    directives.some(directiveIterator);
+    while (domEle) {
+        // Process Element level Directives
+        if (domEle.nodeType === 1) {
+            directives.some(directiveIterator);
+        }
+        else if (domEle.nodeType === 3) {
+            processTextNode(domEle);
+        }
 
-    let childNode;
-    const children = arraySlice(ele.childNodes);
+        if (!domEle.parentNode) {
+            domWalker.currentNode = priorDomEle;
+        }
+        else {
+            priorDomEle = domEle;
+        }
 
-    if (!children.length || !ele.parentNode) {
-        return bindings;
-    }
-
-    while ((childNode = children.shift())) {
-        processChildNode(childNode);
+        domEle = domWalker.nextNode();
     }
 
     return bindings;
