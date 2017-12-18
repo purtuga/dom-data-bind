@@ -12,7 +12,6 @@ const ARRAY_PROTOTYPE           = Array.prototype;
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
-const arraySlice            = bindCallTo(ARRAY_PROTOTYPE.slice);
 const arrayForEach          = bindCallTo(ARRAY_PROTOTYPE.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
 
@@ -21,7 +20,6 @@ const reHasDataToken        = new RegExp(DATA_TOKEN_REG_EXP_STR);
 const reTokenMatch          = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
 const getNodeValue          = node => node ? node.nodeValue : "";
 const setNodeValue          = (node, value) => node ? node.nodeValue = value : "";
-const isTextNode            = e => e && e.nodeType === 3;
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 const treeWalkerFilter      = {
     acceptNode(node) {
