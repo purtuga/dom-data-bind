@@ -45,6 +45,8 @@ export const deferExec          = (() => {
 
 
 export function createValueGetter(evalCode) {
+    evalCode = evalCode.trim();
+
     if (VALUE_GETTERS.has(evalCode)) {
         return VALUE_GETTERS.get(evalCode);
     }

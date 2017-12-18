@@ -18,10 +18,24 @@ const nodeSplitText         = bindCallTo(Text.prototype.splitText);
 
 // short helpers
 const reHasDataToken        = new RegExp(DATA_TOKEN_REG_EXP_STR);
+const reTokenMatch          = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
 const getNodeValue          = node => node ? node.nodeValue : "";
 const setNodeValue          = (node, value) => node ? node.nodeValue = value : "";
 const isTextNode            = e => e && e.nodeType === 3;
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
+const treeWalkerFilter      = {
+    acceptNode(node) {
+        if (node.nodeType === 1 && !node.attributes.length) {
+            return _NodeFilter.FILTER_SKIP;
+        }
+        if (node.nodeType === 3 && (!node.nodeValue || node.nodeValue.indexOf("{{") === -1)) {
+            return _NodeFilter.FILTER_SKIP;
+        }
+
+        return _NodeFilter.FILTER_ACCEPT;
+    }
+};
+
 
 /**
  * Bind data to a DOM element and automatically persist changes in that data to the UI.
@@ -78,25 +92,9 @@ DomDataBind.directives = [];
 function getBindingsFromDom(binder, ele) {
     const { directives }    = PRIVATE.get(binder);
     const bindings          = [];
-    const domWalker         = document.createTreeWalker(
-        ele,
-        _NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT,
-        {
-            acceptNode(node) {
-                if (node.nodeType === 1 && !node.attributes.length) {
-                    return _NodeFilter.FILTER_SKIP;
-                }
-                if (node.nodeType === 3 && (!node.nodeValue || node.nodeValue.indexOf("{{") === -1)) {
-                    return _NodeFilter.FILTER_SKIP;
-                }
-
-                return _NodeFilter.FILTER_ACCEPT;
-            }
-        },
-        false
-    );
-    let domEle = domWalker.currentNode;
-    let priorDomEle = domEle;
+    const domWalker         = document.createTreeWalker(ele, 5, treeWalkerFilter, false); // 5 === NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT
+    let domEle              = domWalker.currentNode;
+    let priorDomEle         = domEle;
     const directiveIterator = Directive => {
         let attrName;
 
@@ -112,7 +110,7 @@ function getBindingsFromDom(binder, ele) {
     };
     const processTextNode = child => {
         if (hasToken(child)) {
-            const reTokenMatch = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
+            reTokenMatch.lastIndex = 0;
             let childTokenMatches = reTokenMatch.exec(getNodeValue(child));
 
             while (childTokenMatches) {
