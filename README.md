@@ -65,6 +65,12 @@ Usage:
 
 Conditionally render an element and it's bindings based on the `truthy` of an expression.
 
+>   Note: in order to hide these types of conditional elements on initial page rendering, the following CSS rule should be added to you page stylesheet:
+>
+>       [_if] {
+>           display: none;
+>       }
+
 
 ### _show
 
@@ -74,7 +80,13 @@ Usage:
 <div _show="isVisible">...</div>
 ```
 
-Conditionally show or hide an element (uses  `style.display`). Unlike `_if`, this directive will process the element's children
+Conditionally show or hide an element (uses  `style.display`). Unlike `_if`, this directive will process the element's children.
+
+>   Note: in order to hide these types of conditional elements on initial page rendering, the following CSS rule should be added to you page stylesheet:
+>
+>       [_show] {
+>           display: none;
+>       }
 
 ### _class
 
@@ -134,6 +146,12 @@ Usage:
 ```
 
 Loop through a list using the HTML element as the template for each item.
+
+>   Note: in order to hide these types of conditional elements on initial page rendering, the following CSS rule should be added to you page stylesheet:
+>
+>       [_each] {
+>           display: none;
+>       }
 
 ### _html
 
