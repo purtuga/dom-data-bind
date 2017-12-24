@@ -104,7 +104,6 @@ const EachDirective = Directive.extend({
                 }
 
                 const rowEle = ele.cloneNode(true);
-                rowEle._DomDataBindClonedFrom = ele;
 
                 insertBefore(eleParentNode, rowEle, placeholderEle);
 

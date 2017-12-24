@@ -1,5 +1,6 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
 import Map              from "common-micro-libs/src/jsutils/es6-Map"
+import Set              from "common-micro-libs/src/jsutils/es6-Set"
 import nextTick         from "common-micro-libs/src/jsutils/nextTick"
 import { observeAll }   from "observable-data"
 import {
@@ -106,75 +107,6 @@ function getBindingsFromDom(binder, ele) {
     return response;
 }
 
-function _getBindingsFromDom(binder, ele) {
-    getTemplateForDomElement(ele, binder);
-
-    const { directives }    = PRIVATE.get(binder);
-    const bindings          = [];
-    const domWalker         = document.createTreeWalker(ele, 5, treeWalkerFilter, false); // 5 === NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT
-    let domEle              = domWalker.currentNode;
-    let priorDomEle         = domEle;
-    const directiveIterator = Directive => {
-        let attrName;
-
-        while ((attrName = Directive.has(domEle)) && domEle.parentNode) {
-            bindings.push(Directive.create(domEle, attrName, getAttribute(domEle, attrName), binder));
-        }
-
-        // If this Directive removed the element from its parent, then
-        // don't do any more processing.
-        if (!domEle.parentNode) {
-            return true;
-        }
-    };
-    const processTextNode = child => {
-        if (hasToken(child)) {
-            reTokenMatch.lastIndex = 0;
-            let childTokenMatches = reTokenMatch.exec(getNodeValue(child));
-
-            while (childTokenMatches) {
-                // If no need to split the text node, then just create a binding for it and exit
-                if (child.textContent === "{{" + childTokenMatches[1] + "}}") {
-                    bindings.push(TextBinding.create(child, childTokenMatches[1]));
-                    childTokenMatches = null;
-                }
-                else {
-                    const tokenTextNode = nodeSplitText(child, childTokenMatches.index);
-
-                    // Split again at the end of token, so that we have a dedicated text node for the token value.
-                    nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-
-                    // Blank out the txt node and then set its value via TextBinding
-                    setNodeValue(tokenTextNode, "");
-                    bindings.push(TextBinding.create(tokenTextNode, childTokenMatches[1]));
-                    childTokenMatches = reTokenMatch.exec(getNodeValue(child));
-                }
-            }
-        }
-    };
-
-    while (domEle) {
-        // Process Element level Directives
-        if (domEle.nodeType === 1) {
-            directives.some(directiveIterator);
-        }
-        else if (domEle.nodeType === 3) {
-            processTextNode(domEle);
-        }
-
-        if (!domEle.parentNode) {
-            domWalker.currentNode = priorDomEle;
-        }
-        else {
-            priorDomEle = domEle;
-        }
-
-        domEle = domWalker.nextNode();
-    }
-
-    return bindings;
-}
-
 function getNodeAt(root, path) {
     if (!path.length) {
         return root;
@@ -195,64 +127,44 @@ function getNodeAt(root, path) {
 function getTemplateForDomElement(ele, binder) {
     const templateId = ele.outerHTML;
 
-    if (PRIVATE.has(ele)) {
-        return PRIVATE.get(ele);
-    }
-    else if (ele._DomDataBindClonedFrom && PRIVATE.has(ele._DomDataBindClonedFrom)) {
-        return PRIVATE.get(ele._DomDataBindClonedFrom);
-    }
-
-    if (ele._DomDataBindClonedFrom) {
-        ele = ele._DomDataBindClonedFrom;
+    if (TEMPLATES.has(templateId)) {
+        return TEMPLATES.get(templateId);
     }
 
     // return:
     //  {
-    //      clone(),
     //      bindings: Map(
     //          []: [ binding constructors ],
     //          [0,1,3]: [ binding constructors ]
     //      )
     //  }
     const template = {
-        clone() {
-            const newEle = ele.cloneNode(true);
-            newEle._DomDataBindClonedFrom = ele;
-            return newEle;
-        },
         bindings: new Map() // ele: []
     };
 
-    const eleToBindings = new Map();
-
-    const { directives } = PRIVATE.get(binder);
-    const bindings          = [];
+    const eleToBindings     = new Map();
+    const { directives }    = PRIVATE.get(binder);
     const domWalker         = document.createTreeWalker(ele, 5, treeWalkerFilter, false); // 5 === NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT
     let domEle              = domWalker.currentNode;
-    let priorDomEle         = domEle;
-    const getAttrDirective  = (Directive, attrName, attrValue) => {
-        return Directive.extend({
-            init(...args) {
-                Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);
-            }
-        });
-    };
+    const ignoredChildren   = new Set();
     const directiveIterator = Directive => {
         let attrName;
         let attrValue;
         let managesNode;
 
         while (attrName = Directive.has(domEle)) {
-            if (!eleToBindings.has(domEle)) {
-                eleToBindings.set(domEle, []);
-            }
             attrValue = getAttribute(domEle, attrName);
-            eleToBindings.get(domEle).push(getAttrDirective(Directive, attrName, attrValue));
+            getArrayForNodeFromMap(eleToBindings, domEle).push(getDirectiveForAttribute(Directive, attrName, attrValue));
             removeAttribute(domEle, attrName);
             managesNode = Directive.manages();
+
+            if (managesNode) {
+                ignoredChildren.add(domEle);
+            }
         }
         return managesNode;
     };
+
     const processTextNode = child => {
         if (hasToken(child)) {
             reTokenMatch.lastIndex = 0;
@@ -261,7 +173,7 @@ function getTemplateForDomElement(ele, binder) {
             while (childTokenMatches) {
                 // If no need to split the text node, then just create a binding for it and exit
                 if (child.textContent === "{{" + childTokenMatches[1] + "}}") {
-                    bindings.push(TextBinding.create(child, childTokenMatches[1]));
+                    getArrayForNodeFromMap(eleToBindings, child).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
                     childTokenMatches = null;
                 }
                 else {
@@ -269,10 +181,7 @@ function getTemplateForDomElement(ele, binder) {
 
                     // Split again at the end of token, so that we have a dedicated text node for the token value.
                     nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-
-                    // Blank out the txt node and then set its value via TextBinding
-                    setNodeValue(tokenTextNode, "");
-                    bindings.push(TextBinding.create(tokenTextNode, childTokenMatches[1]));
+                    getArrayForNodeFromMap(eleToBindings, tokenTextNode).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
                     childTokenMatches = reTokenMatch.exec(getNodeValue(child));
                 }
             }
@@ -280,20 +189,26 @@ function getTemplateForDomElement(ele, binder) {
     };
 
     while (domEle) {
-        // Process Element level Directives
-        if (domEle.nodeType === 1) {
-            directives.some(directiveIterator);
-        }
-        // else if (domEle.nodeType === 3) {
-        //     processTextNode(domEle);
-        // }
+        let skip = false;
 
-        // if (!domEle.parentNode) {
-        //     domWalker.currentNode = priorDomEle;
-        // }
-        // else {
-        //     priorDomEle = domEle;
-        // }
+        if (ignoredChildren.size) {
+            for (let ignoredParent of ignoredChildren.values()) {
+                if (ignoredParent.contains(domEle)) {
+                    skip = true;
+                    break;
+                }
+            }
+        }
+
+        if (!skip) {
+            // Process Element level Directives
+            if (domEle.nodeType === 1) {
+                directives.some(directiveIterator);
+            }
+            else if (domEle.nodeType === 3) {
+                processTextNode(domEle);
+            }
+        }
 
         domEle = domWalker.nextNode();
     }
@@ -305,20 +220,46 @@ function getTemplateForDomElement(ele, binder) {
             return;
         }
 
-        const path = [];
+        const path  = [];
         let walkEle = bindingEle;
-        let parent = walkEle.parentNode;
+        let parent  = walkEle.parentNode;
+
         while (walkEle !== ele) {
             path.unshift(path.indexOf.call(parent.childNodes, walkEle));
             walkEle = walkEle.parentNode;
-            parent = walkEle.parentNode;
+            parent  = walkEle.parentNode;
         }
+
         template.bindings.set(path, bindings);
     });
 
+    TEMPLATES.set(templateId, template);
 
-    PRIVATE.set(ele, template);
     eleToBindings.clear();
+    ignoredChildren.clear();
 
     return template;
+}
+
+function getArrayForNodeFromMap(map, node) {
+    if (!map.has(node)) {
+        map.set(node, []);
+    }
+    return map.get(node);
+}
+
+function getTextBindingForToken(Directive, tokenText) {
+    return Directive.extend({
+        init(node) {
+            Directive.prototype.init.call(this, node, tokenText);
+        }
+    })
+}
+
+function getDirectiveForAttribute (Directive, attrName, attrValue) {
+    return Directive.extend({
+        init(...args) {
+            Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);
+        }
+    });
 }
