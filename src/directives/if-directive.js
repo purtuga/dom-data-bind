@@ -7,7 +7,6 @@ import Directive                from "./Directive"
 import {
     PRIVATE,
     hasAttribute,
-    getAttribute,
     removeAttribute,
     createComment,
     insertBefore,
@@ -19,13 +18,13 @@ import {
 const DIRECTIVE = "_if";
 
 const IfDirective = Directive.extend({
-    init(ele, directiveAttr, binder) {
+    init(ele, directiveAttr, attrValue, binder) {
         let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let showElement             = true;
         let clonedEleBinder;
         const eleParentNode         = ele.parentNode;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter        = createValueGetter((attrValue || ""));
         const placeholderEle        = createComment("");
         const updater               = data => {
             if (this.isDestroyed) {
@@ -97,3 +96,5 @@ export default IfDirective;
 IfDirective.has = function (ele) {
     return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
 };
+
+IfDirective.manages = function() { return true; };

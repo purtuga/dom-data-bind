@@ -13,6 +13,8 @@ import { PRIVATE }  from "../utils"
  *  The HTML element that contains the directive
  * @param {String} directiveAttr
  *  The directive html element attribute as found in the element.
+ * @param {String} attrValue
+ *  The value of the attribute
  * @param {DomDataBind} binder
  *  The instance of DomDataBind that called the Directive
  */
@@ -43,4 +45,12 @@ export default Directive;
  */
 Directive.has = function (/*ele*/) {
     return "";
+};
+
+/**
+ * A boolean indicating whether this directive manages the element. If set to true, then
+ * `DomDataBind` will not process any other directives after this one.
+ */
+Directive.manages = function () {
+    return false;
 };

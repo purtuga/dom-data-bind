@@ -40,12 +40,12 @@ const KEY_DIRECTIVE = "_key";
  * b:each="(value, key) of objectList"
  */
 const EachDirective = Directive.extend({
-    init(ele, directiveAttr, binder) {
+    init(ele, directiveAttr, attrValue, binder) {
         let dataForTokenValueGetter     = {};
         let updateAlreadyQueued         = false;
         const BinderFactory             = binder.getFactory();
         const eleParentNode             = ele.parentNode;
-        const [ iteratorArgs, listVar ] = parseDirectiveValue(getAttribute(ele, directiveAttr).trim());
+        const [ iteratorArgs, listVar ] = parseDirectiveValue((attrValue || "").trim());
         let tokenValueGetter            = createValueGetter(listVar);
         let isDedicatedParent;
         let listObj;
@@ -104,6 +104,7 @@ const EachDirective = Directive.extend({
                 }
 
                 const rowEle = ele.cloneNode(true);
+                rowEle._DomDataBindClonedFrom = ele;
 
                 insertBefore(eleParentNode, rowEle, placeholderEle);
 
@@ -269,3 +270,5 @@ export default EachDirective;
 EachDirective.has = function (ele) {
     return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
 };
+
+EachDirective.manages = function() { return true; };

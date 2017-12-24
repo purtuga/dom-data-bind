@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Performance</title>
+
+    <style>
+        [_each],
+        [_if],
+        [_show] {
+            display: none;
+        }
+        table {
+            width: 90%;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        tr {
+            cursor: pointer;
+        }
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .selected {
+            background: #d3ffd8;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <div>
+            <a href="javascript:" _on.click="clear">Clear</a> |
+            <a href="javascript:" _on.click="add1h">Add 100</a> |
+            <a href="javascript:" _on.click="add1k">Add 1,000</a>
+        </div>
+        <table>
+            <tr _each="item in items" _class="{ 'selected': selected === item }" _on.click="selected = item">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="DomDataBind.js"></script>
+    <script>
+        data = {
+            items: [],
+            selected: null,
+            clear() {
+                data.items.splice(0);
+            },
+            add1h() {
+                data.items.push(...generate(100))
+            },
+            add1k() {
+                data.items.push(...generate(1000));
+            }
+        };
+        _count = 1000;
+        function generate(n = 10){
+            let response = [];
+            while (--n) {
+                response.push({
+                    id: _count++,
+                    name: `name ${ _count - 1 }`,
+
+                });
+            }
+            return response;
+        }
+
+        window.DomDataBind.default.create(document.getElementById("app"), data);
+    </script>
+</body>
+</html>
