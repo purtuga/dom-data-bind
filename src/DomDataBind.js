@@ -12,20 +12,17 @@ import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
-const ARRAY_PROTOTYPE           = Array.prototype;
-
-const TEMPLATES             = new Map();
+const TEMPLATES                 = new Map();
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
-const arrayForEach          = bindCallTo(ARRAY_PROTOTYPE.forEach);
+const arrayForEach          = bindCallTo(Array.prototype.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
 
 // short helpers
 const reHasDataToken        = new RegExp(DATA_TOKEN_REG_EXP_STR);
 const reTokenMatch          = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
 const getNodeValue          = node => node ? node.nodeValue : "";
-const setNodeValue          = (node, value) => node ? node.nodeValue = value : "";
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 const treeWalkerFilter      = {
     acceptNode(node) {
@@ -58,7 +55,7 @@ const treeWalkerFilter      = {
  *  An object whose data will be used to bind to `ele`.
  *
  */
-const DomDataBind = Compose.extend({
+export const DomDataBind = Compose.extend({
     init(ele, data = {}) {
         const Factory = this.getFactory();
         const state = {
@@ -93,15 +90,17 @@ export default DomDataBind;
  */
 DomDataBind.directives = [];
 
+
+
 function getBindingsFromDom(binder, ele) {
     const eleTemplate = getTemplateForDomElement(ele, binder);
     const response = [];
 
     eleTemplate.bindings.forEach((directives, path) => {
         const node = getNodeAt(ele, path);
-        directives.forEach(Directive => {
+        arrayForEach(directives, Directive => {
             response.push(Directive.create(node, null, null, binder));
-        })
+        });
     });
 
     return response;
@@ -112,7 +111,7 @@ function getNodeAt(root, path) {
         return root;
     }
 
-    path.forEach(index => root = root.childNodes[index]);
+    arrayForEach(path, index => root = root.childNodes[index]);
     return root;
 }
 
@@ -131,15 +130,16 @@ function getTemplateForDomElement(ele, binder) {
         return TEMPLATES.get(templateId);
     }
 
-    // return:
+    // TEMPLATE:
     //  {
     //      bindings: Map(
-    //          []: [ binding constructors ],
+    //          [path via childNodes to element]: [ binding constructors ],
+    //          // example:
     //          [0,1,3]: [ binding constructors ]
     //      )
     //  }
     const template = {
-        bindings: new Map() // ele: []
+        bindings: new Map()
     };
 
     const eleToBindings     = new Map();
@@ -205,6 +205,7 @@ function getTemplateForDomElement(ele, binder) {
             if (domEle.nodeType === 1) {
                 directives.some(directiveIterator);
             }
+            // TEXT nodes
             else if (domEle.nodeType === 3) {
                 processTextNode(domEle);
             }
