@@ -8,8 +8,6 @@ import {
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    escapeString,
-    getAttribute,
     removeAttribute,
     createValueGetter,
     hasAttribute,
@@ -19,7 +17,7 @@ import {
 const DIRECTIVE             = "_class";
 
 const ClassDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let cssClassList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
@@ -28,7 +26,7 @@ const ClassDirective = Directive.extend({
         const addClass          = eleClassList.add.bind(eleClassList);
         const removeClass       = eleClassList.remove.bind(eleClassList);
         const containsClass     = eleClassList.contains.bind(eleClassList);
-        let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter    = createValueGetter((attrValue || ""));
         const updater = data => {
             if (this.isDestroyed) {
                 return;

@@ -6,7 +6,6 @@ import {
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    getAttribute,
     removeAttribute,
     createValueGetter,
     hasAttribute,
@@ -17,13 +16,13 @@ const DIRECTIVE             = "_show";
 const HIDDEN                = "none";
 
 const ShowDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let showElement             = true;
         const eleStyleList          = ele.style;
         const eleDisplayStyle       = eleStyleList.display;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter        = createValueGetter((attrValue || ""));
         const updater               = data => {
             if (this.isDestroyed) {
                 return;

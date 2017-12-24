@@ -1,25 +1,28 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
+import Map              from "common-micro-libs/src/jsutils/es6-Map"
+import Set              from "common-micro-libs/src/jsutils/es6-Set"
 import nextTick         from "common-micro-libs/src/jsutils/nextTick"
 import { observeAll }   from "observable-data"
 import {
     PRIVATE,
-    bindCallTo  }   from "./utils"
-import TextBinding  from "./bindings/text-binding"
+    bindCallTo,
+    removeAttribute,
+    getAttribute,
+    arrayForEach    }   from "./utils"
+import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
-const ARRAY_PROTOTYPE           = Array.prototype;
+const TEMPLATES                 = new Map();
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
-const arrayForEach          = bindCallTo(ARRAY_PROTOTYPE.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
 
 // short helpers
 const reHasDataToken        = new RegExp(DATA_TOKEN_REG_EXP_STR);
 const reTokenMatch          = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
 const getNodeValue          = node => node ? node.nodeValue : "";
-const setNodeValue          = (node, value) => node ? node.nodeValue = value : "";
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 const treeWalkerFilter      = {
     acceptNode(node) {
@@ -52,7 +55,7 @@ const treeWalkerFilter      = {
  *  An object whose data will be used to bind to `ele`.
  *
  */
-const DomDataBind = Compose.extend({
+export const DomDataBind = Compose.extend({
     init(ele, data = {}) {
         const Factory = this.getFactory();
         const state = {
@@ -87,25 +90,82 @@ export default DomDataBind;
  */
 DomDataBind.directives = [];
 
+
 function getBindingsFromDom(binder, ele) {
+    const eleTemplate = getTemplateForDomElement(ele, binder);
+    const response = [];
+
+    eleTemplate.bindings.forEach((directives, path) => {
+        const node = getNodeAt(ele, path);
+        arrayForEach(directives, Directive => {
+            response.push(Directive.create(node, null, null, binder));
+        });
+    });
+
+    return response;
+}
+
+function getNodeAt(root, path) {
+    if (!path.length) {
+        return root;
+    }
+
+    arrayForEach(path, index => root = root.childNodes[index]);
+    return root;
+}
+
+/**
+ * Returns the template representation for a given dom Element
+ *
+ * @param {HTMLElement} ele
+ * @param {DomDataBind} binder
+ *
+ * @return {Object}
+ */
+function getTemplateForDomElement(ele, binder) {
+    const templateId = ele.outerHTML;
+
+    if (TEMPLATES.has(templateId)) {
+        return TEMPLATES.get(templateId);
+    }
+
+    // TEMPLATE:
+    //  {
+    //      bindings: Map(
+    //          [path via childNodes to element]: [ binding constructors ],
+    //          // example:
+    //          [0,1,3]: [ binding constructors ]
+    //      )
+    //  }
+    //
+    // The goal is to be able to provide a path to each elements for which a group of directives will be applied.
+    const template = {
+        bindings: new Map()
+    };
+
+    const eleToBindings     = new Map();
     const { directives }    = PRIVATE.get(binder);
-    const bindings          = [];
     const domWalker         = document.createTreeWalker(ele, 5, treeWalkerFilter, false); // 5 === NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT
     let domEle              = domWalker.currentNode;
-    let priorDomEle         = domEle;
+    const ignoredChildren   = new Set();
     const directiveIterator = Directive => {
         let attrName;
+        let attrValue;
+        let managesNode;
 
-        while ((attrName = Directive.has(domEle)) && domEle.parentNode) {
-            bindings.push(Directive.create(domEle, attrName, binder));
-        }
+        while (attrName = Directive.has(domEle)) {
+            attrValue = getAttribute(domEle, attrName);
+            getArrayForNodeFromMap(eleToBindings, domEle).push(getDirectiveForAttribute(Directive, attrName, attrValue));
+            removeAttribute(domEle, attrName);
+            managesNode = Directive.manages();
 
-        // If this Directive removed the element from its parent, then
-        // don't do any more processing.
-        if (!domEle.parentNode) {
-            return true;
+            if (managesNode) {
+                ignoredChildren.add(domEle);
+            }
         }
+        return managesNode;
     };
+
     const processTextNode = child => {
         if (hasToken(child)) {
             reTokenMatch.lastIndex = 0;
@@ -114,7 +174,7 @@ function getBindingsFromDom(binder, ele) {
             while (childTokenMatches) {
                 // If no need to split the text node, then just create a binding for it and exit
                 if (child.textContent === "{{" + childTokenMatches[1] + "}}") {
-                    bindings.push(TextBinding.create(child, childTokenMatches[1]));
+                    getArrayForNodeFromMap(eleToBindings, child).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
                     childTokenMatches = null;
                 }
                 else {
@@ -122,10 +182,7 @@ function getBindingsFromDom(binder, ele) {
 
                     // Split again at the end of token, so that we have a dedicated text node for the token value.
                     nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-
-                    // Blank out the txt node and then set its value via TextBinding
-                    setNodeValue(tokenTextNode, "");
-                    bindings.push(TextBinding.create(tokenTextNode, childTokenMatches[1]));
+                    getArrayForNodeFromMap(eleToBindings, tokenTextNode).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
                     childTokenMatches = reTokenMatch.exec(getNodeValue(child));
                 }
             }
@@ -133,23 +190,78 @@ function getBindingsFromDom(binder, ele) {
     };
 
     while (domEle) {
-        // Process Element level Directives
-        if (domEle.nodeType === 1) {
-            directives.some(directiveIterator);
-        }
-        else if (domEle.nodeType === 3) {
-            processTextNode(domEle);
+        let skip = false;
+
+        if (ignoredChildren.size) {
+            for (let ignoredParent of ignoredChildren.values()) {
+                if (ignoredParent.contains(domEle)) {
+                    skip = true;
+                    break;
+                }
+            }
         }
 
-        if (!domEle.parentNode) {
-            domWalker.currentNode = priorDomEle;
-        }
-        else {
-            priorDomEle = domEle;
+        if (!skip) {
+            // Process Element level Directives
+            if (domEle.nodeType === 1) {
+                directives.some(directiveIterator);
+            }
+            // TEXT nodes
+            else if (domEle.nodeType === 3) {
+                processTextNode(domEle);
+            }
         }
 
         domEle = domWalker.nextNode();
     }
 
-    return bindings;
+    // Create the list array of node indexes for each binding processed
+    eleToBindings.forEach((bindings, bindingEle) => {
+        if (ele === bindingEle) {
+            template.bindings.set([], bindings);
+            return;
+        }
+
+        const path  = [];
+        let walkEle = bindingEle;
+        let parent  = walkEle.parentNode;
+
+        while (walkEle !== ele) {
+            path.unshift(path.indexOf.call(parent.childNodes, walkEle));
+            walkEle = walkEle.parentNode;
+            parent  = walkEle.parentNode;
+        }
+
+        template.bindings.set(path, bindings);
+    });
+
+    TEMPLATES.set(templateId, template);
+
+    eleToBindings.clear();
+    ignoredChildren.clear();
+
+    return template;
+}
+
+function getArrayForNodeFromMap(map, node) {
+    if (!map.has(node)) {
+        map.set(node, []);
+    }
+    return map.get(node);
+}
+
+function getTextBindingForToken(Directive, tokenText) {
+    return Directive.extend({
+        init(node) {
+            Directive.prototype.init.call(this, node, tokenText);
+        }
+    })
+}
+
+function getDirectiveForAttribute (Directive, attrName, attrValue) {
+    return Directive.extend({
+        init(...args) {
+            Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);
+        }
+    });
 }

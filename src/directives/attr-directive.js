@@ -19,10 +19,10 @@ const DIRECTIVE             = "_attr.";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const AttrDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter        = createValueGetter((attrValue || ""));
         const htmlAttr              = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
         const updater               = data => {
             if (this.isDestroyed) {

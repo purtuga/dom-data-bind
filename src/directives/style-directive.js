@@ -7,7 +7,6 @@ import {
     stopDependeeNotifications } from "observable-data/src/ObservableObject"
 import {
     PRIVATE,
-    getAttribute,
     removeAttribute,
     createValueGetter,
     hasAttribute,
@@ -18,13 +17,13 @@ import Directive        from "./Directive"
 const DIRECTIVE             = "_style";
 
 const StyleDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let cssStyleList        = {};
         let updateAlreadyQueued = false;
         let domEleUpdateQueued  = false;
         let dataForGetter       = null;
         const eleStyleList      = ele.style;
-        let tokenValueGetter    = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter    = createValueGetter((attrValue || ""));
         const updater = data => {
             if (this.isDestroyed) {
                 return;

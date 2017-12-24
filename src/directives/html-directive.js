@@ -6,7 +6,6 @@ import {
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    getAttribute,
     removeAttribute,
     createValueGetter,
     hasAttribute,
@@ -16,10 +15,10 @@ import {
 const DIRECTIVE             = "_html";
 
 const HtmlDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter        = createValueGetter((attrValue || ""));
         let htmlMarkup              = "";
         const updater               = data => {
             if (this.isDestroyed) {

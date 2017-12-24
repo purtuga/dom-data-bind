@@ -3,7 +3,6 @@ import Directive            from "./Directive"
 import {
     PRIVATE,
     escapeString,
-    getAttribute,
     removeAttribute,
     createValueGetter,
     getNodeAttrNames } from "../utils"
@@ -13,9 +12,9 @@ const DIRECTIVE             = "_on.";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const OnDirective = Directive.extend({
-    init(ele, directiveAttr) {
+    init(ele, directiveAttr, attrValue) {
         let dataForTokenValueGetter = { $data: {} };
-        let tokenValueGetter        = createValueGetter(getAttribute(ele, directiveAttr));
+        let tokenValueGetter        = createValueGetter((attrValue || ""));
         const eventName         = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
         const eventHandler      = domEv => {
             let tokenValue;
