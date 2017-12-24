@@ -7,7 +7,8 @@ import {
     PRIVATE,
     bindCallTo,
     removeAttribute,
-    getAttribute    }   from "./utils"
+    getAttribute,
+    arrayForEach    }   from "./utils"
 import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
@@ -16,7 +17,6 @@ const TEMPLATES                 = new Map();
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
-const arrayForEach          = bindCallTo(Array.prototype.forEach);
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
 
 // short helpers
@@ -91,7 +91,6 @@ export default DomDataBind;
 DomDataBind.directives = [];
 
 
-
 function getBindingsFromDom(binder, ele) {
     const eleTemplate = getTemplateForDomElement(ele, binder);
     const response = [];
@@ -138,6 +137,8 @@ function getTemplateForDomElement(ele, binder) {
     //          [0,1,3]: [ binding constructors ]
     //      )
     //  }
+    //
+    // The goal is to be able to provide a path to each elements for which a group of directives will be applied.
     const template = {
         bindings: new Map()
     };
