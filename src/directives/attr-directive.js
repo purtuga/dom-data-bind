@@ -45,26 +45,26 @@ const AttrDirective = Directive.extend({
                 let newValue;
                 try {
                     newValue = tokenValueGetter(dataForTokenValueGetter || {});
+
+                    if (this.constructor._isProp) {
+                        if (newValue !== currentValue) {
+                            ele[htmlAttr] = newValue;
+                        }
+                    }
+                    else {
+                        if (newValue && currentValue !== newValue) {
+                            setAttribute(ele, htmlAttr, newValue);
+                        }
+                        else if (currentValue && !newValue) {
+                            removeAttribute(ele, htmlAttr);
+                        }
+                    }
                 }
                 catch(e) {
                     console.error(e);
                 }
                 unsetDependencyTracker(updater);
                 updateAlreadyQueued = false;
-
-                if (this.constructor._isProp) {
-                    if (newValue !== currentValue) {
-                        ele[htmlAttr] = newValue;
-                    }
-                }
-                else {
-                    if (newValue && currentValue !== newValue) {
-                        setAttribute(ele, htmlAttr, newValue);
-                    }
-                    else if (currentValue && !newValue) {
-                        removeAttribute(ele, htmlAttr);
-                    }
-                }
             });
         };
         const inst = { updater };

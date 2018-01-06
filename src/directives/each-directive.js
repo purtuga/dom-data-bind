@@ -201,6 +201,7 @@ const EachDirective = Directive.extend({
 
             listObj = newList;
 
+            // FIXME: Move all this logi to be inside of hte try{} block. Then, all dependency tracking is taken care of
             if (Array.isArray(listObj)) {
                 makeArrayObservable(listObj);
                 listObjEv = listObj.on("change", iterateOverList);
