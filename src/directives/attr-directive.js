@@ -15,15 +15,13 @@ import {
     deferExec } from "../utils"
 
 //============================================
-const DIRECTIVE             = "_attr.";
-const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
 const AttrDirective = Directive.extend({
     init(ele, directiveAttr, attrValue) {
         let dataForTokenValueGetter = null;
         let updateAlreadyQueued     = false;
         let tokenValueGetter        = createValueGetter((attrValue || ""));
-        const htmlAttr              = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
+        const htmlAttr              = (new RegExp(this.constructor._matches)).exec(directiveAttr)[1];
         const updater               = data => {
             if (this.isDestroyed) {
                 return;
@@ -54,11 +52,18 @@ const AttrDirective = Directive.extend({
                 unsetDependencyTracker(updater);
                 updateAlreadyQueued = false;
 
-                if (newValue && currentValue !== newValue) {
-                    setAttribute(ele, htmlAttr, newValue);
+                if (this.constructor._isProp) {
+                    if (newValue !== currentValue) {
+                        ele[htmlAttr] = newValue;
+                    }
                 }
-                else if (currentValue && !newValue) {
-                    removeAttribute(ele, htmlAttr);
+                else {
+                    if (newValue && currentValue !== newValue) {
+                        setAttribute(ele, htmlAttr, newValue);
+                    }
+                    else if (currentValue && !newValue) {
+                        removeAttribute(ele, htmlAttr);
+                    }
                 }
             });
         };
@@ -79,8 +84,12 @@ const AttrDirective = Directive.extend({
 
 export default AttrDirective;
 
+// Protected private variables for re-use in _prop directive
+AttrDirective._matches = /^_attr\.(.*)/;
+AttrDirective._isProp = false;
+
 AttrDirective.has = function (ele) {
     let directiveAttr = "";
-    getNodeAttrNames(ele).some(attr => matchesDirective.test(attr) && (directiveAttr = attr));
+    getNodeAttrNames(ele).some(attr => this._matches.test(attr) && (directiveAttr = attr));
     return directiveAttr;
 };

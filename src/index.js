@@ -5,6 +5,7 @@ import StyleDirective   from "./directives/style-directive"
 import IfDirective      from "./directives/if-directive"
 import ShowDirective    from "./directives/show-directive"
 import AttrDirective    from "./directives/attr-directive"
+import PropDirective    from "./directives/prop-directive"
 import OnDirective      from "./directives/on-directive"
 import EachDirective    from "./directives/each-directive"
 import HtmlDirective    from "./directives/html-directive"
@@ -17,6 +18,7 @@ DomDataBindAll.directives = [
     StyleDirective,
     ShowDirective,
     AttrDirective,
+    PropDirective,
     OnDirective,
     HtmlDirective
 ];
@@ -30,6 +32,8 @@ export {
     ClassDirective,
     StyleDirective,
     ShowDirective,
+    AttrDirective,
+    PropDirective,
     OnDirective,
     HtmlDirective
 };
