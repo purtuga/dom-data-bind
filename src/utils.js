@@ -68,9 +68,10 @@ with ($data) {
 }
 
 export function getNodeAttrNames(node){
-    let attrNames = [];
+    const attrNames = [];
+    const total = node.attributes.length;
 
-    for(let i = node.attributes.length - 1; i >= 0; i--) {
+    for(let i = 0; i < total; i++) {
         attrNames.push(node.attributes.item(i).name);
     }
 
