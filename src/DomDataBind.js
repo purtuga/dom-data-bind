@@ -8,12 +8,14 @@ import {
     bindCallTo,
     removeAttribute,
     getAttribute,
-    arrayForEach    }   from "./utils"
+    arrayForEach,
+    createComment   }   from "./utils"
 import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const TEMPLATES                 = new Map();
+const ID                        = Math.random().toString(36).replace(/[^a-z]+/g, '');
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
@@ -95,8 +97,17 @@ function getBindingsFromDom(binder, ele) {
     const eleTemplate = getTemplateForDomElement(ele, binder);
     const response = [];
 
+    if (eleTemplate.ele.hasChildNodes()) {
+        ele.innerHTML = eleTemplate.ele.innerHTML;
+    }
+
     eleTemplate.bindings.forEach((directives, path) => {
         const node = getNodeAt(ele, path);
+        if (!node) {
+            console.log(new Error(`Unable to find node!`));
+            return;
+        }
+
         arrayForEach(directives, Directive => {
             response.push(Directive.create(node, null, null, binder));
         });
@@ -178,11 +189,16 @@ function getTemplateForDomElement(ele, binder) {
                     childTokenMatches = null;
                 }
                 else {
-                    const tokenTextNode = nodeSplitText(child, childTokenMatches.index);
+                    let tokenTextNode = nodeSplitText(child, childTokenMatches.index);
 
                     // Split again at the end of token, so that we have a dedicated text node for the token value.
+                    // Because we'll be using this as a template, well also need to replace this token value node
+                    // with an HTML comment, which will be replaced later during directive initialization
                     nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-                    getArrayForNodeFromMap(eleToBindings, tokenTextNode).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
+                    const tokenPlaceholder = tokenTextNode.parentNode.insertBefore(createComment(ID), tokenTextNode);
+                    tokenTextNode.parentNode.removeChild(tokenTextNode);
+
+                    getArrayForNodeFromMap(eleToBindings, tokenPlaceholder).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
                     childTokenMatches = reTokenMatch.exec(getNodeValue(child));
                 }
             }
@@ -240,6 +256,7 @@ function getTemplateForDomElement(ele, binder) {
     eleToBindings.clear();
     ignoredChildren.clear();
 
+    template.ele = ele.cloneNode(true);
     return template;
 }
 
@@ -253,6 +270,11 @@ function getArrayForNodeFromMap(map, node) {
 function getTextBindingForToken(Directive, tokenText) {
     return Directive.extend({
         init(node) {
+            if (node.nodeType === 8 && node.nodeValue === ID) {
+                const nodeToRemove = node;
+                node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
+                nodeToRemove.parentNode.removeChild(nodeToRemove);
+            }
             Directive.prototype.init.call(this, node, tokenText);
         }
     })
