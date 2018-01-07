@@ -70,7 +70,7 @@ export const DomDataBind = Compose.extend({
 
         const bindings = state.bindings = getBindingsFromDom(this, ele);
         observeAll(data);
-        nextTick(() => arrayForEach(bindings, binding => binding.render(data)));
+        arrayForEach(bindings, binding => binding.render(data));
 
         this.onDestroy(() => {
             delete state.data;

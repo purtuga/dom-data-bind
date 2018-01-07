@@ -39,6 +39,7 @@
             <a href="javascript:" _on.click="add1k">Add 1,000</a> |
             <a href="javascript:" _on.click="add10k">Add 10,000</a>
         </div>
+        <div>{{ lastMeasurement }}</div>
         <table>
             <tr _each="item in items" _class="{ 'selected': selected === item }" _on.click="selected = item">
                 <td>{{ item.id }}</td>
@@ -49,23 +50,46 @@
 
     <script src="DomDataBind.js"></script>
     <script>
+
         data = {
             items: [],
             selected: null,
+            lastMeasurement: "",
             clear() {
                 data.items.splice(0);
+                data.lastMeasurement = "";
             },
             add1h() {
-                data.items.push(...generate(100))
+                addItemsAndMeasure(100);
             },
             add1k() {
-                data.items.push(...generate(1000));
+                addItemsAndMeasure(1000);
             },
             add10k() {
-                data.items.push(...generate(10000));
+                addItemsAndMeasure(10000);
             }
         };
         _count = 1000;
+        function addItemsAndMeasure(count) {
+            const itemList = generate(count);
+            const markName = `add${ count }`;
+            const markNameStart = `${ markName }-start`;
+            const markNameEnd = `${ markName }-end`;
+
+
+            performance.mark(markNameStart);
+            data.items.push(...itemList);
+            setTimeout(() => {
+                performance.mark(markNameEnd);
+                performance.measure(markName, markNameStart, markNameEnd);
+
+                data.lastMeasurement = `Add ${ count } = ${ performance.getEntriesByName(markName)[0].duration }`;
+                console.log(data.lastMeasurement);
+
+                performance.clearMarks();
+                performance.clearMeasures();
+            }, 0);
+        }
         function generate(n = 10){
             let response = [];
             while (--n) {

@@ -18,6 +18,7 @@ import {
     removeChild,
     createValueGetter,
     isPureObject,
+    createDocFragment,
     deferExec } from "../utils"
 
 //============================================
@@ -34,10 +35,10 @@ const KEY_DIRECTIVE = "_key";
  *
  * @example
  *
- * b:each="item of arrayList"
- * b:each="(item, index) of arrayList"
- * b:each="value of objectList"
- * b:each="(value, key) of objectList"
+ * _each="item of arrayList"
+ * _each="(item, index) of arrayList"
+ * _each="value of objectList"
+ * _each="(value, key) of objectList"
  */
 const EachDirective = Directive.extend({
     init(ele, directiveAttr, attrValue, binder) {
@@ -103,12 +104,14 @@ const EachDirective = Directive.extend({
                     return;
                 }
 
+                const frag = createDocFragment();
                 const rowEle = ele.cloneNode(true);
+                frag.appendChild(rowEle);
 
-                insertBefore(eleParentNode, rowEle, placeholderEle);
 
                 rowEleBinder        = BinderFactory.create(rowEle, rowData);
                 rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
+                insertBefore(eleParentNode, frag, placeholderEle);
 
                 if (rowKey) {
                     keyToBinderMap.set(rowKey, rowEleBinder);

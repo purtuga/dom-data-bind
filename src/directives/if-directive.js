@@ -12,6 +12,7 @@ import {
     insertBefore,
     removeChild,
     createValueGetter,
+    createDocFragment,
     deferExec } from "../utils"
 
 //============================================
@@ -55,9 +56,11 @@ const IfDirective = Directive.extend({
                 updateAlreadyQueued = false;
 
                 if (showElement && !clonedEleBinder) {
+                    const frag = createDocFragment();
                     const clonedEle = ele.cloneNode(true);
-                    insertBefore(eleParentNode, clonedEle, placeholderEle);
+                    frag.appendChild(clonedEle);
                     clonedEleBinder = binder.getFactory().create(clonedEle, dataForTokenValueGetter);
+                    insertBefore(eleParentNode, frag, placeholderEle);
                     clonedEleBinder.onDestroy(() => {
                         // We do this check because a directive could have
                         // removed the element from its parent.
