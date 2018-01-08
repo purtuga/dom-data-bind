@@ -15,7 +15,7 @@ import TextBinding      from "./bindings/text-binding"
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const TEMPLATES                 = new Map();
-const ID                        = Math.random().toString(36).replace(/[^a-z]+/g, '');
+const UUID                      = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
@@ -195,7 +195,7 @@ function getTemplateForDomElement(ele, binder) {
                     // Because we'll be using this as a template, well also need to replace this token value node
                     // with an HTML comment, which will be replaced later during directive initialization
                     nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-                    const tokenPlaceholder = tokenTextNode.parentNode.insertBefore(createComment(ID), tokenTextNode);
+                    const tokenPlaceholder = tokenTextNode.parentNode.insertBefore(createComment(UUID), tokenTextNode);
                     tokenTextNode.parentNode.removeChild(tokenTextNode);
 
                     getArrayForNodeFromMap(eleToBindings, tokenPlaceholder).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
@@ -270,7 +270,7 @@ function getArrayForNodeFromMap(map, node) {
 function getTextBindingForToken(Directive, tokenText) {
     return Directive.extend({
         init(node) {
-            if (node.nodeType === 8 && node.nodeValue === ID) {
+            if (node.nodeType === 8 && node.nodeValue === UUID) {
                 const nodeToRemove = node;
                 node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
                 nodeToRemove.parentNode.removeChild(nodeToRemove);

@@ -19,6 +19,7 @@ import {
     createValueGetter,
     isPureObject,
     createDocFragment,
+    arrayForEach,
     deferExec } from "../utils"
 
 //============================================
@@ -64,21 +65,26 @@ const EachDirective = Directive.extend({
             createValueGetter(getAttribute(ele, KEY_DIRECTIVE)) :
             () => {};
         const positionChildren  = () => {
-            childEleBinders.forEach((childBinder, index) => {
+            arrayForEach(childEleBinders, (childBinder, index) => {
                 const childInstance = childBinder._loop;
                 if (childInstance.pos === index) {
                     return;
                 }
 
-                let nextSibling = childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle;
-                insertBefore(eleParentNode, childInstance.rowEle, nextSibling);
+                insertBefore(
+                    eleParentNode,
+                    childInstance.rowEle,
+                    childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle
+                );
                 childInstance.pos = index;
             });
         };
         const iterateOverList   = () => {
             const attachedEleBinder = [];
+            const newDomElements    = createDocFragment();
             let isArray             = false;
             let data;
+
             const dataItemIterator  = (item, index) => {
                 let rowData;
 
@@ -111,7 +117,7 @@ const EachDirective = Directive.extend({
 
                 rowEleBinder        = BinderFactory.create(rowEle, rowData);
                 rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
-                insertBefore(eleParentNode, frag, placeholderEle);
+                newDomElements.appendChild(frag);
 
                 if (rowKey) {
                     keyToBinderMap.set(rowKey, rowEleBinder);
@@ -142,20 +148,22 @@ const EachDirective = Directive.extend({
                 dataItemIterator(data[i], i);
             }
 
+            if (newDomElements.hasChildNodes()) {
+                insertBefore(eleParentNode, newDomElements, placeholderEle);
+            }
+
             // store the new attached set of elements in their new positions, and
             // clean up old Binders that are no longer being used/displayed
-            childEleBinders
-                .splice(0, childEleBinders.length, ...attachedEleBinder)
-                .forEach(childBinder => {
-                    if (childEleBinders.indexOf(childBinder) === -1) {
-                        childBinder.destroy();
-                    }
-                });
+            arrayForEach(childEleBinders.splice(0, childEleBinders.length, ...attachedEleBinder), childBinder => {
+                if (childEleBinders.indexOf(childBinder) === -1) {
+                    childBinder.destroy();
+                }
+            });
 
             positionChildren();
         };
         const destroyChildBinders = () => {
-            const callDestroyOnBinders = () => childEleBinders.splice(0).forEach(binder => binder.destroy());
+            const callDestroyOnBinders = () => arrayForEach(childEleBinders.splice(0), binder => binder.destroy());
 
             if (isDedicatedParent) {
                 eleParentNode.textContent = "";
