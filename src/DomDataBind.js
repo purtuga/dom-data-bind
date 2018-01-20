@@ -4,6 +4,7 @@ import Set              from "common-micro-libs/src/jsutils/es6-Set"
 import { observeAll }   from "observable-data"
 import {
     PRIVATE,
+    UUID,
     bindCallTo,
     removeAttribute,
     getAttribute,
@@ -14,7 +15,6 @@ import TextBinding      from "./bindings/text-binding"
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const TEMPLATES                 = new Map();
-const UUID                      = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
@@ -108,7 +108,12 @@ function getBindingsFromDom(binder, ele) {
         }
 
         arrayForEach(directives, Directive => {
-            response.push(Directive.create(node, null, null, binder));
+            if (Directive.getNodeHandler){
+                response.push(Directive.getNodeHandler(node));
+            }
+            else { // FIXME: remove this when all are converted
+                response.push(Directive.create(node, null, null, binder));
+            }
         });
     });
 
@@ -266,17 +271,43 @@ function getArrayForNodeFromMap(map, node) {
     return map.get(node);
 }
 
+/**
+ * Returns a node handlers for the given directive
+ *
+ * @param {Directive} Directive
+ * @param {String} tokenText
+ *  The token text (no curly braces)
+ *
+ * @returns {Directive}
+ *  Returns a Directive instance. Call `.getNodeHandler` to get a handler for a given node
+ */
 function getTextBindingForToken(Directive, tokenText) {
-    return Directive.extend({
-        init(node) {
-            if (node.nodeType === 8 && node.nodeValue === UUID) {
-                const nodeToRemove = node;
-                node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
-                nodeToRemove.parentNode.removeChild(nodeToRemove);
-            }
-            Directive.prototype.init.call(this, node, tokenText);
-        }
-    })
+    tokenText = tokenText.trim();
+
+    let directiveInstances = PRIVATE.get(Directive);
+
+    if (!directiveInstances) {
+        directiveInstances = {};
+        PRIVATE.set(Directive, directiveInstances);
+    }
+
+    if (!directiveInstances[tokenText]) {
+        directiveInstances[tokenText] = new Directive(tokenText);
+    }
+
+    return directiveInstances[tokenText];
+
+
+    // return Directive.extend({
+    //     init(node) {
+    //         if (node.nodeType === 8 && node.nodeValue === UUID) {
+    //             const nodeToRemove = node;
+    //             node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
+    //             nodeToRemove.parentNode.removeChild(nodeToRemove);
+    //         }
+    //         Directive.prototype.init.call(this, node, tokenText);
+    //     }
+    // })
 }
 
 function getDirectiveForAttribute (Directive, attrName, attrValue) {

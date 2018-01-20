@@ -10,6 +10,7 @@ const VALUE_GETTERS         = new Map();
 const _bind                 = FUNCTION.bind.call.bind(FUNCTION.bind);
 
 export const PRIVATE            = dataStore.create();
+export const UUID               = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
 export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";
@@ -22,6 +23,7 @@ export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
 export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
 export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
 export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
+export const logError           = _bind(console.error, console); // eslint-disable-line
 export const deferExec          = (() => {
     let isQueued;
     let callbacks       = [];
