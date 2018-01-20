@@ -311,6 +311,25 @@ function getTextBindingForToken(Directive, tokenText) {
 }
 
 function getDirectiveForAttribute (Directive, attrName, attrValue) {
+    if (Directive.__new ) { // FIXME: remove this
+
+        attrValue = attrValue.trim();
+
+        const directiveSignature    = `${attrName}-${ UUID }-${ attrValue }`;
+        let directiveInstances      = PRIVATE.get(Directive);
+
+        if (!directiveInstances) {
+            directiveInstances = {};
+            PRIVATE.set(Directive, directiveInstances);
+        }
+
+        if (!directiveInstances[directiveSignature]) {
+            directiveInstances[directiveSignature] = new Directive(attrName, attrValue);
+        }
+
+        return directiveInstances[directiveSignature];
+    }
+
     return Directive.extend({
         init(...args) {
             Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);

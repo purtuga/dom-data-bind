@@ -27,6 +27,15 @@ const devData = {
 let data                = {};
 let currentBinding;
 
+console.log(`%c
+                                                       
+    variable available:                                
+                                                       
+    data                                               
+    currentBinding                                     
+                                                       
+`, "background: lightgreen; color: darkgreen;");
+
 function sortBy(arr, attr) {
     arr.sort(function (a, b) {
         let attrA = a[attr];

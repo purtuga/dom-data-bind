@@ -5,65 +5,85 @@ import {
     escapeString,
     removeAttribute,
     createValueGetter,
-    getNodeAttrNames } from "../utils"
+    getNodeAttrNames,
+    logError } from "../utils"
 
 //============================================
 const DIRECTIVE             = "_on.";
 const matchesDirective      = new RegExp(`^${ escapeString(DIRECTIVE) }(.*)`);
 
-const OnDirective = Directive.extend({
-    init(ele, directiveAttr, attrValue) {
-        let dataForTokenValueGetter = { $data: {} };
-        let tokenValueGetter        = createValueGetter((attrValue || ""));
-        const eventName         = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
-        const eventHandler      = domEv => {
-            let tokenValue;
-            dataForTokenValueGetter.$ev = domEv;
-
-            try {
-                tokenValue = tokenValueGetter(dataForTokenValueGetter);
-            }
-            catch(e) {
-                console.error(e);
-                return;
-            }
-
-            delete dataForTokenValueGetter.$ev;
-
-            if ("function" === typeof tokenValue) {
-                tokenValue(domEv);
-            }
-        };
-        const updater = data => {
-            if (this.isDestroyed) {
-                return;
-            }
-            if (data) {
-                if (data.$data) {
-                    dataForTokenValueGetter = data;
-                }
-                else {
-                    dataForTokenValueGetter.$data = data;
-                }
-            }
-        };
-        const inst = { updater };
-
-        PRIVATE.set(this, inst);
-        removeAttribute(ele, directiveAttr);
-        inst.evListener = domAddEventListener(ele, eventName, eventHandler);
-
-        this.onDestroy(() => {
-            this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            tokenValueGetter = null;
-        });
+export class OnDirective extends Directive {
+    static has(ele) {
+        let directiveAttr = "";
+        getNodeAttrNames(ele).some(attr => matchesDirective.test(attr) && (directiveAttr = attr));
+        return directiveAttr;
     }
-});
+
+
+    init(directiveAttr, attrValue) {
+        this._attr              = directiveAttr;
+        this._eventName         = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
+        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+    }
+
+    /**
+     * Handles the event on the node
+     *
+     * @param {NodeHandler} handler
+     * @param {Event} domEv
+     */
+    handleEvent(handler, domEv) {
+        const state = PRIVATE.get(handler);
+
+        let tokenValue;
+        state.data.$ev = domEv;
+
+        try {
+            tokenValue = this._tokenValueGetter(state.data);
+        }
+        catch(e) {
+            logError(e);
+            return;
+        }
+
+        delete state.data.$ev;
+
+        if ("function" === typeof tokenValue) {
+            return tokenValue(domEv);
+        }
+    }
+
+    // takes care of only storing the data on the node, for when the event is triggered
+    render(handler, node, data) {
+        let state = PRIVATE.get(handler);
+
+        if (!state) {
+            state = {
+                data:       { $data: {} },
+                tracker:    () => this.render(handler, node, state.data)
+            };
+            PRIVATE.set(handler, state);
+        }
+
+        if (data) {
+            if (data.$data) {
+                state.data = data;
+            }
+            else {
+                state.data.$data = data;
+            }
+        }
+    }
+
+    getNodeHandler(node) {
+        const handler = super.getNodeHandler(node);
+        const evListener = domAddEventListener(node, this._eventName, this.handleEvent.bind(this, handler));
+        removeAttribute(node, this._attr);
+        handler.onDestroy(() => evListener.remove());
+        return handler;
+    }
+}
 
 export default OnDirective;
 
-OnDirective.has = function (ele) {
-    let directiveAttr = "";
-    getNodeAttrNames(ele).some(attr => matchesDirective.test(attr) && (directiveAttr = attr));
-    return directiveAttr;
-};
+OnDirective.__new = true; // FIXME: temp.... remove

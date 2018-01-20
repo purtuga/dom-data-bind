@@ -1,5 +1,5 @@
-import Compose  from "common-micro-libs/src/jsutils/Compose"
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
+import nextTick     from "common-micro-libs/src/jsutils/nextTick"
+import Directive    from "../directives/Directive"
 import {
     setDependencyTracker,
     unsetDependencyTracker,
@@ -9,68 +9,24 @@ import {
     PRIVATE,
     UUID,
     createValueGetter,
-    deferExec,
     logError    } from "../utils"
 
 //===========================================================
 
-export class TextBinding extends Compose {
+export class TextBinding extends Directive {
     init(tokenText) {
         this._tokenText = tokenText;
         this._tokenValueGetter = createValueGetter(tokenText);
     }
 
-    initOld(ele, tokenText) {
-        let dataForTokenValueGetter = null;
-        let updateAlreadyQueued     = false;
-        this._tokenValueGetter      = createValueGetter(tokenText);
-        const updater               = data => {
-            if (data) {
-                if (dataForTokenValueGetter) {
-                    stopDependeeNotifications(updater);
-                }
-                dataForTokenValueGetter = data;
-            }
-            if (updateAlreadyQueued) {
-                return;
-            }
-            updateAlreadyQueued = true;
-            nextTick(() => {
-                setDependencyTracker(updater);
-                try {
-                    ele.nodeValue = tokenValueGetter(dataForTokenValueGetter || null);
-                }
-                catch(e) {
-                    logError(e);
-                }
-                unsetDependencyTracker(updater);
-                updateAlreadyQueued = false;
-            });
-        };
-        const state = { updater };
-
-        PRIVATE.set(this, state);
-
-        this.onDestroy(() => {
-            deferExec(() => {
-                stopDependeeNotifications(updater);
-                this.getFactory().getDestroyCallback(state, PRIVATE)();
-            });
-        });
-    }
-
-    renderOld(data) {
-        PRIVATE.get(this).updater(data);
-    }
-
-    render(node, data) {
+    render(handler, node, data) {
         let state = PRIVATE.get(node);
 
         if (!state) {
             state = {
                 data: null,
                 isQueued:   false,
-                tracker:    () => this.render(node, state.data),
+                tracker:    () => this.render(handler, node, state.data),
                 update:     () => {
                     setDependencyTracker(state.tracker);
 
@@ -117,19 +73,7 @@ export class TextBinding extends Compose {
             nodeToRemove.parentNode.removeChild(nodeToRemove);
         }
 
-        return Object.create({
-            render: data => {
-                this.render(node, data);
-            },
-
-            destroy() {
-                const state = PRIVATE.get(node);
-                if (state){
-                    setDependencyTracker(state.tracker);
-                    PRIVATE.delete(node);
-                }
-            }
-        });
+        return super.getNodeHandler(node);
     }
 }
 

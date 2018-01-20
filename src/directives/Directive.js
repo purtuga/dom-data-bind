@@ -1,5 +1,7 @@
-import Compose      from "common-micro-libs/src/jsutils/Compose"
-import { PRIVATE }  from "../utils"
+import Compose                          from "common-micro-libs/src/jsutils/Compose"
+import { PRIVATE }                      from "../utils"
+import { stopDependeeNotifications }    from "observable-data/src/ObservableObject"
+
 
 /**
  * A DOM element directive.
@@ -18,39 +20,68 @@ import { PRIVATE }  from "../utils"
  * @param {DomDataBind} binder
  *  The instance of DomDataBind that called the Directive
  */
-const Directive = Compose.extend({
+export class Directive extends Compose {
+    /**
+     * Checks a given element has an element attribute that matches the Directive.
+     * If a match is found, the html Element's attribute that was matched must be
+     * returned.
+     *
+     * @param {HTMLElement} ele
+     *
+     * @returns {String}
+     */
+    static has(/*ele*/) { return ""; }
+
+    /**
+     * A boolean indicating whether this directive manages the element. If set to true, then
+     * `DomDataBind` will not process any other directives after this one.
+     */
+    static manages() { return false; }
+
     /**
      * Render the Directive with given data
      *
-     * @param {Object} [data]
+     * @param {Node} node
+     * @param {Object} data
      */
-    render(data) {
-        const inst = PRIVATE.get(this);
-        if (inst && inst.updater) {
-            inst.updater(data);
-        }
+    render(/*handler, node, data*/) {}
+
+    /**
+     * Returns an object with a `render` function for the given node.
+     *
+     * @param {Node} node
+     *
+     * @return {NodeHandler}
+     */
+    getNodeHandler(node) {
+        return new NodeHandler(this, node);
     }
-});
+}
 export default Directive;
 
-
 /**
- * Checks a given element has an element attribute that matches the Directive.
- * If a match is found, the html Element's attribute that was matched must be
- * returned.
+ * A node directive handler.
  *
- * @param {HTMLElement} ele
- *
- * @returns {String}
+ * @extends Compose
  */
-Directive.has = function (/*ele*/) {
-    return "";
-};
+class NodeHandler extends Compose {
+    init(directive, node) {
+        this._d = directive;
+        this._n = node;
+        this.onDestroy(() => {
+            const state = PRIVATE.get(this);
+            if (state && state.tracker){
+                stopDependeeNotifications(state.tracker);
+            }
+            if (state.data) {
+                state.data = null;
+            }
+            PRIVATE.delete(this);
+        });
+    }
 
-/**
- * A boolean indicating whether this directive manages the element. If set to true, then
- * `DomDataBind` will not process any other directives after this one.
- */
-Directive.manages = function () {
-    return false;
-};
+    render(data) {
+        this._d.render(this, this._n, data);
+    }
+}
+
