@@ -105,7 +105,9 @@ export class Directive extends Compose {
 
             unsetDependencyTracker(handlerState.tracker);
             handlerState.isQueued = false;
-            handlerState.value = newValue;
+            if (state.value !== newValue) {
+                handlerState.value = newValue;
+            }
         }
     }
 
