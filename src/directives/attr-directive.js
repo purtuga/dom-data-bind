@@ -31,7 +31,6 @@ export class AttrDirective extends Directive {
     }
 
 
-
     init(attr, attrValue) {
         this._attr              = attr;
         this._tokenValueGetter  = createValueGetter((attrValue || ""));
@@ -39,64 +38,30 @@ export class AttrDirective extends Directive {
     }
 
     render(handler, node, data) {
+        super.render(handler, node, data);
         let state = PRIVATE.get(handler);
-
-        if (!state) {
-            state = {
-                data:       null,
-                value:      "",
-                isQueued:   false,
-                tracker:    () => this.render(handler, node, state.data),
-                update:     () => {
-                    let newValue = "";
-
-                    setDependencyTracker(state.tracker);
-
-                    try {
-                        newValue = this._tokenValueGetter(state.data || {});
+        if (!state.update) {
+            state.update = newValue => {
+                if (this.constructor._isProp) {
+                    if (newValue !== state.value) {
+                        node[this._htmlAttr] = newValue;
                     }
-                    catch(e) {
-                        logError(e);
+                }
+                else {
+                    if (newValue && state.value !== newValue) {
+                        setAttribute(node, this._htmlAttr, newValue);
                     }
-
-                    unsetDependencyTracker(state.tracker);
-                    state.isQueued = false;
-
-                    if (this.constructor._isProp) {
-                        if (newValue !== state.value) {
-                            node[this._htmlAttr] = newValue;
-                        }
+                    else if (state.value && !newValue) {
+                        removeAttribute(node, this._htmlAttr);
                     }
-                    else {
-                        if (newValue && state.value !== newValue) {
-                            setAttribute(node, this._htmlAttr, newValue);
-                        }
-                        else if (state.value && !newValue) {
-                            removeAttribute(node, this._htmlAttr);
-                        }
-                    }
-
-                    state.value = newValue;
                 }
             };
-            PRIVATE.set(handler, state);
         }
-
-        if (state.data !== data) {
-            stopDependeeNotifications(state.tracker);
-            state.data = data;
-        }
-
-        if (state.isQueued) {
-            return;
-        }
-
-        state.isQueued = true;
-        nextTick(state.update);
     }
 }
 
 export default AttrDirective;
+
 
 
 AttrDirective.__new = true; // FIXME: temp.... remove
