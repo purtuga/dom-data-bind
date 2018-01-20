@@ -80,11 +80,6 @@ export class AttrDirective extends Directive {
                 }
             };
             PRIVATE.set(handler, state);
-            handler.onDestroy(() => {
-                stopDependeeNotifications(state.tracker);
-                state = null;
-                PRIVATE.delete(handler);
-            });
         }
 
         if (state.data !== data) {
