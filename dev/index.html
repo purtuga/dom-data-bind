@@ -5,83 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOM Data Bind</title>
-    <style>
-        #ui,
-        #data,
-        #template,
-        #out {
-            box-sizing: border-box;
-        }
-
-        #ui {
-            position: relative;
-        }
-
-        textarea {
-            width: 100%;
-        }
-
-        #data,
-        #template {
-            width: 40%;
-        }
-
-        #data textarea {
-            height: 25em;
-        }
-        #dataError {
-            color: red;
-            min-height: 1.2em;
-        }
-
-        #template textarea {
-            height: 15em;
-        }
-
-        #out {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 57%;
-            padding: 1em;
-            border: 1em solid lightgrey;
-            min-height: 43em;
-        }
-
-
-        .border {
-            border: 1px solid red;
-        }
-        .padding {
-            padding: 1em;
-        }
-        .margin {
-            margin: 2em;
-        }
-        .pre {
-            white-space: pre;
-        }
-        .bg-blue {
-            background: lightskyblue;
-        }
-        .bg-red {
-            background: lightcoral;
-        }
-        .bg-green {
-            background: lightgreen;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css" >
 </head>
 <body>
 <h1>Dom Data Bind - Development Workbench</h1>
-<p>
-    <a href="perf.html">PERF Testing</a>
+<p id="menu">
+    <script src="./menu.js"></script>
     <hr/>
 </p>
 <div id="ui">
     <div id="data">
         <h2>Data</h2>
-<textarea>
+<!-- ========================================================================== --><textarea>
 {
     firstName: "Paul",
     lastName: "Tavares",
@@ -133,13 +68,13 @@
 
 
 
-</textarea>
+</textarea><!-- ========================================================================== -->
         <div id="dataError">{{dataError}}</div>
     </div>
 
     <div id="template">
         <h2>template</h2>
-<textarea>
+<!-- ========================================================================== --><textarea>
 <div _style="{
         border: styles.border,
         padding: '0.5em'
@@ -212,91 +147,13 @@
 
 
 
-</textarea>
+</textarea><!-- ========================================================================== -->
     </div>
 
     <div id="out"></div>
 </div>
 
 <script src="DomDataBind.js"></script>
-<script>
-    const DomDataBind       = window.DomDataBind.default;
-    const uiFind            = document.querySelector.bind(document);
-    const dataTextarea      = uiFind("#data > textarea");
-    const templateTextarea  = uiFind("#template > textarea");
-    const outEle            = uiFind("#out");
-    const missingTemplate   = "Template is missing!";
-    const debounce          = (cb, ms) => {
-        let isQueued = null;
-        let lastCallArgs;
-
-        return (...args) => {
-            lastCallArgs = args;
-            if (isQueued) {
-                clearTimeout(isQueued);
-            }
-            isQueued = setTimeout(() => {
-                isQueued = null;
-                cb(...lastCallArgs);
-                lastCallArgs = undefined;
-            }, ms || 0);
-        };
-    };
-    const devData = {
-        dataError: ""
-    };
-
-    let data                = {};
-    let currentBinding;
-
-    function sortBy(arr, attr) {
-        arr.sort(function (a, b) {
-            let attrA = a[attr];
-            let attrB = b[attr];
-
-            if (attrA > attrB) {
-                return 1;
-            }
-
-            if (attrA < attrB) {
-                return -1;
-            }
-
-            return 0;
-        });
-    }
-
-    function getData() {
-        let newData;
-        devData.dataError = "";
-        let fn = new Function('return (' + dataTextarea.value + ');');
-        try {
-            newData = fn();
-        }
-        catch(e) {
-            console.error(e);
-            devData.dataError = e.message;
-            newData = {};
-        }
-
-        Object.assign(data, newData);
-        return data;
-    }
-
-    function createDomBinding() {
-        if (currentBinding) {
-            currentBinding.destroy();
-        }
-
-        outEle.textContent = "";
-        outEle.innerHTML = `<div>${templateTextarea.value}</div>` || "<div>{{ missingTemplate }}</div>";
-        currentBinding = DomDataBind.create(outEle.firstChild, getData());
-    }
-
-    dataTextarea.addEventListener("keyup", debounce(getData, 1000));
-    templateTextarea.addEventListener("keyup", debounce(createDomBinding, 1000));
-    createDomBinding();
-    DomDataBind.create(uiFind("#dataError"), devData);
-</script>
+<script src="./workbench.js"></script>
 </body>
 </html>
