@@ -1,7 +1,6 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
 import Map              from "common-micro-libs/src/jsutils/es6-Map"
 import Set              from "common-micro-libs/src/jsutils/es6-Set"
-import nextTick         from "common-micro-libs/src/jsutils/nextTick"
 import { observeAll }   from "observable-data"
 import {
     PRIVATE,
