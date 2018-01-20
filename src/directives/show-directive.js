@@ -1,81 +1,41 @@
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications } from "observable-data/src/ObservableObject"
-import Directive                from "./Directive"
+import Directive        from "./Directive"
 import {
     PRIVATE,
-    removeAttribute,
     createValueGetter,
-    hasAttribute,
-    deferExec } from "../utils"
+    hasAttribute    }   from "../utils"
 
 //============================================
 const DIRECTIVE             = "_show";
 const HIDDEN                = "none";
 
-const ShowDirective = Directive.extend({
-    init(ele, directiveAttr, attrValue) {
-        let dataForTokenValueGetter = null;
-        let updateAlreadyQueued     = false;
-        let showElement             = true;
-        const eleStyleList          = ele.style;
-        const eleDisplayStyle       = eleStyleList.display;
-        let tokenValueGetter        = createValueGetter((attrValue || ""));
-        const updater               = data => {
-            if (this.isDestroyed) {
-                return;
-            }
-            if (data) {
-                if (dataForTokenValueGetter) {
-                    stopDependeeNotifications(updater);
-                }
-                dataForTokenValueGetter = data;
-            }
-            if (updateAlreadyQueued) {
-                return;
-            }
-            updateAlreadyQueued = true;
-            nextTick(() => {
-                if (this.isDestroyed) {
-                    return;
-                }
-                setDependencyTracker(updater);
-                try {
-                    showElement = tokenValueGetter(dataForTokenValueGetter || {});
-                }
-                catch(e) {
-                    console.error(e);
-                }
-                unsetDependencyTracker(updater);
-                updateAlreadyQueued = false;
+export class ShowDirective extends Directive {
+    static has(ele) {
+        return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
+    }
 
-                if (showElement) {
+    init(attr, attrValue) {
+        this._attr              = attr;
+        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+    }
+
+    render(handler, node, data) {
+        super.render(handler, node, data);
+        const state = PRIVATE.get(handler);
+        if (!state.update) {
+            const eleStyleList      = node.style;
+            const eleDisplayStyle   = node.display || "";
+            state.update            = newValue => {
+                if (newValue) {
                     eleStyleList.display = eleDisplayStyle;
                 }
                 else if (eleStyleList.display !== HIDDEN)  {
                     eleStyleList.display = HIDDEN;
                 }
-            });
-        };
-        const inst = { updater };
-
-        PRIVATE.set(this, inst);
-        removeAttribute(ele, directiveAttr);
-
-        this.onDestroy(() => {
-            deferExec(() => {
-                stopDependeeNotifications(updater);
-                this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            });
-            dataForTokenValueGetter = tokenValueGetter = null;
-        });
+            };
+        }
     }
-});
+}
 
 export default ShowDirective;
 
-ShowDirective.has = function (ele) {
-    return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
-};
+ShowDirective.__new = true; // FIXME: remove this.
