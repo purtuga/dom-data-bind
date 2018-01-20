@@ -1,7 +1,8 @@
 import AttrDirective from "./attr-directive"
 
-export const PropDirective = AttrDirective.extend({});
+const matchRegExp = /^_prop\.(.*)/;
+export class PropDirective extends AttrDirective {
+    static get _matches() { return matchRegExp; }
+    static _isProp() { return true; }
+}
 export default PropDirective;
-
-AttrDirective._matches = /^_prop\.(.*)/;
-AttrDirective._isProp = true;

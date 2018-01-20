@@ -78,7 +78,6 @@ export class OnDirective extends Directive {
     getNodeHandler(node) {
         const handler = super.getNodeHandler(node);
         const evListener = domAddEventListener(node, this._eventName, this.handleEvent.bind(this, handler));
-        removeAttribute(node, this._attr);
         handler.onDestroy(() => evListener.remove());
         return handler;
     }

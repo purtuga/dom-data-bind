@@ -4,8 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOM Data Bind - ON Directive</title>
+    <title>DOM Data Bind - ATTR Directive</title>
     <link rel="stylesheet" type="text/css" href="styles.css" >
+    <style>
+        #attr_ele:before {
+            content: attr(data-val);
+        }
+    </style>
 </head>
 <body>
 <h1>Dom Data Bind - Development Workbench</h1>
@@ -18,13 +23,8 @@
         <h2>Data</h2>
         <!-- ========================================================================== --><textarea>
 {
-    clickit() {
-        const ele = document.getElementById("click_out");
-        ele.innerHTML = `${ ele.innerHTML } <div>Clicked == ${ Date.now() }</div>`;
-    },
-    hoverit(ev) {
-        console.log(`hovering: ${Date.now()} ${ev.target.textContent}`);
-    }
+    attr1: "Attribute one is set",
+    attr2: "Attribute two is set"
 }
 
 
@@ -35,10 +35,10 @@
 
     <div id="template">
         <h2>template</h2>
-        <!-- ========================================================================== --> <textarea>
+<!-- ========================================================================== --> <textarea>
 <div>
-    <a href="javascript:" _on.click="clickit" _on.mouseover="hoverit">Click this</a>
-    <div id="click_out"></div>
+    <h2>Att below</h2>
+    <div id="attr_ele" _attr.title="attr1" _attr.data-val="attr2"></div>
 </div>
 
 

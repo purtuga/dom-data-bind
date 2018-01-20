@@ -1,5 +1,5 @@
 import Compose                          from "common-micro-libs/src/jsutils/Compose"
-import { PRIVATE }                      from "../utils"
+import { PRIVATE, removeAttribute }     from "../utils"
 import { stopDependeeNotifications }    from "observable-data/src/ObservableObject"
 
 
@@ -54,6 +54,9 @@ export class Directive extends Compose {
      * @return {NodeHandler}
      */
     getNodeHandler(node) {
+        if (this._attr) {
+            removeAttribute(node, this._attr);
+        }
         return new NodeHandler(this, node);
     }
 }
@@ -83,5 +86,7 @@ class NodeHandler extends Compose {
     render(data) {
         this._d.render(this, this._n, data);
     }
+
+    update(/*value*/) {}
 }
 
