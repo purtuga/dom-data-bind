@@ -8,5 +8,6 @@
     "classDirective.html",
     "htmlDirective.html",
     "showDirective.html",
-    "styleDirective.html"
+    "styleDirective.html",
+    "ifDirective.html"
 ].forEach(page => document.write(`<a href="${ page }">${ page }</a>`));

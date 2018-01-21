@@ -109,7 +109,7 @@ function getBindingsFromDom(binder, ele) {
 
         arrayForEach(directives, Directive => {
             if (Directive.getNodeHandler){
-                response.push(Directive.getNodeHandler(node));
+                response.push(Directive.getNodeHandler(node, binder));
             }
             else { // FIXME: remove this when all are converted
                 response.push(Directive.create(node, null, null, binder));

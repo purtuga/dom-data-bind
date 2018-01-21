@@ -1,6 +1,9 @@
-import nextTick                         from "common-micro-libs/src/jsutils/nextTick"
-import Compose                          from "common-micro-libs/src/jsutils/Compose"
-import { PRIVATE, removeAttribute }     from "../utils"
+import nextTick         from "common-micro-libs/src/jsutils/nextTick"
+import Compose          from "common-micro-libs/src/jsutils/Compose"
+import {
+    PRIVATE,
+    removeAttribute,
+    logError    }       from "../utils"
 import {
     setDependencyTracker,
     unsetDependencyTracker,
@@ -115,15 +118,15 @@ export class Directive extends Compose {
      * Returns an object with a `render` function for the given node.
      *
      * @param {Node} node
-     * @param {Function} [updater]
+     * @param {DomDataBind} [binder]
      *
      * @return {NodeHandler}
      */
-    getNodeHandler(node, updater) {
+    getNodeHandler(node/*, binder*/) {
         if (this._attr) {
             removeAttribute(node, this._attr);
         }
-        return new NodeHandler(this, node, updater);
+        return new NodeHandler(this, node);
     }
 }
 export default Directive;
@@ -134,17 +137,18 @@ export default Directive;
  * @extends Compose
  */
 class NodeHandler extends Compose {
-    init(directive, node, updater) {
+    init(directive, node) {
         this._d = directive;
         this._n = node;
-        this._u = updater;
         this.onDestroy(() => {
             const state = PRIVATE.get(this);
-            if (state && state.tracker){
-                stopDependeeNotifications(state.tracker);
-            }
-            if (state.data) {
-                state.data = null;
+            if (state){
+                if (state.tracker) {
+                    stopDependeeNotifications(state.tracker);
+                }
+                if (state.data) {
+                    state.data = null;
+                }
             }
             PRIVATE.delete(this);
         });
