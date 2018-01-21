@@ -9,7 +9,8 @@ import {
     removeAttribute,
     getAttribute,
     arrayForEach,
-    createComment   }   from "./utils"
+    createComment,
+    logError        }   from "./utils"
 import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
@@ -97,13 +98,16 @@ function getBindingsFromDom(binder, ele) {
     const response = [];
 
     if (eleTemplate.ele.hasChildNodes()) {
-        ele.innerHTML = eleTemplate.ele.innerHTML;
+        ele.textContent = "";
+        arrayForEach(eleTemplate.ele.childNodes, node => {
+            ele.appendChild(node.cloneNode(true));
+        });
     }
 
     eleTemplate.bindings.forEach((directives, path) => {
         const node = getNodeAt(ele, path);
         if (!node) {
-            console.log(new Error(`Unable to find node!`));
+            logError(new Error(`Unable to find node!`));
             return;
         }
 
