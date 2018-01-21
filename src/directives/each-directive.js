@@ -60,7 +60,6 @@ export class EachDirective extends Directive {
         const [ iteratorArgs, listVar ] = parseDirectiveValue((attrValue || "").trim());
         this._attr              = attr;
         this._iteratorArgs      = iteratorArgs;
-        this._listVar           = listVar;
         this._tokenValueGetter  = createValueGetter((listVar || ""));
     }
 
@@ -87,7 +86,7 @@ export class EachDirective extends Directive {
                 }
 
                 if (!newList) {
-                    // destroyChildBinders();
+                    this.destroyChildBinders(state.binders, handler);
                     return;
                 }
 
@@ -105,12 +104,43 @@ export class EachDirective extends Directive {
                 }
 
                 if (isEmptyList(newList)) {
-                    // destroyChildBinders();
+                    this.destroyChildBinders(state.binders, handler);
                 }
                 else {
                     this.iterateOverList(handler, newList);
                 }
             };
+
+            // When handler is destroyed, remove data listeners
+            handler.onDestroy(() => {
+                if (state.listChgEv) {
+                    state.listChgEv.off();
+                    state.listChgEv = null;
+                }
+                state.bindersByKey.clear();
+                this.destroyChildBinders(state.binders, handler);
+            });
+        }
+    }
+
+    /**
+     * Destroy the binder instances and remove Elements from DOM.
+     *
+     * @param binders
+     * @param handler
+     */
+    destroyChildBinders(binders, handler) {
+        binders = binders.splice(0);
+
+        if (handler._isSoleChild) {
+            handler._placeholderEle.parentNode.textContent = "";
+            handler._placeholderEle.parentNode.appendChild(handler._placeholderEle);
+            setTimeout(() => {
+                arrayForEach(binders.splice(0), binder => binder.destroy())
+            });
+        }
+        else {
+            arrayForEach(binders.splice(0), binder => binder.destroy());
         }
     }
 
@@ -125,7 +155,7 @@ export class EachDirective extends Directive {
      *      _each="item in arrayList"
      *      arrayList = [ "value 1" ]
      *
-     *      // Array Keys           // Array values             // result object
+     *      // Array Keys           // Array values             // result: object
      *      // Defined in the       // Data in actual           // Matches the key
      *      // template             // Array                    // to the data
      *      //-------------------   //-----------------         //---------------------
@@ -148,62 +178,19 @@ export class EachDirective extends Directive {
         );
     }
 
+    /**
+     * Iterates over a new set (list) and eitehr updates or builds out new elements for each item
+     * in that list.
+     *
+     * @param handler
+     * @param newData
+     */
     iterateOverList(handler, newData) {
-        const state = PRIVATE.get(handler);
+        const state             = PRIVATE.get(handler);
         const attachedEleBinder = [];
         const newDomElements    = createDocFragment();
         let isArray             = Array.isArray(newData);
         let data;
-
-        // FIXME: make this function part of the class
-        const dataItemIterator  = (item, index) => {
-            let rowData = { $data: state.data.$data || state.data };
-
-            if (isArray) {
-                this.getDataForIteration([ item, index ], rowData);
-            }
-            else {
-                this.getDataForIteration([ newData[item], item, index ], rowData);
-            }
-
-            const rowKey = handler.getKey(rowData);
-            let rowEleBinder;
-
-            if (rowKey) {
-                rowEleBinder = state.bindersByKey.get(rowKey);
-            }
-
-            // If a binder already exists for this key, then just update its data
-            if (rowEleBinder) {
-                delete rowData.$data;
-                observableAssign(rowEleBinder._loop.rowData, rowData);
-                attachedEleBinder.push(rowEleBinder);
-                return;
-            }
-
-            const frag = createDocFragment();
-            const rowEle = handler._n.cloneNode(true);
-            frag.appendChild(rowEle);
-
-
-            rowEleBinder        = new handler._Factory(rowEle, rowData);
-            rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
-            newDomElements.appendChild(frag);
-
-            if (rowKey) {
-                state.bindersByKey.set(rowKey, rowEleBinder);
-            }
-
-            state.binders.push(rowEleBinder);
-            attachedEleBinder.push(rowEleBinder);
-
-            rowEleBinder.onDestroy(() => {
-                rowEle.parentNode && removeChild(handler._placeholderEle.parentNode, rowEle);
-                if (rowKey) {
-                    state.bindersByKey.delete(rowKey);
-                }
-            });
-        };
 
         if (isArray) {
             isArray = true;
@@ -216,7 +203,19 @@ export class EachDirective extends Directive {
         }
 
         for (let i = 0, t = data.length; i < t; i++) {
-            dataItemIterator(data[i], i);
+            let rowData = { $data: state.data.$data || state.data };
+
+            if (isArray) {
+                this.getDataForIteration([ data[i], i ], rowData);
+            }
+            else {
+                this.getDataForIteration([ newData[ data[i] ], data[i], i ], rowData);
+            }
+
+            const [ binder, newEle ] = this.getRowBinder(handler, rowData);
+            binder._loop.pos = attachedEleBinder.length;
+            attachedEleBinder.push(binder);
+            newDomElements.appendChild(newEle);
         }
 
         if (newDomElements.hasChildNodes()) {
@@ -235,23 +234,31 @@ export class EachDirective extends Directive {
             }
         });
 
-        this.positionChildren(
-            handler._placeholderEle.parentNode,
-            handler._placeholderEle,
-            state.binders
-        );
+        if (state.binders.length) {
+            this.positionChildren(
+                handler._placeholderEle.parentNode,
+                handler._placeholderEle,
+                state.binders
+            );
+        }
     }
 
-    dataItemIterator(handler, item, index, isArray) {
-        const state = PRIVATE.get(handler);
-        const rowData = { $data: state.data.$data || state.data };
-
-        if (isArray) {
-            this.getDataForIteration([ item, index ], rowData);
-        }
-        else {
-            this.getDataForIteration([ state.data[item], item, index ], rowData);
-        }
+    /**
+     * Handles processing a single data item by either updating and existing binder or creating
+     * a new binder.
+     *
+     * @param {NodeHandler} handler
+     * @param {Object} rowData
+     *
+     * @returns {Array<DomDataBind, HTMLFragment>}
+     *  returns an array wtih two values:
+     *  -   the binder for the data item (could be an exising one)
+     *  -   Document fragment containing any new Elements that should be inserted into dom
+     */
+    getRowBinder(handler, rowData) {
+        const state             = PRIVATE.get(handler);
+        let itemBinder          = null;
+        const newDomElements    = createDocFragment();
 
         const rowKey = handler.getKey(rowData);
         let rowEleBinder;
@@ -264,25 +271,23 @@ export class EachDirective extends Directive {
         if (rowEleBinder) {
             delete rowData.$data;
             observableAssign(rowEleBinder._loop.rowData, rowData);
-            attachedEleBinder.push(rowEleBinder);
-            return;
+            itemBinder = rowEleBinder;
+            return [ itemBinder, newDomElements ];
         }
 
         const frag = createDocFragment();
         const rowEle = handler._n.cloneNode(true);
         frag.appendChild(rowEle);
 
-
         rowEleBinder        = new handler._Factory(rowEle, rowData);
-        rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
+        rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: -1 };
         newDomElements.appendChild(frag);
 
         if (rowKey) {
             state.bindersByKey.set(rowKey, rowEleBinder);
         }
 
-        state.binders.push(rowEleBinder);
-        attachedEleBinder.push(rowEleBinder);
+        itemBinder = rowEleBinder;
 
         rowEleBinder.onDestroy(() => {
             rowEle.parentNode && removeChild(handler._placeholderEle.parentNode, rowEle);
@@ -290,6 +295,8 @@ export class EachDirective extends Directive {
                 state.bindersByKey.delete(rowKey);
             }
         });
+
+        return [ itemBinder, newDomElements ];
     }
 
     /**
@@ -319,237 +326,13 @@ export class EachDirective extends Directive {
         handler._Factory        = binder.getFactory();
         handler._placeholderEle = createComment("");
         handler.getKey          = hasAttribute(node, KEY_DIRECTIVE) ? createValueGetter(getAttribute(node, KEY_DIRECTIVE)) : NOOP;
+        handler._isSoleChild    = hasDedicatedParent(node);
 
         insertBefore(node.parentNode, handler._placeholderEle, node);
-        removeAttribute(node, KEY_DIRECTIVE);
         removeChild(node.parentNode, node);
+        removeAttribute(node, KEY_DIRECTIVE);
 
         return handler;
-    }
-
-
-
-    ____init(ele, directiveAttr, attrValue, binder) {
-        let dataForTokenValueGetter     = {};
-        let updateAlreadyQueued         = false;
-        const BinderFactory             = binder.getFactory();
-        const eleParentNode             = ele.parentNode;
-        const [ iteratorArgs, listVar ] = parseDirectiveValue((attrValue || "").trim());
-        let tokenValueGetter            = createValueGetter(listVar);
-        let isDedicatedParent;
-        let listObj;
-        let listObjEv;
-        let childEleBinders         = [];
-        const keyToBinderMap        = new Map();
-        const placeholderEle        = createComment("");
-        const getDataForIteration   = iteratorArgValues => {
-            return iteratorArgs.reduce((rowData, argName) => {
-                rowData[argName] = iteratorArgValues.shift();
-                return rowData;
-            }, { $data: dataForTokenValueGetter.$data || dataForTokenValueGetter });
-        };
-        const getIterationKey   = hasAttribute(ele, KEY_DIRECTIVE) ?
-            createValueGetter(getAttribute(ele, KEY_DIRECTIVE)) :
-            () => {};
-        const positionChildren  = () => {
-            arrayForEach(childEleBinders, (childBinder, index) => {
-                const childInstance = childBinder._loop;
-                if (childInstance.pos === index) {
-                    return;
-                }
-
-                insertBefore(
-                    eleParentNode,
-                    childInstance.rowEle,
-                    childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle
-                );
-                childInstance.pos = index;
-            });
-        };
-        const iterateOverList   = () => {
-            const attachedEleBinder = [];
-            const newDomElements    = createDocFragment();
-            let isArray             = false;
-            let data;
-
-            const dataItemIterator  = (item, index) => {
-                let rowData;
-
-                if (isArray) {
-                    rowData = getDataForIteration([ item, index ]);
-                }
-                else {
-                    rowData = getDataForIteration([ data[item], item, index ]);
-                }
-
-                const rowKey = getIterationKey(rowData);
-                let rowEleBinder;
-
-                if (rowKey) {
-                    rowEleBinder = keyToBinderMap.get(rowKey);
-                }
-
-                // If a binder already exists for this key, then just update its data
-                if (rowEleBinder) {
-                    delete rowData.$data;
-                    observableAssign(rowEleBinder._loop.rowData, rowData);
-                    attachedEleBinder.push(rowEleBinder);
-                    return;
-                }
-
-                const frag = createDocFragment();
-                const rowEle = ele.cloneNode(true);
-                frag.appendChild(rowEle);
-
-
-                rowEleBinder        = BinderFactory.create(rowEle, rowData);
-                rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: attachedEleBinder.length };
-                newDomElements.appendChild(frag);
-
-                if (rowKey) {
-                    keyToBinderMap.set(rowKey, rowEleBinder);
-                }
-
-                childEleBinders.push(rowEleBinder);
-                attachedEleBinder.push(rowEleBinder);
-
-                rowEleBinder.onDestroy(() => {
-                    rowEle.parentNode && removeChild(eleParentNode, rowEle);
-                    if (rowKey) {
-                        keyToBinderMap.delete(rowKey);
-                    }
-                });
-            };
-
-            if (Array.isArray(listObj)) {
-                isArray = true;
-                data = listObj;
-            }
-            else if (isPureObject(listObj)) {
-                data = Object.keys(listObj);
-            } else {
-                return;
-            }
-
-            for (let i = 0, t = data.length; i < t; i++) {
-                dataItemIterator(data[i], i);
-            }
-
-            if (newDomElements.hasChildNodes()) {
-                insertBefore(eleParentNode, newDomElements, placeholderEle);
-            }
-
-            // store the new attached set of elements in their new positions, and
-            // clean up old Binders that are no longer being used/displayed
-            arrayForEach(childEleBinders.splice(0, childEleBinders.length, ...attachedEleBinder), childBinder => {
-                if (childEleBinders.indexOf(childBinder) === -1) {
-                    childBinder.destroy();
-                }
-            });
-
-            positionChildren();
-        };
-        const destroyChildBinders = () => {
-            const callDestroyOnBinders = () => arrayForEach(childEleBinders.splice(0), binder => binder.destroy());
-
-            if (isDedicatedParent) {
-                eleParentNode.textContent = "";
-                eleParentNode.appendChild(placeholderEle);
-                setTimeout(callDestroyOnBinders);
-            }
-            else {
-                callDestroyOnBinders();
-            }
-
-        };
-        const isEmptyList = list => {
-            return (Array.isArray(list) && !list.length) || (isPureObject(list) && !Object.keys(list).length);
-        };
-        const applyUpdateToDom = () => {
-            if (this.isDestroyed) {
-                return;
-            }
-            setDependencyTracker(updater);
-            let newList;
-            try {
-                newList = tokenValueGetter(dataForTokenValueGetter);
-            }
-            catch(e) {
-                console.error(e);
-            }
-            unsetDependencyTracker(updater);
-            updateAlreadyQueued = false;
-
-            if (newList === listObj) {
-                return;
-            }
-            else if (listObj) {
-                listObj = null;
-
-                if (listObjEv) {
-                    listObjEv.off();
-                    listObjEv = null;
-                }
-            }
-
-            if (!newList) {
-                destroyChildBinders();
-                return;
-            }
-
-            listObj = newList;
-
-            // FIXME: Move all this logi to be inside of hte try{} block. Then, all dependency tracking is taken care of
-            if (Array.isArray(listObj)) {
-                makeArrayObservable(listObj);
-                listObjEv = listObj.on("change", iterateOverList);
-            }
-            else if (isPureObject(listObj)) {
-                listObjEv = inst.listObjEv = watchProp(listObj, listObj, iterateOverList);
-            }
-
-            if (isEmptyList(newList)) {
-                destroyChildBinders();
-            }
-            else {
-                iterateOverList();
-            }
-        };
-        const updater = data => {
-            if (this.isDestroyed) {
-                return;
-            }
-            if (data) {
-                stopDependeeNotifications(updater);
-                dataForTokenValueGetter = data;
-            }
-            if (updateAlreadyQueued) {
-                return;
-            }
-            updateAlreadyQueued = true;
-            nextTick(applyUpdateToDom);
-        };
-        const inst = { updater };
-
-        PRIVATE.set(this, inst);
-        removeAttribute(ele, KEY_DIRECTIVE);
-        removeAttribute(ele, directiveAttr);
-        insertBefore(eleParentNode, placeholderEle, ele);
-        removeChild(eleParentNode, ele);
-        isDedicatedParent = Array.prototype.every.call(eleParentNode.childNodes, node => {
-            return node === placeholderEle || (node.nodeType === 3 && !node.textContent.trim());
-        });
-
-        this.onDestroy(() => {
-            dataForTokenValueGetter = tokenValueGetter = null;
-            removeChild(eleParentNode, placeholderEle);
-            destroyChildBinders();
-            deferExec(() => {
-                stopDependeeNotifications(updater);
-                this.getFactory().getDestroyCallback(inst, PRIVATE)();
-                keyToBinderMap.clear();
-            });
-        });
     }
 }
 
@@ -561,6 +344,12 @@ function parseDirectiveValue(attrValue) {
         return matches;
     }
     return [];
+}
+
+function hasDedicatedParent(node) {
+    return Array.prototype.every.call(node.parentNode.childNodes, childNode => {
+        return childNode === node || (childNode.nodeType === 3 && !childNode.textContent.trim());
+    });
 }
 
 

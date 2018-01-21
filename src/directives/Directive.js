@@ -141,17 +141,23 @@ class NodeHandler extends Compose {
         this._d = directive;
         this._n = node;
         this.onDestroy(() => {
-            const state = PRIVATE.get(this);
-            if (state){
-                if (state.tracker) {
-                    stopDependeeNotifications(state.tracker);
-                }
-                if (state.data) {
-                    state.data = null;
-                }
-            }
-            PRIVATE.delete(this);
         });
+    }
+
+    // Override destroy (which is by default "async" and ensure that notifications
+    // are turned off immediately for this Node
+    destroy() {
+        const state = PRIVATE.get(this);
+        if (state){
+            if (state.tracker) {
+                stopDependeeNotifications(state.tracker);
+            }
+            if (state.data) {
+                state.data = null;
+            }
+        }
+        super.destroy();
+        PRIVATE.delete(this);
     }
 
     /**
