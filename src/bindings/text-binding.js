@@ -1,15 +1,8 @@
-import nextTick     from "common-micro-libs/src/jsutils/nextTick"
-import Directive    from "../directives/Directive"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications   } from "observable-data/src/ObservableObject"
-
+import Directive from "../directives/Directive"
 import {
     PRIVATE,
     UUID,
-    createValueGetter,
-    logError    } from "../utils"
+    createValueGetter   } from "../utils"
 
 //===========================================================
 
@@ -20,39 +13,15 @@ export class TextBinding extends Directive {
     }
 
     render(handler, node, data) {
-        let state = PRIVATE.get(node);
-
-        if (!state) {
-            state = {
-                data: null,
-                isQueued:   false,
-                tracker:    () => this.render(handler, node, state.data),
-                update:     () => {
-                    setDependencyTracker(state.tracker);
-
-                    try {
-                        node.nodeValue = this._tokenValueGetter(state.data || {});
-                    }
-                    catch(e) {
-                        logError(e);
-                    }
-
-                    unsetDependencyTracker(state.tracker);
-                    state.isQueued = false;
+        super.render(handler, node, data);
+        const state = PRIVATE.get(handler);
+        if (!state.update) {
+            state.update = newValue => {
+                if (newValue !== node.nodeValue) {
+                    node.nodeValue = newValue;
                 }
             };
-            PRIVATE.set(node, state);
         }
-
-        stopDependeeNotifications(state.tracker);
-        state.data = data;
-
-        if (state.isQueued) {
-            return;
-        }
-
-        state.isQueued = true;
-        nextTick(state.update);
     }
 
     /**
@@ -69,7 +38,7 @@ export class TextBinding extends Directive {
         if (node.nodeType === 8 && node.nodeValue === UUID) {
             const nodeToRemove = node;
             // FIXME: below code should use node.ownerDocument???
-            node = node.parentNode.insertBefore(document.createTextNode(this._tokenText), nodeToRemove);
+            node = node.parentNode.insertBefore(document.createTextNode(""), nodeToRemove);
             nodeToRemove.parentNode.removeChild(nodeToRemove);
         }
 

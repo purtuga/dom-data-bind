@@ -40,7 +40,7 @@ function applyCssClassesToNode(node, newClasses = {}, oldClasses = {}) {
             if (newClasses[className] && !domHasClass(node, className)) {
                 domAddClass(node, className);
             }
-            else if (domHasClass(node, className)) {
+            else if (!newClasses[className] && domHasClass(node, className)) {
                 domRemoveClass(node, className);
             }
         });

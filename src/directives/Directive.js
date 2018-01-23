@@ -96,17 +96,17 @@ export class Directive extends Compose {
 
             try {
                 newValue = this._tokenValueGetter(handlerState.data || {});
-
-                // Update node
-                if (handler.update) {
-                    handler.update(newValue);
-                }
             }
             catch(e) {
                 logError(e);
             }
 
             unsetDependencyTracker(handlerState.tracker);
+
+            // Update node
+            if (handler.update) {
+                handler.update(newValue);
+            }
             handlerState.isQueued = false;
             if (handlerState.value !== newValue) {
                 handlerState.value = newValue;
@@ -140,8 +140,6 @@ class NodeHandler extends Compose {
     init(directive, node) {
         this._d = directive;
         this._n = node;
-        this.onDestroy(() => {
-        });
     }
 
     // Override destroy (which is by default "async" and ensure that notifications

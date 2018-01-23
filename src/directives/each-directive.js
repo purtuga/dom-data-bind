@@ -130,6 +130,10 @@ export class EachDirective extends Directive {
      * @param handler
      */
     destroyChildBinders(binders, handler) {
+        if (!binders || !binders.length) {
+            return;
+        }
+
         binders = binders.splice(0);
 
         if (handler._isSoleChild) {
@@ -226,12 +230,10 @@ export class EachDirective extends Directive {
         // clean up old Binders that are no longer being used/displayed
         // FIXME: this needs to be more efficient!!!!!!
         arrayForEach(state.binders.splice(0, state.binders.length, ...attachedEleBinder), childBinder => {
-            if (state.binders.indexOf(childBinder) === -1) {
-                if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
-                    childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
-                }
-                childBinder.destroy(); // this is aysnc
+            if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
+                childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
             }
+            childBinder.destroy(); // this is aysnc
         });
 
         if (state.binders.length) {
