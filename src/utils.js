@@ -24,28 +24,6 @@ export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
 export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
 export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
 export const logError           = _bind(console.error, console); // eslint-disable-line
-export const deferExec          = (() => {
-    let isQueued;
-    let callbacks       = [];
-    const execCallbacks = () => {
-        isQueued = null;
-        callbacks = [];
-        let queue = callbacks;
-        let size = callbacks.length;
-        while (--size !== -1) {
-            queue[size]();
-        }
-    };
-
-    return (cb, msDelay = 1) => {
-        callbacks.push(cb);
-
-        if (!isQueued) {
-            isQueued = setTimeout(execCallbacks, msDelay);
-        }
-    }
-})();
-
 
 export function createValueGetter(evalCode) {
     evalCode = evalCode.trim();

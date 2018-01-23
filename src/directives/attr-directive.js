@@ -1,19 +1,10 @@
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications } from "observable-data/src/ObservableObject"
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    escapeString,
-    getAttribute,
     removeAttribute,
     setAttribute,
     createValueGetter,
-    getNodeAttrNames,
-    deferExec,
-    logError } from "../utils"
+    getNodeAttrNames } from "../utils"
 
 //============================================
 const attrRegExp = /^_attr\.(.*)/;

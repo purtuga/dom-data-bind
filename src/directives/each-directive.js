@@ -1,14 +1,9 @@
-import nextTick     from "common-micro-libs/src/jsutils/nextTick"
-import Map          from "common-micro-libs/src/jsutils/es6-Map"
+import Map from "common-micro-libs/src/jsutils/es6-Map"
 import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications,
     watchProp,
-    observableAssign }                  from "observable-data/src/ObservableObject"
-import { mixin as makeArrayObservable } from "observable-data/src/ObservableArray"
-import { observeAll }                   from "observable-data"
-import Directive                        from "./Directive"
+    observableAssign }  from "observable-data/src/ObservableObject"
+import { observeAll }   from "observable-data"
+import Directive        from "./Directive"
 import {
     PRIVATE,
     hasAttribute,
@@ -20,8 +15,7 @@ import {
     createValueGetter,
     isPureObject,
     createDocFragment,
-    arrayForEach,
-    deferExec } from "../utils"
+    arrayForEach    }   from "../utils"
 
 //============================================
 const DIRECTIVE     = "_each";

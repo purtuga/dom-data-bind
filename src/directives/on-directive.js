@@ -3,7 +3,6 @@ import Directive            from "./Directive"
 import {
     PRIVATE,
     escapeString,
-    removeAttribute,
     createValueGetter,
     getNodeAttrNames,
     logError } from "../utils"

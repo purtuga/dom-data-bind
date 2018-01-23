@@ -300,18 +300,6 @@ function getTextBindingForToken(Directive, tokenText) {
     }
 
     return directiveInstances[tokenText];
-
-
-    // return Directive.extend({
-    //     init(node) {
-    //         if (node.nodeType === 8 && node.nodeValue === UUID) {
-    //             const nodeToRemove = node;
-    //             node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
-    //             nodeToRemove.parentNode.removeChild(nodeToRemove);
-    //         }
-    //         Directive.prototype.init.call(this, node, tokenText);
-    //     }
-    // })
 }
 
 function getDirectiveForAttribute (Directive, attrName, attrValue) {
