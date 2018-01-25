@@ -3,6 +3,8 @@ const webpack           = require('webpack');
 const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
 const isProduction      = process.env.NODE_ENV === "production";
 
+const WebpackBabelExternalsPlugin = require('webpack-babel-external-helpers-2');
+
 console.log(`MODE: ${ isProduction ? "PRODUCTION" : "DEVELOPMENT" }`);
 
 let config = module.exports = {
@@ -44,6 +46,8 @@ if (isProduction) {
     );
 
     config.plugins.push(
+        new WebpackBabelExternalsPlugin(/* plugin options object */),
+
         new UglifyJSPlugin({
             sourceMap: true,
             output: {
@@ -56,5 +60,5 @@ if (isProduction) {
                 'NODE_ENV': JSON.stringify('production')
             }
         })
-    )
+    );
 }
