@@ -97,7 +97,7 @@ export class EachDirective extends Directive {
                     state.listChgEv = watchProp(newList, newList, state.listIterator);
                 }
 
-                if (isEmptyList(newList)) {
+                if (isEmptyList(newList) && state.binders) {
                     this.destroyChildBinders(state.binders, handler);
                 }
                 else {
@@ -131,8 +131,9 @@ export class EachDirective extends Directive {
         binders = binders.splice(0);
 
         if (handler._isSoleChild) {
-            handler._placeholderEle.parentNode.textContent = "";
-            handler._placeholderEle.parentNode.appendChild(handler._placeholderEle);
+            const parentEle = handler._placeholderEle.parentNode;
+            parentEle.textContent = "";
+            parentEle.appendChild(handler._placeholderEle);
             setTimeout(() => {
                 arrayForEach(binders.splice(0), binder => binder.destroy())
             });
@@ -224,10 +225,12 @@ export class EachDirective extends Directive {
         // clean up old Binders that are no longer being used/displayed
         // FIXME: this needs to be more efficient!!!!!!
         arrayForEach(state.binders.splice(0, state.binders.length, ...attachedEleBinder), childBinder => {
-            if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
-                childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
+            if (attachedEleBinder.indexOf(childBinder) === -1) {
+                if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
+                    childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
+                }
+                childBinder.destroy(); // this is aysnc
             }
-            childBinder.destroy(); // this is aysnc
         });
 
         if (state.binders.length) {
