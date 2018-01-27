@@ -35,5 +35,3 @@ export class HtmlDirective extends Directive {
 
 export default HtmlDirective;
 
-
-HtmlDirective.__new = true; // FIXME: remove this

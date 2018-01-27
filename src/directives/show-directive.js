@@ -37,5 +37,3 @@ export class ShowDirective extends Directive {
 }
 
 export default ShowDirective;
-
-ShowDirective.__new = true; // FIXME: remove this.

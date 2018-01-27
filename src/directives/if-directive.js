@@ -75,5 +75,3 @@ export class IfDirective extends Directive {
 }
 
 export default IfDirective;
-
-IfDirective.__new = true; // FIXME: remove this

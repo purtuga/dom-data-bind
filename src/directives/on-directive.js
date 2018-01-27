@@ -83,5 +83,3 @@ export class OnDirective extends Directive {
 }
 
 export default OnDirective;
-
-OnDirective.__new = true; // FIXME: temp.... remove

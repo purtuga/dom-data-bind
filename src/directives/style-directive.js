@@ -35,5 +35,3 @@ export class StyleDirective extends Directive {
 }
 
 export default StyleDirective;
-
-StyleDirective.__new = true; // FIXME: remove this

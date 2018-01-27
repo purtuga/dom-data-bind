@@ -1,9 +1,10 @@
 import Map from "common-micro-libs/src/jsutils/es6-Map"
 import {
     watchProp,
-    observableAssign }  from "observable-data/src/ObservableObject"
-import { observeAll }   from "observable-data"
-import Directive        from "./Directive"
+    observableAssign,
+    unsetDependencyTracker }    from "observable-data/src/ObservableObject"
+import { observeAll }           from "observable-data"
+import Directive                from "./Directive"
 import {
     PRIVATE,
     hasAttribute,
@@ -62,7 +63,7 @@ export class EachDirective extends Directive {
         const state = PRIVATE.get(handler);
 
         if (!state.update) {
-            state.binders = [];     // FIXME: why we need both? array and map() below
+            state.binders = [];
             state.bindersByKey = new Map();
             state.listChgEv = null;
             state.listIterator = () => this.iterateOverList(handler, state.value);
@@ -84,12 +85,12 @@ export class EachDirective extends Directive {
                     return;
                 }
 
+                unsetDependencyTracker(state.tracker); // We don't need to be notified of changes for individual items.
                 state.value = newList;
 
                 // Make sure data is observable and setup event listners on it.
                 observeAll(newList);
 
-                // FIXME: Move all this logi to be inside of hte try{} block. Then, all dependency tracking is taken care of
                 if (Array.isArray(newList)) {
                     state.listChgEv = newList.on("change", state.listIterator);
                 }
@@ -353,6 +354,3 @@ function hasDedicatedParent(node) {
 
 
 export default EachDirective;
-
-
-EachDirective.__new = true; // FIXME: remove this

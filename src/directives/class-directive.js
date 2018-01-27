@@ -45,8 +45,3 @@ function applyCssClassesToNode(node, newClasses = {}, oldClasses = {}) {
             }
         });
 }
-
-
-
-ClassDirective.__new = true; // FIXME: remove this
-

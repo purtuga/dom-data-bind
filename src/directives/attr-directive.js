@@ -52,7 +52,3 @@ export class AttrDirective extends Directive {
 }
 
 export default AttrDirective;
-
-
-
-AttrDirective.__new = true; // FIXME: temp.... remove

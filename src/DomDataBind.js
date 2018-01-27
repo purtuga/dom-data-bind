@@ -112,12 +112,7 @@ function getBindingsFromDom(binder, ele) {
         }
 
         arrayForEach(directives, Directive => {
-            if (Directive.getNodeHandler){
-                response.push(Directive.getNodeHandler(node, binder));
-            }
-            else { // FIXME: remove this when all are converted
-                response.push(Directive.create(node, null, null, binder));
-            }
+            response.push(Directive.getNodeHandler(node, binder));
         });
     });
 
@@ -303,28 +298,19 @@ function getTextBindingForToken(Directive, tokenText) {
 }
 
 function getDirectiveForAttribute (Directive, attrName, attrValue) {
-    if (Directive.__new ) { // FIXME: remove this
+    attrValue = attrValue.trim();
 
-        attrValue = attrValue.trim();
+    const directiveSignature    = `${attrName}-${ UUID }-${ attrValue }`;
+    let directiveInstances      = PRIVATE.get(Directive);
 
-        const directiveSignature    = `${attrName}-${ UUID }-${ attrValue }`;
-        let directiveInstances      = PRIVATE.get(Directive);
-
-        if (!directiveInstances) {
-            directiveInstances = {};
-            PRIVATE.set(Directive, directiveInstances);
-        }
-
-        if (!directiveInstances[directiveSignature]) {
-            directiveInstances[directiveSignature] = new Directive(attrName, attrValue);
-        }
-
-        return directiveInstances[directiveSignature];
+    if (!directiveInstances) {
+        directiveInstances = {};
+        PRIVATE.set(Directive, directiveInstances);
     }
 
-    return Directive.extend({
-        init(...args) {
-            Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);
-        }
-    });
+    if (!directiveInstances[directiveSignature]) {
+        directiveInstances[directiveSignature] = new Directive(attrName, attrValue);
+    }
+
+    return directiveInstances[directiveSignature];
 }
