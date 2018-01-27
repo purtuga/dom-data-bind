@@ -53,6 +53,25 @@ if (isProduction) {
             output: {
                 comments: false
             }
+
+            //----- no min --------
+            // comments: true,
+            // beautify: true,
+            // mangle: false,
+            // compress: {
+            //     warnings: false,
+            //     collapse_vars: false,
+            //     sequences: false,
+            //     // conditionals: false,
+            //     comparisons: false,
+            //     booleans: false,
+            //     //evaluate:       false,
+            //     hoist_funs: false,
+            //     join_vars: false,
+            //     if_return: false,
+            //     cascade: false
+            // }
+            //^^ ----- no min -------- ^^
         }),
 
         new webpack.DefinePlugin({
