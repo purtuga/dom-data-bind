@@ -1,80 +1,37 @@
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications } from "observable-data/src/ObservableObject"
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    removeAttribute,
     createValueGetter,
-    hasAttribute,
-    deferExec } from "../utils"
+    hasAttribute } from "../utils"
 
 //============================================
-const DIRECTIVE             = "_html";
+const DIRECTIVE = "_html";
 
-const HtmlDirective = Directive.extend({
-    init(ele, directiveAttr, attrValue) {
-        let dataForTokenValueGetter = null;
-        let updateAlreadyQueued     = false;
-        let tokenValueGetter        = createValueGetter((attrValue || ""));
-        let htmlMarkup              = "";
-        const updater               = data => {
-            if (this.isDestroyed) {
-                return;
-            }
-            if (data) {
-                if (dataForTokenValueGetter) {
-                    stopDependeeNotifications(updater);
-                }
-                dataForTokenValueGetter = data;
-            }
-            if (updateAlreadyQueued) {
-                return;
-            }
-            updateAlreadyQueued = true;
-            nextTick(() => {
-                if (this.isDestroyed) {
-                    return;
-                }
-                setDependencyTracker(updater);
-                let newHtmlMarkup = "";
-                try {
-                    newHtmlMarkup = tokenValueGetter(dataForTokenValueGetter || {});
-                }
-                catch(e) {
-                    console.error(e);
-                }
-                unsetDependencyTracker(updater);
-                updateAlreadyQueued = false;
-
-                if (newHtmlMarkup === htmlMarkup) {
-                    return;
-                }
-
-                ele.innerHTML = htmlMarkup = newHtmlMarkup;
-            });
-        };
-        const inst = { updater };
-
-        PRIVATE.set(this, inst);
-        removeAttribute(ele, directiveAttr);
-        ele.innerHTML = "";
-
-        this.onDestroy(() => {
-            dataForTokenValueGetter = tokenValueGetter = null;
-            htmlMarkup = undefined;
-            deferExec(() => {
-                stopDependeeNotifications(updater);
-                this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            });
-        });
+export class HtmlDirective extends Directive {
+    static has(ele) {
+        return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
     }
-});
+
+
+    init(attr, attrValue) {
+        this._attr              = attr;
+        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+    }
+
+    render(handler, node, data) {
+        super.render(handler, node, data);
+        const state = PRIVATE.get(handler);
+        if (!state.update) {
+            state.update = newValue => {
+                if (newValue === state.value) {
+                    return;
+                }
+
+                node.innerHTML = newValue;
+            }
+        }
+    }
+}
 
 export default HtmlDirective;
 
-HtmlDirective.has = function (ele) {
-    return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
-};

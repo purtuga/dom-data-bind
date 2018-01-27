@@ -1,0 +1,94 @@
+#menu a {
+    display: inline-block;
+}
+#menu a:not(:last-child):after  {
+    content: '|';
+    display: inline-block;
+    padding: 0 0.5em;
+}
+
+#ui,
+#data,
+#template,
+#out {
+    box-sizing: border-box;
+}
+
+#ui {
+    position: relative;
+}
+
+textarea {
+    width: 100%;
+}
+
+#data,
+#template {
+    width: 40%;
+}
+
+#data textarea {
+    height: 25em;
+}
+#dataError {
+    color: red;
+    min-height: 1.2em;
+}
+
+#template textarea {
+    height: 15em;
+}
+
+#out {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 57%;
+    padding: 1em;
+    border: 1em solid lightgrey;
+    min-height: 43em;
+}
+
+
+.border {
+    border: 1px solid red;
+}
+.padding {
+    padding: 1em;
+}
+.margin {
+    margin: 2em;
+}
+.pre {
+    white-space: pre;
+}
+.bg-blue {
+    background: lightskyblue;
+}
+.bg-red {
+    background: lightcoral;
+}
+.bg-green {
+    background: lightgreen;
+}
+
+[_each],
+[_if],
+[_show] {
+    display: none;
+}
+table {
+    width: 90%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+tr {
+    cursor: pointer;
+}
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.selected {
+    background: #fff770;
+}

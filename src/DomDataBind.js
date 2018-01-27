@@ -4,17 +4,18 @@ import Set              from "common-micro-libs/src/jsutils/es6-Set"
 import { observeAll }   from "observable-data"
 import {
     PRIVATE,
+    UUID,
     bindCallTo,
     removeAttribute,
     getAttribute,
     arrayForEach,
-    createComment   }   from "./utils"
+    createComment,
+    logError        }   from "./utils"
 import TextBinding      from "./bindings/text-binding"
 
 //====================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const TEMPLATES                 = new Map();
-const UUID                      = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 
 // Local aliases
 const _NodeFilter           = NodeFilter;
@@ -97,18 +98,21 @@ function getBindingsFromDom(binder, ele) {
     const response = [];
 
     if (eleTemplate.ele.hasChildNodes()) {
-        ele.innerHTML = eleTemplate.ele.innerHTML;
+        ele.textContent = "";
+        arrayForEach(eleTemplate.ele.childNodes, node => {
+            ele.appendChild(node.cloneNode(true));
+        });
     }
 
     eleTemplate.bindings.forEach((directives, path) => {
         const node = getNodeAt(ele, path);
         if (!node) {
-            console.log(new Error(`Unable to find node!`));
+            logError(new Error(`Unable to find node!`));
             return;
         }
 
         arrayForEach(directives, Directive => {
-            response.push(Directive.create(node, null, null, binder));
+            response.push(Directive.getNodeHandler(node, binder));
         });
     });
 
@@ -266,23 +270,47 @@ function getArrayForNodeFromMap(map, node) {
     return map.get(node);
 }
 
+/**
+ * Returns a node handlers for the given directive
+ *
+ * @param {Directive} Directive
+ * @param {String} tokenText
+ *  The token text (no curly braces)
+ *
+ * @returns {Directive}
+ *  Returns a Directive instance. Call `.getNodeHandler` to get a handler for a given node
+ */
 function getTextBindingForToken(Directive, tokenText) {
-    return Directive.extend({
-        init(node) {
-            if (node.nodeType === 8 && node.nodeValue === UUID) {
-                const nodeToRemove = node;
-                node = node.parentNode.insertBefore(document.createTextNode(tokenText), nodeToRemove);
-                nodeToRemove.parentNode.removeChild(nodeToRemove);
-            }
-            Directive.prototype.init.call(this, node, tokenText);
-        }
-    })
+    tokenText = tokenText.trim();
+
+    let directiveInstances = PRIVATE.get(Directive);
+
+    if (!directiveInstances) {
+        directiveInstances = {};
+        PRIVATE.set(Directive, directiveInstances);
+    }
+
+    if (!directiveInstances[tokenText]) {
+        directiveInstances[tokenText] = new Directive(tokenText);
+    }
+
+    return directiveInstances[tokenText];
 }
 
 function getDirectiveForAttribute (Directive, attrName, attrValue) {
-    return Directive.extend({
-        init(...args) {
-            Directive.prototype.init.call(this, args[0], attrName, attrValue, args[3]);
-        }
-    });
+    attrValue = attrValue.trim();
+
+    const directiveSignature    = `${attrName}-${ UUID }-${ attrValue }`;
+    let directiveInstances      = PRIVATE.get(Directive);
+
+    if (!directiveInstances) {
+        directiveInstances = {};
+        PRIVATE.set(Directive, directiveInstances);
+    }
+
+    if (!directiveInstances[directiveSignature]) {
+        directiveInstances[directiveSignature] = new Directive(attrName, attrValue);
+    }
+
+    return directiveInstances[directiveSignature];
 }

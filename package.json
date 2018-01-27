@@ -1,6 +1,6 @@
 {
   "name": "dom-data-bind",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "DOM Data Bind utility. Bind data to DOM",
   "main": "./src/index.js",
   "scripts": {
@@ -10,22 +10,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/paultavares/dom-data-bind.git"
+    "url": "git+ssh://git@github.com:purtuga/dom-data-bind.git"
   },
   "keywords": [
     "DOM",
-    "Bind"
+    "Bind",
+    "Data"
   ],
   "author": "Paul Tavares",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/paultavares/dom-data-bind#readme",
+  "homepage": "https://github.com/purtuga/dom-data-bind/blob/master/README.md",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-builtin-classes": "^0.6.1",
     "babel-preset-env": "^1.6.0",
-    "common-micro-libs": "file:../common-micro-libs",
-    "observable-data": "file:../observable-data",
+    "common-micro-libs": "github:purtuga/common-micro-libs#master",
+    "observable-data": "github:purtuga/observable-data#master",
     "webpack": "^3.7.1",
+    "webpack-babel-external-helpers-2": "^3.0.2",
     "webpack-dev-server": "^2.9.1"
   }
 }

@@ -1,5 +1,13 @@
-import Compose      from "common-micro-libs/src/jsutils/Compose"
-import { PRIVATE }  from "../utils"
+import nextTick         from "common-micro-libs/src/jsutils/nextTick"
+import Compose          from "common-micro-libs/src/jsutils/Compose"
+import {
+    PRIVATE,
+    removeAttribute,
+    logError    }       from "../utils"
+import {
+    setDependencyTracker,
+    unsetDependencyTracker,
+    stopDependeeNotifications   }       from "observable-data/src/ObservableObject"
 
 /**
  * A DOM element directive.
@@ -18,39 +26,159 @@ import { PRIVATE }  from "../utils"
  * @param {DomDataBind} binder
  *  The instance of DomDataBind that called the Directive
  */
-const Directive = Compose.extend({
+export class Directive extends Compose {
+    /**
+     * Checks a given element has an element attribute that matches the Directive.
+     * If a match is found, the html Element's attribute that was matched must be
+     * returned.
+     *
+     * @param {HTMLElement} ele
+     *
+     * @returns {String}
+     */
+    static has(/*ele*/) { return ""; }
+
+    /**
+     * A boolean indicating whether this directive manages the element. If set to true, then
+     * `DomDataBind` will not process any other directives after this one.
+     */
+    static manages() { return false; }
+
     /**
      * Render the Directive with given data
      *
-     * @param {Object} [data]
+     * @param {NodeHandler} handler
+     * @param {Node} node
+     * @param {Object} data
      */
-    render(data) {
-        const inst = PRIVATE.get(this);
-        if (inst && inst.updater) {
-            inst.updater(data);
+    render(handler, node, data) {
+        let state = PRIVATE.get(handler);
+
+        if (!state) {
+            state = {
+                data:       null,
+                value:      "",
+                isQueued:   false,
+                deferUpd:   this.update.bind(this, handler),
+                tracker:    () => this.render(handler, node, state.data)
+                //update: () => {} --- should be defined by Directive subclass
+            };
+            PRIVATE.set(handler, state);
+
+        }
+
+        if (state.data !== data) {
+            stopDependeeNotifications(state.tracker);
+            state.data = data;
+        }
+
+        if (state.isQueued) {
+            return;
+        }
+
+        state.isQueued = true;
+        nextTick(state.deferUpd);
+    }
+
+    /**
+     * Updates a node by generating a new value for the Directive, storing it
+     * in the handler `state.value` and calling `handle.update` after it.
+     *
+     * @param {NodeHandler} handler
+     */
+    update(handler) {
+        const handlerState = PRIVATE.get(handler);
+
+        if (handlerState) {
+            let newValue = "";
+
+            setDependencyTracker(handlerState.tracker);
+
+            try {
+                newValue = this._tokenValueGetter(handlerState.data || {});
+
+                // Update node
+                if (handler.update) {
+                    handler.update(newValue);
+                }
+            }
+            catch(e) {
+                logError(e);
+            }
+
+            unsetDependencyTracker(handlerState.tracker);
+
+            handlerState.isQueued = false;
+            if (handlerState.value !== newValue) {
+                handlerState.value = newValue;
+            }
         }
     }
-});
+
+    /**
+     * Returns an object with a `render` function for the given node.
+     *
+     * @param {Node} node
+     * @param {DomDataBind} [binder]
+     *
+     * @return {NodeHandler}
+     */
+    getNodeHandler(node/*, binder*/) {
+        if (this._attr) {
+            removeAttribute(node, this._attr);
+        }
+        return new NodeHandler(this, node);
+    }
+}
 export default Directive;
 
-
 /**
- * Checks a given element has an element attribute that matches the Directive.
- * If a match is found, the html Element's attribute that was matched must be
- * returned.
+ * A node directive handler.
  *
- * @param {HTMLElement} ele
- *
- * @returns {String}
+ * @extends Compose
  */
-Directive.has = function (/*ele*/) {
-    return "";
-};
+class NodeHandler extends Compose {
+    init(directive, node) {
+        this._d = directive;
+        this._n = node;
+    }
 
-/**
- * A boolean indicating whether this directive manages the element. If set to true, then
- * `DomDataBind` will not process any other directives after this one.
- */
-Directive.manages = function () {
-    return false;
-};
+    // Override destroy (which is by default "async" and ensure that notifications
+    // are turned off immediately for this Node
+    destroy() {
+        const state = PRIVATE.get(this);
+        if (state){
+            if (state.tracker) {
+                stopDependeeNotifications(state.tracker);
+            }
+            if (state.data) {
+                state.data = null;
+            }
+        }
+        super.destroy();
+        PRIVATE.delete(this);
+    }
+
+    /**
+     * Renders the data given on input to the Node
+     *
+     * @param data
+     */
+    render(data) {
+        this._d.render(this, this._n, data);
+    }
+
+    /**
+     * Applies a new value to the Node. This method will check if the handler instance state data has
+     * a method named `update` and if so, delegate to that method as to how the node should be updated.
+     *
+     * @param newValue
+     */
+    update(newValue) {
+        const state = PRIVATE.get(this);
+        if (state && state.update) {
+            return state.update(newValue);
+        }
+    }
+}
+

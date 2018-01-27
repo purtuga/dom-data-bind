@@ -1,95 +1,54 @@
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications } from "observable-data/src/ObservableObject"
 import Directive                from "./Directive"
 import {
     PRIVATE,
-    escapeString,
-    getAttribute,
     removeAttribute,
     setAttribute,
     createValueGetter,
-    getNodeAttrNames,
-    deferExec } from "../utils"
+    getNodeAttrNames } from "../utils"
 
 //============================================
+const attrRegExp = /^_attr\.(.*)/;
 
-const AttrDirective = Directive.extend({
-    init(ele, directiveAttr, attrValue) {
-        let dataForTokenValueGetter = null;
-        let updateAlreadyQueued     = false;
-        let tokenValueGetter        = createValueGetter((attrValue || ""));
-        const htmlAttr              = (new RegExp(this.constructor._matches)).exec(directiveAttr)[1];
-        const updater               = data => {
-            if (this.isDestroyed) {
-                return;
-            }
-            if (data) {
-                if (dataForTokenValueGetter) {
-                    stopDependeeNotifications(updater);
-                }
-                dataForTokenValueGetter = data;
-            }
-            if (updateAlreadyQueued) {
-                return;
-            }
-            updateAlreadyQueued = true;
-            nextTick(() => {
-                if (this.isDestroyed) {
-                    return;
-                }
-                setDependencyTracker(updater);
-                const currentValue = getAttribute(ele, htmlAttr);
-                let newValue;
-                try {
-                    newValue = tokenValueGetter(dataForTokenValueGetter || {});
+export class AttrDirective extends Directive {
 
-                    if (this.constructor._isProp) {
-                        if (newValue !== currentValue) {
-                            ele[htmlAttr] = newValue;
-                        }
-                    }
-                    else {
-                        if (newValue && currentValue !== newValue) {
-                            setAttribute(ele, htmlAttr, newValue);
-                        }
-                        else if (currentValue && !newValue) {
-                            removeAttribute(ele, htmlAttr);
-                        }
-                    }
-                }
-                catch(e) {
-                    console.error(e);
-                }
-                unsetDependencyTracker(updater);
-                updateAlreadyQueued = false;
-            });
-        };
-        const inst = { updater };
+    static get _matches() { return attrRegExp; }
 
-        PRIVATE.set(this, inst);
-        removeAttribute(ele, directiveAttr);
+    static get _isProp() { return false; }
 
-        this.onDestroy(() => {
-            dataForTokenValueGetter = tokenValueGetter = null;
-            deferExec(() => {
-                stopDependeeNotifications(updater);
-                this.getFactory().getDestroyCallback(inst, PRIVATE)();
-            });
-        });
+    static has(ele) {
+        let directiveAttr = "";
+        getNodeAttrNames(ele).some(attr => this._matches.test(attr) && (directiveAttr = attr));
+        return directiveAttr;
     }
-});
+
+
+    init(attr, attrValue) {
+        this._attr              = attr;
+        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._htmlAttr          = (new RegExp(this.constructor._matches)).exec(attr)[1];
+    }
+
+    render(handler, node, data) {
+        super.render(handler, node, data);
+        let state = PRIVATE.get(handler);
+        if (!state.update) {
+            state.update = newValue => {
+                if (this.constructor._isProp) {
+                    if (newValue !== state.value) {
+                        node[this._htmlAttr] = newValue;
+                    }
+                }
+                else {
+                    if (newValue && state.value !== newValue) {
+                        setAttribute(node, this._htmlAttr, newValue);
+                    }
+                    else if (state.value && !newValue) {
+                        removeAttribute(node, this._htmlAttr);
+                    }
+                }
+            };
+        }
+    }
+}
 
 export default AttrDirective;
-
-// Protected private variables for re-use in _prop directive
-AttrDirective._matches = /^_attr\.(.*)/;
-AttrDirective._isProp = false;
-
-AttrDirective.has = function (ele) {
-    let directiveAttr = "";
-    getNodeAttrNames(ele).some(attr => this._matches.test(attr) && (directiveAttr = attr));
-    return directiveAttr;
-};

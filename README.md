@@ -52,8 +52,7 @@ Tokens are defined using the double mustache (curly braces): `{{ }}`. These will
 All directives start with the underscore character (`_`). Example:
 
 ```html
-<div _if="visible" _class="{ important: isImportant }">
-</div>
+<div _if="visible" _on.click="sayHello">{{ label.clickme }}</div>
 ```
 
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Data Bind - IF Directive</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" >
+
+</head>
+<body>
+<h1>Dom Data Bind - Development Workbench</h1>
+<p id="menu">
+    <script src="./menu.js"></script>
+<hr/>
+</p>
+<div id="ui">
+    <div id="data">
+        <h2>Data</h2>
+        <!-- ========================================================================== --><textarea>
+
+
+{
+    show: null,
+
+    toggle: function() {
+        if (!this.show) {
+            this.show = { text: "this is text" };
+        }
+        else {
+            this.show = null;
+        }
+    }.bind(data)
+}
+
+
+
+</textarea><!-- ========================================================================== -->
+        <div id="dataError">{{dataError}}</div>
+    </div>
+
+    <div id="template">
+        <h2>template</h2>
+        <!-- ========================================================================== --> <textarea>
+<div>
+    <h2>IF below <input type="checkbox" _on.change="toggle" /> </h2>
+    <h1 _if="show">{{ text }}</h1>
+</div>
+
+
+</textarea><!-- ========================================================================== -->
+    </div>
+
+    <div id="out"></div>
+</div>
+
+<script src="DomDataBind.js"></script>
+<script src="./workbench.js"></script>
+</body>
+</html>
