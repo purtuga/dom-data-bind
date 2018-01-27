@@ -40,7 +40,7 @@ export class IfDirective extends Directive {
                     const clonedEle = node.cloneNode(true);
 
                     frag.appendChild(clonedEle);
-                    state.cloneBinder = new handler._Factory(clonedEle, showElement);
+                    state.cloneBinder = new handler._Factory(clonedEle, state.data);
                     insertBefore(handler._placeholderEle.parentNode, frag, handler._placeholderEle);
                     state.cloneBinder.onDestroy(() => {
                         // We do this check because a directive could have

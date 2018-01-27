@@ -20,10 +20,12 @@
         <!-- ========================================================================== --><textarea>
 
 
+
+
 {
     list: [
-        { name: "paul" },
-        { name: "John" }
+        { name: "paul", edit: false },
+        { name: "John", edit: false }
     ],
 
     list2: {
@@ -34,6 +36,10 @@
 
 
 
+
+
+
+
 </textarea><!-- ========================================================================== -->
         <div id="dataError">{{dataError}}</div>
     </div>
@@ -41,14 +47,26 @@
     <div id="template">
         <h2>template</h2>
         <!-- ========================================================================== --> <textarea>
+
+
 <div>
     <h2>EACH below</h2>
-    <div _each="item in list">{{ item.name }}</div>
+    <div _each="(item, index) in list">
+         <div _if="item.edit">
+             <div _on.click="item.edit = !item.edit">{{ item.name }} {{ item.edit }} <strong>EDIT MODE</strong></div>
+         </div>
+
+         <div _if="!item.edit" _on.click="item.edit = !item.edit">{{ item.name }} {{ item.edit }}</div>
+    </div>
 
     <hr/>
     <h3>Using object below</h3>
     <div _each="(value, label) in list2">{{ label }} : {{ value }}</div>
 </div>
+
+
+
+
 
 
 
