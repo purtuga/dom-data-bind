@@ -25,6 +25,7 @@ DomDataBindAll.directives = [
 
 export default DomDataBindAll;
 export {
+    DomDataBindAll,
     DomDataBind,
     Directive,
     EachDirective,

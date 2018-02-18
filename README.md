@@ -168,3 +168,8 @@ Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting 
 
 [MIT](LICENSE)
 
+
+# TODO
+
+- [ ] Support directive `modifiers` - similar to VueJS... like: `.once` (does not bind, but rather only sets one time)
+
