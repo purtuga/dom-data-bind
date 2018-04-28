@@ -1,7 +1,7 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
 import Map              from "common-micro-libs/src/jsutils/es6-Map"
 import Set              from "common-micro-libs/src/jsutils/es6-Set"
-import { observeAll }   from "observable-data"
+import { makeObservable }   from "observables"
 import {
     PRIVATE,
     UUID,
@@ -68,9 +68,11 @@ export const DomDataBind = Compose.extend({
 
         PRIVATE.set(this, state);
 
-        const bindings = state.bindings = getBindingsFromDom(this, ele);
-        observeAll(data);
-        arrayForEach(bindings, binding => binding.render(data));
+        state.bindings = getBindingsFromDom(this, ele);
+
+        if (data) {
+            this.setData(data);
+        }
 
         this.onDestroy(() => {
             delete state.data;
@@ -79,7 +81,19 @@ export const DomDataBind = Compose.extend({
 
             arrayForEach(bindings, binding => binding.destroy());
             Factory.getDestroyCallback(state, PRIVATE)();
-        })
+        });
+    },
+
+    /**
+     * Set data on to the DOM provided during initialization.
+     * In most cases, you should never have the need to call this method. Data
+     * provided during initialization is "live" and changes are automatically
+     * reflected to dom.
+     */
+    setData(data) {
+        makeObservable(data);
+        const bindings = PRIVATE.get(this).bindings;
+        arrayForEach(bindings, binding => binding.render(data));
     }
 });
 export default DomDataBind;

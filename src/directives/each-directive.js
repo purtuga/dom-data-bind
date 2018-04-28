@@ -1,9 +1,5 @@
 import Map from "common-micro-libs/src/jsutils/es6-Map"
-import {
-    watchProp,
-    observableAssign,
-    unsetDependencyTracker }    from "observable-data/src/ObservableObject"
-import { observeAll }           from "observable-data"
+import { makeObservable, unsetDependencyTracker, objectWatchProp, arrayWatch }           from "observables"
 import Directive                from "./Directive"
 import {
     PRIVATE,
@@ -75,7 +71,7 @@ export class EachDirective extends Directive {
                     state.value = null;
 
                     if (state.listChgEv) {
-                        state.listChgEv.off();
+                        state.listChgEv();
                         state.listChgEv = null;
                     }
                 }
@@ -89,13 +85,15 @@ export class EachDirective extends Directive {
                 state.value = newList;
 
                 // Make sure data is observable and setup event listners on it.
-                observeAll(newList);
+                makeObservable(newList);
 
                 if (Array.isArray(newList)) {
-                    state.listChgEv = newList.on("change", state.listIterator);
+                    // state.listChgEv = newList.on("change", state.listIterator);
+                    state.listChgEv = arrayWatch(newList, state.listIterator);
                 }
                 else if (isPureObject(newList)) {
-                    state.listChgEv = watchProp(newList, newList, state.listIterator);
+                    // state.listChgEv = watchProp(newList, newList, state.listIterator);
+                    state.listChgEv = objectWatchProp(newList, null, state.listIterator);
                 }
 
                 if (isEmptyList(newList) && state.binders) {
@@ -270,7 +268,7 @@ export class EachDirective extends Directive {
         // If a binder already exists for this key, then just update its data
         if (rowEleBinder) {
             delete rowData.$data;
-            observableAssign(rowEleBinder._loop.rowData, rowData);
+            rowEleBinder.setData(rowData);
             itemBinder = rowEleBinder;
             return [ itemBinder, newDomElements ];
         }
@@ -280,7 +278,7 @@ export class EachDirective extends Directive {
         frag.appendChild(rowEle);
 
         rowEleBinder        = new handler._Factory(rowEle, rowData);
-        rowEleBinder._loop  = { rowEle, rowData, rowKey, pos: -1 };
+        rowEleBinder._loop  = { rowEle, rowKey, pos: -1 };
         newDomElements.appendChild(frag);
 
         if (rowKey) {

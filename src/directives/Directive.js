@@ -6,8 +6,10 @@ import {
     logError    }       from "../utils"
 import {
     setDependencyTracker,
-    unsetDependencyTracker,
-    stopDependeeNotifications   }       from "observable-data/src/ObservableObject"
+    unsetDependencyTracker
+} from "observables"
+
+//===================================================================================
 
 /**
  * A DOM element directive.
@@ -68,7 +70,9 @@ export class Directive extends Compose {
         }
 
         if (state.data !== data) {
-            stopDependeeNotifications(state.tracker);
+            if (state.tracker.stopWatchingAll) {
+                state.tracker.stopWatchingAll();
+            }
             state.data = data;
         }
 
@@ -148,8 +152,8 @@ class NodeHandler extends Compose {
     destroy() {
         const state = PRIVATE.get(this);
         if (state){
-            if (state.tracker) {
-                stopDependeeNotifications(state.tracker);
+            if (state.tracker && state.tracker.stopWatchingAll) {
+                state.tracker.stopWatchingAll();
             }
             if (state.data) {
                 state.data = null;

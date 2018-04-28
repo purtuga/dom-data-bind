@@ -29,7 +29,6 @@
     "devDependencies": {
         "base": "github:purtuga/Base",
         "common-micro-libs": "github:purtuga/common-micro-libs#master",
-        "observable-data": "github:purtuga/observable-data#master",
         "observables": "github:purtuga/observables"
     }
 }
