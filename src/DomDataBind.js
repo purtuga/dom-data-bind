@@ -75,11 +75,12 @@ export const DomDataBind = Compose.extend({
         }
 
         this.onDestroy(() => {
+            arrayForEach(state.bindings, binding => binding.destroy());
+
             delete state.data;
             delete state.directives;
             delete state.bindings;
 
-            arrayForEach(bindings, binding => binding.destroy());
             Factory.getDestroyCallback(state, PRIVATE)();
         });
     },

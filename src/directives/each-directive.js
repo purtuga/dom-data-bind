@@ -1,5 +1,5 @@
 import Map from "common-micro-libs/src/jsutils/es6-Map"
-import { makeObservable, unsetDependencyTracker, objectWatchProp, arrayWatch }           from "observables"
+import { makeObservable, unsetDependencyTracker, objectWatchProp, arrayWatch } from "observables"
 import Directive                from "./Directive"
 import {
     PRIVATE,
