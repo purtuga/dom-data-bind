@@ -107,19 +107,8 @@
         /******/
         // Load entry module and return exports
         /******/
-        return __webpack_require__(__webpack_require__.s = 52);
+        return __webpack_require__(__webpack_require__.s = 14);
     }([ /* 0 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var store = __webpack_require__(36)("wks");
-        var uid = __webpack_require__(17);
-        var _Symbol = __webpack_require__(3).Symbol;
-        var USE_SYMBOL = "function" == typeof _Symbol;
-        var $exports = module.exports = function(name) {
-            return store[name] || (store[name] = USE_SYMBOL && _Symbol[name] || (USE_SYMBOL ? _Symbol : uid)("Symbol." + name));
-        };
-        $exports.store = store;
-    }, /* 1 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -188,9 +177,9 @@
         /* harmony export (immutable) */
         __webpack_exports__.j = getNodeAttrNames;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(16);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(7);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(30);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
         //=====================================================
         var DOCUMENT = document;
         var FUNCTION = Function;
@@ -231,19 +220,19 @@
             for (var i = 0; i < total; i++) attrNames.push(node.attributes.item(i).name);
             return attrNames;
         }
-    }, /* 2 */
+    }, /* 1 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export Directive */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(22);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(12);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(15);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observable_data_src_ObservableObject__ = __webpack_require__(33);
+        var __WEBPACK_IMPORTED_MODULE_3_observables__ = __webpack_require__(4);
         var _get = function get(object, property, receiver) {
             null === object && (object = Function.prototype);
             var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -291,6 +280,7 @@
             });
             superClass && (Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass);
         }
+        //===================================================================================
         /**
  * A DOM element directive.
  * NOte that any directive that removes the original DOM element from its parent
@@ -339,7 +329,7 @@
                         __WEBPACK_IMPORTED_MODULE_2__utils__.a.set(handler, state);
                     }
                     if (state.data !== data) {
-                        Object(__WEBPACK_IMPORTED_MODULE_3_observable_data_src_ObservableObject__.d)(state.tracker);
+                        state.tracker.stopWatchingAll && state.tracker.stopWatchingAll();
                         state.data = data;
                     }
                     if (state.isQueued) return;
@@ -352,7 +342,7 @@
                     var handlerState = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
                     if (handlerState) {
                         var newValue = "";
-                        Object(__WEBPACK_IMPORTED_MODULE_3_observable_data_src_ObservableObject__.c)(handlerState.tracker);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_observables__.d)(handlerState.tracker);
                         try {
                             newValue = this._tokenValueGetter(handlerState.data || {});
                             // Update node
@@ -360,7 +350,7 @@
                         } catch (e) {
                             Object(__WEBPACK_IMPORTED_MODULE_2__utils__.n)(e);
                         }
-                        Object(__WEBPACK_IMPORTED_MODULE_3_observable_data_src_ObservableObject__.e)(handlerState.tracker);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_observables__.e)(handlerState.tracker);
                         handlerState.isQueued = false;
                         handlerState.value !== newValue && (handlerState.value = newValue);
                     }
@@ -417,7 +407,7 @@
                 value: function() {
                     var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(this);
                     if (state) {
-                        state.tracker && Object(__WEBPACK_IMPORTED_MODULE_3_observable_data_src_ObservableObject__.d)(state.tracker);
+                        state.tracker && state.tracker.stopWatchingAll && state.tracker.stopWatchingAll();
                         state.data && (state.data = null);
                     }
                     _get(NodeHandler.prototype.__proto__ || Object.getPrototypeOf(NodeHandler.prototype), "destroy", this).call(this);
@@ -437,206 +427,510 @@
             } ]);
             return NodeHandler;
         }(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__.a);
-    }, /* 3 */
-    /***/
-    function(module, exports) {
-        // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-        var global = module.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();
-        "number" == typeof __g && (__g = global);
-    }, /* 4 */
-    /***/
-    function(module, exports) {
-        var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
-            return typeof obj;
-        } : function(obj) {
-            return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-        };
-        module.exports = function(it) {
-            return "object" === ("undefined" === typeof it ? "undefined" : _typeof(it)) ? null !== it : "function" === typeof it;
-        };
-    }, /* 5 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // Thank's IE8 for his funny defineProperty
-        module.exports = !__webpack_require__(18)(function() {
-            return 7 != Object.defineProperty({}, "a", {
-                get: function() {
-                    return 7;
-                }
-            }).a;
-        });
-    }, /* 6 */
-    /***/
-    function(module, exports) {
-        var hasOwnProperty = {}.hasOwnProperty;
-        module.exports = function(it, key) {
-            return hasOwnProperty.call(it, key);
-        };
-    }, /* 7 */
+    }, /* 2 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        /* unused harmony export Set */
-        var Set = __webpack_require__(55);
-        /* harmony default export */
-        __webpack_exports__.a = Set;
-    }, /* 8 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(3);
-        var hide = __webpack_require__(9);
-        var has = __webpack_require__(6);
-        var SRC = __webpack_require__(17)("src");
-        var $toString = Function.toString;
-        var TPL = ("" + $toString).split("toString");
-        __webpack_require__(19).inspectSource = function(it) {
-            return $toString.call(it);
-        };
-        (module.exports = function(O, key, val, safe) {
-            var isFunction = "function" == typeof val;
-            isFunction && (has(val, "name") || hide(val, "name", key));
-            if (O[key] === val) return;
-            isFunction && (has(val, SRC) || hide(val, SRC, O[key] ? "" + O[key] : TPL.join(String(key))));
-            if (O === global) O[key] = val; else if (safe) O[key] ? O[key] = val : hide(O, key, val); else {
-                delete O[key];
-                hide(O, key, val);
-            }
-        })(Function.prototype, "toString", function() {
-            return "function" == typeof this && this[SRC] || $toString.call(this);
+        /* unused harmony export functionBind */
+        /* unused harmony export functionBindCall */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "f", function() {
+            return objectDefineProperty;
         });
-    }, /* 9 */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "e", function() {
+            return objectDefineProperties;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "g", function() {
+            return objectKeys;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "d", function() {
+            return isArray;
+        });
+        /* unused harmony export arrayForEach */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return arrayIndexOf;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "c", function() {
+            return arraySplice;
+        });
+        /* unused harmony export consoleLog */
+        /* unused harmony export consoleError */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return SymbolIterator;
+        });
+        // Function
+        // functionBind(fn, fnParent)
+        var functionBind = Function.bind.call.bind(Function.bind);
+        // usage: functionBindCall(Array.prototype.forEach) // generates a bound function to Array.prototype.forEach.call
+        var functionBindCall = functionBind(Function.call.bind, Function.call);
+        // Object
+        var objectDefineProperty = Object.defineProperty;
+        var objectDefineProperties = Object.defineProperties;
+        var objectKeys = Object.keys;
+        // Array
+        var arr = [];
+        var isArray = Array.isArray;
+        functionBindCall(arr.forEach);
+        var arrayIndexOf = functionBindCall(arr.indexOf);
+        var arraySplice = functionBindCall(arr.splice);
+        // Logging
+        var consoleLog = console.log;
+        console.error;
+        // Iterators
+        var SymbolIterator = "undefined" !== typeof Symbol && Symbol.iterator ? Symbol.iterator : "@@iterator";
+    }, /* 3 */
     /***/
-    function(module, exports, __webpack_require__) {
-        var dP = __webpack_require__(10);
-        var createDesc = __webpack_require__(24);
-        module.exports = __webpack_require__(5) ? function(object, key, value) {
-            return dP.f(object, key, createDesc(1, value));
-        } : function(object, key, value) {
-            object[key] = value;
-            return object;
-        };
-    }, /* 10 */
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__Map__ = __webpack_require__(19);
+        /* unused harmony reexport Map */
+        /* unused harmony reexport FakeMap */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__Map__.a;
+        });
+    }, /* 4 */
     /***/
-    function(module, exports, __webpack_require__) {
-        var anObject = __webpack_require__(11);
-        var IE8_DOM_DEFINE = __webpack_require__(37);
-        var toPrimitive = __webpack_require__(39);
-        var dP = Object.defineProperty;
-        exports.f = __webpack_require__(5) ? Object.defineProperty : function(O, P, Attributes) {
-            anObject(O);
-            P = toPrimitive(P, true);
-            anObject(Attributes);
-            if (IE8_DOM_DEFINE) try {
-                return dP(O, P, Attributes);
-            } catch (e) {}
-            if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
-            "value" in Attributes && (O[P] = Attributes.value);
-            return O;
-        };
-    }, /* 11 */
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(5);
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "c", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.d;
+        });
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.c;
+        });
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "d", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.f;
+        });
+        /* unused harmony reexport stopTrackerNotification */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "e", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.g;
+        });
+        /* harmony import */
+        __webpack_require__(20);
+        /* unused harmony reexport objectCreateComputedProp */
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__arrayWatch__ = __webpack_require__(21);
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_2__arrayWatch__.a;
+        });
+    }, /* 5 */
     /***/
-    function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(4);
-        module.exports = function(it) {
-            if (!isObject(it)) throw TypeError(it + " is not an object!");
-            return it;
-        };
-    }, /* 12 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(3);
-        var core = __webpack_require__(19);
-        var hide = __webpack_require__(9);
-        var redefine = __webpack_require__(8);
-        var ctx = __webpack_require__(13);
-        var $export = function $export(type, name, source) {
-            var IS_FORCED = type & $export.F;
-            var IS_GLOBAL = type & $export.G;
-            var IS_STATIC = type & $export.S;
-            var IS_PROTO = type & $export.P;
-            var IS_BIND = type & $export.B;
-            var target = IS_GLOBAL ? global : IS_STATIC ? global[name] || (global[name] = {}) : (global[name] || {}).prototype;
-            var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
-            var expProto = exports.prototype || (exports.prototype = {});
-            var key, own, out, exp;
-            IS_GLOBAL && (source = name);
-            for (key in source) {
-                // contains in native
-                own = !IS_FORCED && target && void 0 !== target[key];
-                // export native or passed
-                out = (own ? target : source)[key];
-                // bind timers to global for call from export context
-                exp = IS_BIND && own ? ctx(out, global) : IS_PROTO && "function" == typeof out ? ctx(Function.call, out) : out;
-                // extend global
-                target && redefine(target, key, out, type & $export.U);
-                // export
-                exports[key] != out && hide(exports, key, exp);
-                IS_PROTO && expProto[key] != out && (expProto[key] = out);
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return OBSERVABLE_IDENTIFIER;
+        });
+        /* harmony export (immutable) */
+        __webpack_exports__.d = objectWatchProp;
+        /* unused harmony export setupObjState */
+        /* harmony export (immutable) */
+        __webpack_exports__.c = makeObservable;
+        /* harmony export (immutable) */
+        __webpack_exports__.e = queueCallbackAndScheduleRun;
+        /* unused harmony export destroyWatcher */
+        /* harmony export (immutable) */
+        __webpack_exports__.f = setDependencyTracker;
+        /* harmony export (immutable) */
+        __webpack_exports__.g = unsetDependencyTracker;
+        /* unused harmony export stopTrackerNotification */
+        /* harmony export (immutable) */
+        __webpack_exports__.b = makeArrayWatchable;
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(2);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(9);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(12);
+        function _toConsumableArray(arr) {
+            if (Array.isArray(arr)) {
+                for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+                return arr2;
             }
+            return Array.from(arr);
+        }
+        //---------------------------------------------------------------------------
+        var OBSERVABLE_IDENTIFIER = "___$observable$___";
+        // FIXME: this should be a Symbol()
+        var DEFAULT_PROP_DEFINITION = {
+            configurable: true,
+            enumerable: true
         };
-        global.core = core;
-        // type bitmap
-        $export.F = 1;
-        // forced
-        $export.G = 2;
-        // global
-        $export.S = 4;
-        // static
-        $export.P = 8;
-        // proto
-        $export.B = 16;
-        // bind
-        $export.W = 32;
-        // wrap
-        $export.U = 64;
-        // safe
-        $export.R = 128;
-        // real proto method for `library`
-        module.exports = $export;
-    }, /* 13 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // optional / simple context binding
-        var aFunction = __webpack_require__(40);
-        module.exports = function(fn, that, length) {
-            aFunction(fn);
-            if (void 0 === that) return fn;
-            switch (length) {
-              case 1:
-                return function(a) {
-                    return fn.call(that, a);
-                };
-
-              case 2:
-                return function(a, b) {
-                    return fn.call(that, a, b);
-                };
-
-              case 3:
-                return function(a, b, c) {
-                    return fn.call(that, a, b, c);
-                };
+        var TRACKERS = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b();
+        var WATCHER_IDENTIFIER = "___$watching$___";
+        var ARRAY_WATCHABLE_PROTO = "__$watchable$__";
+        var HAS_ARRAY_WATCHABLE_PROTO = "__$is" + ARRAY_WATCHABLE_PROTO;
+        var mutatingMethods = [ "pop", "push", "shift", "splice", "unshift", "sort", "reverse" ];
+        var isPureObject = function(obj) {
+            return obj && "[object Object]" === Object.prototype.toString.call(obj);
+        };
+        var NOTIFY_QUEUE = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b();
+        var isNotifyQueued = false;
+        /**
+ * A lightweight utility to Watch an object's properties and get notified when it changes.
+ *
+ * @param {Object} obj
+ *
+ * @param {String} [prop]
+ *  the property to be watched. If left undefined, then all existing properties are watched.
+ *
+ * @param {Function} [callback]
+ *  The callback to be executed when property or object changes. If left undefined, then
+ *  `obj` is only made observable (internal structure created and all current enumerable'
+ *  properties are made "watchable")
+ *
+ *  __NOTE:__
+ *  The callback will receive a new non-enumerable property named `stopWatchingAll` of
+ *  type `Function` that can be used to remove the given callback from all places where
+ *  it is being used to watch a property.
+ *
+ *
+ * @return {ObjectUnwatchProp}
+ * Return a function to unwatch the property. Function also has a static property named
+ * `destroy` that will do the same thing (ex. `unwatch.destroy()` is same as `unwatch()`)
+ *
+ * @example
+ *
+ * const oo = {};
+ * const notifyNameChanged =() => console.log(`name changed: ${oo.name}`);
+ * const unWatchName = objectWatchProp(oo, "name", notifyNameChanged);
+ *
+ * oo.name = "paul"; // console outputs: name changed: paul
+ * unWatchName(); // stop watching
+ * notifyNameChanged.stopWatchingAll(); // callback's `stopWatchingAll()` can also be called.
+ *
+ * @example
+ *
+ * const oo = {
+ *      name: "paul",
+ *      country: "usa"
+ * };
+ *
+ * // watch all changes to object
+ * objectWatchProp(oo, null, () => console.log("Something changed in object"));
+ *
+ * // OR: make all properties of object observable
+ * objectWatchProp(oo);
+ *
+ */
+        function objectWatchProp(obj, prop, callback) {
+            obj[OBSERVABLE_IDENTIFIER] || setupObjState(obj);
+            // Convert prop to observable?
+            if (prop && !obj[OBSERVABLE_IDENTIFIER].props[prop]) {
+                setupPropState(obj, prop);
+                setupPropInterceptors(obj, prop);
+            } else prop && obj[OBSERVABLE_IDENTIFIER].props[prop].setupInterceptors && setupPropInterceptors(obj, prop);
+            if (prop && callback) obj[OBSERVABLE_IDENTIFIER].props[prop].storeCallback(callback); else if (!prop) {
+                makeObservable(obj, false);
+                callback && obj[OBSERVABLE_IDENTIFIER].storeCallback(callback);
             }
-            return function() {
-                return fn.apply(that, arguments);
-            };
-        };
-    }, /* 14 */
-    /***/
-    function(module, exports) {
-        module.exports = {};
-    }, /* 15 */
+            /**
+     * Unwatch an object property or object.
+     *
+     * @typedef {Function} ObjectUnwatchProp
+     * @property {Function} destroy Same as function returned.
+     */
+            var unWatch = destroyWatcher.bind(obj, callback, prop ? obj[OBSERVABLE_IDENTIFIER].props[prop] : obj[OBSERVABLE_IDENTIFIER]);
+            unWatch.destroy = unWatch;
+            return unWatch;
+        }
+        function setupObjState(obj) {
+            if (!obj[OBSERVABLE_IDENTIFIER]) {
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(obj, OBSERVABLE_IDENTIFIER, {
+                    configurable: true,
+                    writable: true,
+                    deep: false,
+                    value: {
+                        props: {},
+                        dependents: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b(),
+                        watchers: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b(),
+                        storeCallback: storeCallback
+                    }
+                });
+                setupCallbackStore(obj[OBSERVABLE_IDENTIFIER].dependents, false);
+                setupCallbackStore(obj[OBSERVABLE_IDENTIFIER].watchers, true);
+            }
+        }
+        function setupCallbackStore(store) {
+            var async = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
+            store.async = async;
+            store.isQueued = false;
+            store.notify = notify;
+        }
+        function setupPropState(obj, prop) {
+            if (!obj[OBSERVABLE_IDENTIFIER].props[prop]) {
+                obj[OBSERVABLE_IDENTIFIER].props[prop] = {
+                    val: void 0,
+                    dependents: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b(),
+                    watchers: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b(),
+                    parent: obj[OBSERVABLE_IDENTIFIER],
+                    storeCallback: storeCallback,
+                    setupInterceptors: true,
+                    deep: obj[OBSERVABLE_IDENTIFIER].deep
+                };
+                setupCallbackStore(obj[OBSERVABLE_IDENTIFIER].props[prop].dependents, false);
+                setupCallbackStore(obj[OBSERVABLE_IDENTIFIER].props[prop].watchers, true);
+            }
+            return obj[OBSERVABLE_IDENTIFIER].props[prop];
+        }
+        function setupPropInterceptors(obj, prop) {
+            var propOldDescriptor = Object.getOwnPropertyDescriptor(obj, prop) || DEFAULT_PROP_DEFINITION;
+            if (!propOldDescriptor.get) {
+                obj[OBSERVABLE_IDENTIFIER].props[prop].val = obj[prop];
+                // If prop is marked as `deep` then walk the value and convert it to observables
+                obj[OBSERVABLE_IDENTIFIER].props[prop].deep && makeObservable(obj[OBSERVABLE_IDENTIFIER].props[prop].val);
+            }
+            Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(obj, prop, {
+                configurable: propOldDescriptor.configurable || false,
+                enumerable: propOldDescriptor.enumerable || false,
+                get: function() {
+                    TRACKERS.size && TRACKERS.forEach(obj[OBSERVABLE_IDENTIFIER].props[prop].storeCallback, obj[OBSERVABLE_IDENTIFIER].props[prop]);
+                    if (propOldDescriptor.get) return propOldDescriptor.get.call(obj);
+                    return obj[OBSERVABLE_IDENTIFIER].props[prop].val;
+                },
+                set: function(newVal) {
+                    var priorVal = obj[prop];
+                    propOldDescriptor.set ? newVal = propOldDescriptor.set.call(obj, newVal) : obj[OBSERVABLE_IDENTIFIER].props[prop].val = newVal;
+                    // If this `deep` is true and the new value is an object,
+                    // then ensure its observable
+                    obj[OBSERVABLE_IDENTIFIER].props[prop].deep && makeObservable(newVal);
+                    if (newVal !== priorVal) {
+                        obj[OBSERVABLE_IDENTIFIER].props[prop].watchers.notify();
+                        obj[OBSERVABLE_IDENTIFIER].props[prop].dependents.notify();
+                        obj[OBSERVABLE_IDENTIFIER].watchers.notify();
+                    }
+                    return newVal;
+                }
+            });
+            obj[OBSERVABLE_IDENTIFIER].props[prop].setupInterceptors = false;
+            // Notify object watchers that a new prop was added
+            propOldDescriptor === DEFAULT_PROP_DEFINITION && obj[OBSERVABLE_IDENTIFIER].watchers.notify();
+        }
+        /**
+ * Makes an object (deep) observable.
+ *
+ * @param {Object|Array} obj
+ * @param {Boolean} [walk=true]
+ *  If `true` (default), the object's property values are walked and
+ *  also make observable.
+ * @param {Boolean} [force=false]
+ *  if true, then even if object looks like it might have already been
+ *  converted to an observable, it will still be walked
+ *  (if `walk` is `true`)
+ *
+ * @return {Object|Array} Original `obj` is returned
+ */
+        function makeObservable(obj) {
+            var walk = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1];
+            var force = arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
+            if (!isPureObject(obj) && !Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.d)(obj)) return obj;
+            obj[OBSERVABLE_IDENTIFIER] || (// OBJECT
+            isPureObject(obj) ? setupObjState(obj, force) : Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.d)(obj) && makeArrayWatchable(obj));
+            // If object is marked as "deep" and we are not forcing the walk,
+            // then no need to do anything. Otherwise, mark this object as
+            // being `deep` and keep going
+            if (!force && obj[OBSERVABLE_IDENTIFIER].deep) return;
+            walk && (obj[OBSERVABLE_IDENTIFIER].deep = true);
+            Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.d)(obj) ? walkArray(obj) : walkObject(obj);
+            return obj;
+        }
+        function walkArray(arr, force) {
+            for (var i = 0, t = arr.length; i < t; i++) makeObservable(arr[i], true, force);
+        }
+        function walkObject(obj, force) {
+            // make ALL props observable
+            var keys = Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.g)(obj);
+            for (var i = 0, t = keys.length; i < t; i++) {
+                if (!obj[OBSERVABLE_IDENTIFIER].props[keys[i]]) {
+                    setupPropState(obj, keys[i]);
+                    setupPropInterceptors(obj, keys[i]);
+                }
+                // Do we need to walk this property's value?
+                if (!obj[OBSERVABLE_IDENTIFIER].props[keys[i]].deep || force) {
+                    obj[OBSERVABLE_IDENTIFIER].props[keys[i]].deep = true;
+                    isPureObject(obj[keys[i]]) && makeObservable(obj[keys[i]], true, force);
+                }
+            }
+        }
+        function notify() {
+            // this: new Set(). Set instance could have two additional attributes: async ++ isQueued
+            if (!this.size) return;
+            // If the watcher Set() is synchronous, then execute the callbacks now
+            this.async ? this.forEach(pushCallbacksToQueue) : this.forEach(execCallback);
+            queueCallbackAndScheduleRun();
+        }
+        function queueCallbackAndScheduleRun(cb) {
+            cb && pushCallbacksToQueue(cb);
+            if (isNotifyQueued || !NOTIFY_QUEUE.size) return;
+            isNotifyQueued = true;
+            Object(__WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__.a)(flushQueue);
+        }
+        function pushCallbacksToQueue(callback) {
+            NOTIFY_QUEUE.add(callback);
+        }
+        function execCallback(cb) {
+            cb();
+        }
+        function flushQueue() {
+            var queuedCallbacks = [].concat(_toConsumableArray(NOTIFY_QUEUE));
+            NOTIFY_QUEUE.clear();
+            isNotifyQueued = false;
+            for (var x = 0, total = queuedCallbacks.length; x < total; x++) queuedCallbacks[x]();
+            queuedCallbacks.length = 0;
+        }
+        function storeCallback(callback) {
+            // this === PropState
+            if (callback.asDependent && this.dependents) {
+                setCallbackAsWatcherOf(callback, this.dependents);
+                this.dependents.add(callback);
+            } else {
+                setCallbackAsWatcherOf(callback, this.watchers);
+                this.watchers.add(callback);
+            }
+        }
+        function destroyWatcher(callback, propSetup) {
+            // this == obj
+            if (callback) {
+                // Object state does not have dependents
+                if (propSetup.dependents) {
+                    propSetup.dependents.delete(callback);
+                    unsetCallbackAsWatcherOf(callback, propSetup.dependents);
+                }
+                propSetup.watchers.delete(callback);
+                unsetCallbackAsWatcherOf(callback, propSetup.watchers);
+            }
+        }
+        /**
+ * Sets a callback to be added to the list of watchers for any property
+ * that is accessed after this function is called.
+ *
+ * @param {Function} callback
+ *  The callback to be added to dependency list of watchers.
+ *  NOTE: the callback will modified to include a new property
+ *  `stopWatchingAll()` which can be used to remove the given callback
+ *  from ALL dependencies that include it.
+ *
+ */
+        function setDependencyTracker(callback) {
+            TRACKERS.add(callback);
+        }
+        /**
+ * Removes a callback from being added to a property's watchers as they
+ * are accessed.
+ *
+ * @param {Function} callback
+ */
+        function unsetDependencyTracker(callback) {
+            TRACKERS.delete(callback);
+        }
+        /**
+ * Store a reference to the Set instance provided on input, on the callback.
+ * @private
+ * @param {Function} callback
+ * @param {Set} watchersSet
+ */
+        function setCallbackAsWatcherOf(callback, watchersSet) {
+            if (!callback[WATCHER_IDENTIFIER]) {
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(callback, WATCHER_IDENTIFIER, {
+                    configurable: true,
+                    writable: true,
+                    value: {
+                        watching: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__.b()
+                    }
+                });
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(callback, "stopWatchingAll", {
+                    configurable: true,
+                    writable: true,
+                    value: function() {
+                        callback[WATCHER_IDENTIFIER].watching.forEach(function(watcherList) {
+                            return watcherList.delete(callback);
+                        });
+                        callback[WATCHER_IDENTIFIER].watching.clear();
+                    }
+                });
+            }
+            callback[WATCHER_IDENTIFIER].watching.add(watchersSet);
+        }
+        /**
+ * Removes the reference to the given Set instance from the callback function provided
+ * @private
+ * @param {Function} callback
+ * @param {Set} watchersSet
+ */
+        function unsetCallbackAsWatcherOf(callback, watchersSet) {
+            callback[WATCHER_IDENTIFIER] && callback[WATCHER_IDENTIFIER].watching.delete(watchersSet);
+        }
+        function makeArrayWatchable(arr) {
+            arr[OBSERVABLE_IDENTIFIER] || setupObjState(arr);
+            // If array already has a watchable prototype, then exit
+            if (arr[HAS_ARRAY_WATCHABLE_PROTO]) return;
+            var arrCurrentProto = arr.__proto__;
+            // eslint-disable-line
+            // Create prototype interceptors?
+            if (!arrCurrentProto[ARRAY_WATCHABLE_PROTO]) {
+                var arrProtoInterceptor = Object.create(arrCurrentProto);
+                mutatingMethods.forEach(function(method) {
+                    Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(arrProtoInterceptor, method, {
+                        configurable: true,
+                        writable: true,
+                        value: function() {
+                            var _arrCurrentProto$meth;
+                            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
+                            var response = (_arrCurrentProto$meth = arrCurrentProto[method]).call.apply(_arrCurrentProto$meth, [ this ].concat(args));
+                            arr[OBSERVABLE_IDENTIFIER].dependents.notify();
+                            arr[OBSERVABLE_IDENTIFIER].watchers.notify();
+                            return response;
+                        }
+                    });
+                });
+                // VALUE ADD: include a `size` read only attribute
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(arrProtoInterceptor, "size", {
+                    configurable: true,
+                    get: function() {
+                        TRACKERS.size && TRACKERS.forEach(this[OBSERVABLE_IDENTIFIER].storeCallback, this[OBSERVABLE_IDENTIFIER]);
+                        return this.length;
+                    }
+                });
+                // Add flag to new array interceptor prototype indicating its watchable
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(arrProtoInterceptor, HAS_ARRAY_WATCHABLE_PROTO, {
+                    value: true
+                });
+                // Store the new interceptor prototype on the real prototype
+                Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__.f)(arrCurrentProto, ARRAY_WATCHABLE_PROTO, {
+                    configurable: true,
+                    writable: true,
+                    value: arrProtoInterceptor
+                });
+            }
+            arr.__proto__ = arrCurrentProto[ARRAY_WATCHABLE_PROTO];
+        }
+    }, /* 6 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export getDestroyCallback */
         /* unused harmony export Compose */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(34);
+        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(16);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(16);
+        var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(7);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(54);
+        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(17);
         function _classCallCheck(instance, Constructor) {
             if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
         }
@@ -865,7 +1159,7 @@
         Object(__WEBPACK_IMPORTED_MODULE_0__objectExtend__.a)(Compose, staticMethods);
         /* harmony default export */
         __webpack_exports__.a = Compose;
-    }, /* 16 */
+    }, /* 7 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -940,71 +1234,185 @@
         };
         /* harmony default export */
         __webpack_exports__.a = dataStore;
-    }, /* 17 */
+    }, /* 8 */
     /***/
-    function(module, exports) {
-        var id = 0;
-        var px = Math.random();
-        module.exports = function(key) {
-            return "Symbol(".concat(void 0 === key ? "" : key, ")_", (++id + px).toString(36));
-        };
-    }, /* 18 */
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__Set__ = __webpack_require__(9);
+        /* unused harmony reexport Set */
+        /* unused harmony reexport FakeSet */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__Set__.a;
+        });
+    }, /* 9 */
     /***/
-    function(module, exports) {
-        module.exports = function(exec) {
-            try {
-                return !!exec();
-            } catch (e) {
-                return true;
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return Set;
+        });
+        /* unused harmony export FakeSet */
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(10);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(11);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
+        //============================================================
+        var Set = __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set && __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set.prototype[__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a] ? __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set : FakeSet;
+        /* harmony default export */
+        __webpack_exports__.b = Set;
+        function FakeSet() {}
+        Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.e)(FakeSet.prototype, function(obj, key, value) {
+            key in obj ? Object.defineProperty(obj, key, {
+                value: value,
+                enumerable: true,
+                configurable: true,
+                writable: true
+            }) : obj[key] = value;
+            return obj;
+        }({
+            constructor: {
+                value: FakeSet,
+                configurable: true
+            },
+            _: {
+                get: function() {
+                    var values = [];
+                    Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.f)(this, "_", {
+                        value: values
+                    });
+                    return values;
+                }
+            },
+            add: {
+                value: function(item) {
+                    -1 === Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._, item) && this._.push(item);
+                    return this;
+                }
+            },
+            has: {
+                value: function(item) {
+                    return -1 !== Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._, item);
+                }
+            },
+            size: {
+                get: function() {
+                    return this._.length;
+                }
+            },
+            clear: {
+                value: function() {
+                    this._.splice(0);
+                }
+            },
+            delete: {
+                value: function(item) {
+                    var idx = Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._, item);
+                    if (-1 !== idx) {
+                        this._.splice(idx, 1);
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            values: {
+                value: function() {
+                    return new __WEBPACK_IMPORTED_MODULE_1__Iterator__.a(this._);
+                }
+            },
+            entries: {
+                value: function() {
+                    return new __WEBPACK_IMPORTED_MODULE_1__Iterator__.a(this._, this._);
+                }
+            },
+            forEach: {
+                value: function(cb) {
+                    var _this = this;
+                    this._.forEach(function(item) {
+                        return cb(item, item, _this);
+                    });
+                }
             }
-        };
-    }, /* 19 */
-    /***/
-    function(module, exports) {
-        var core = module.exports = {
-            version: "2.5.3"
-        };
-        "number" == typeof __e && (__e = core);
-    }, /* 20 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // to indexed object, toObject with fallback for non-array-like ES3 strings
-        var IObject = __webpack_require__(63);
-        var defined = __webpack_require__(26);
-        module.exports = function(it) {
-            return IObject(defined(it));
-        };
-    }, /* 21 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var ctx = __webpack_require__(13);
-        var call = __webpack_require__(74);
-        var isArrayIter = __webpack_require__(75);
-        var anObject = __webpack_require__(11);
-        var toLength = __webpack_require__(43);
-        var getIterFn = __webpack_require__(76);
-        var BREAK = {};
-        var RETURN = {};
-        var exports = module.exports = function(iterable, entries, fn, that, ITERATOR) {
-            var iterFn = ITERATOR ? function() {
-                return iterable;
-            } : getIterFn(iterable);
-            var f = ctx(fn, that, entries ? 2 : 1);
-            var index = 0;
-            var length, step, iterator, result;
-            if ("function" != typeof iterFn) throw TypeError(iterable + " is not iterable!");
-            // fast case for arrays with default iterator
-            if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
-                result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-                if (result === BREAK || result === RETURN) return result;
-            } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done; ) {
-                result = call(iterator, f, step.value, entries);
-                if (result === BREAK || result === RETURN) return result;
+        }, __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a, {
+            value: function() {
+                return this.values();
             }
-        };
-        exports.BREAK = BREAK;
-        exports.RETURN = RETURN;
-    }, /* 22 */
+        }));
+    }, /* 10 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* WEBPACK VAR INJECTION */
+        (function(global) {
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() {
+                return GLOBAL;
+            });
+            /* unused harmony export getGlobal */
+            var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            var GLOBAL = function() {
+                /* global self, window, global */
+                if ("undefined" !== ("undefined" === typeof window ? "undefined" : _typeof(window))) return window;
+                if ("undefined" !== ("undefined" === typeof global ? "undefined" : _typeof(global))) return global;
+                if ("undefined" !== ("undefined" === typeof self ? "undefined" : _typeof(self))) return self;
+                return Function("return this;")();
+            }();
+        }).call(__webpack_exports__, __webpack_require__(18));
+    }, /* 11 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (immutable) */
+        __webpack_exports__.a = FakeIterator;
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__ = __webpack_require__(2);
+        //-----------------------------------------------------------------------
+        // Great reference: http://2ality.com/2015/02/es6-iteration.html
+        function FakeIterator(keys, values) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.f)(this, "_", {
+                value: {
+                    keys: keys.slice(0),
+                    values: values ? values.slice(0) : null,
+                    idx: 0,
+                    total: keys.length
+                }
+            });
+        }
+        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.e)(FakeIterator.prototype, {
+            constructor: {
+                value: FakeIterator
+            },
+            next: {
+                enumerable: true,
+                configurable: true,
+                value: function() {
+                    var response = {
+                        done: this._.idx === this._.total
+                    };
+                    if (response.done) {
+                        response.value = void 0;
+                        return response;
+                    }
+                    var nextIdx = this._.idx++;
+                    response.value = this._.keys[nextIdx];
+                    this._.values && (response.value = [ response.value, this._.values[nextIdx] ]);
+                    return response;
+                }
+            }
+        });
+        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.f)(FakeIterator.prototype, __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.a, {
+            value: function() {
+                return this;
+            }
+        });
+    }, /* 12 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1046,2091 +1454,15 @@
         }();
         /* harmony default export */
         __webpack_exports__.a = nextTick;
-    }, /* 23 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // getting tag from 19.1.3.6 Object.prototype.toString()
-        var cof = __webpack_require__(35);
-        var TAG = __webpack_require__(0)("toStringTag");
-        // ES3 wrong here
-        var ARG = "Arguments" == cof(function() {
-            return arguments;
-        }());
-        // fallback for IE11 Script Access Denied error
-        var tryGet = function(it, key) {
-            try {
-                return it[key];
-            } catch (e) {}
-        };
-        module.exports = function(it) {
-            var O, T, B;
-            return void 0 === it ? "Undefined" : null === it ? "Null" : "string" == typeof (T = tryGet(O = Object(it), TAG)) ? T : ARG ? cof(O) : "Object" == (B = cof(O)) && "function" == typeof O.callee ? "Arguments" : B;
-        };
-    }, /* 24 */
-    /***/
-    function(module, exports) {
-        module.exports = function(bitmap, value) {
-            return {
-                enumerable: !(1 & bitmap),
-                configurable: !(2 & bitmap),
-                writable: !(4 & bitmap),
-                value: value
-            };
-        };
-    }, /* 25 */
-    /***/
-    function(module, exports) {
-        // 7.1.4 ToInteger
-        var ceil = Math.ceil;
-        var floor = Math.floor;
-        module.exports = function(it) {
-            return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-        };
-    }, /* 26 */
-    /***/
-    function(module, exports) {
-        // 7.2.1 RequireObjectCoercible(argument)
-        module.exports = function(it) {
-            if (void 0 == it) throw TypeError("Can't call method on  " + it);
-            return it;
-        };
-    }, /* 27 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var LIBRARY = __webpack_require__(59);
-        var $export = __webpack_require__(12);
-        var redefine = __webpack_require__(8);
-        var hide = __webpack_require__(9);
-        var has = __webpack_require__(6);
-        var Iterators = __webpack_require__(14);
-        var $iterCreate = __webpack_require__(60);
-        var setToStringTag = __webpack_require__(29);
-        var getPrototypeOf = __webpack_require__(67);
-        var ITERATOR = __webpack_require__(0)("iterator");
-        var BUGGY = !([].keys && "next" in [].keys());
-        var returnThis = function() {
-            return this;
-        };
-        module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-            $iterCreate(Constructor, NAME, next);
-            var getMethod = function(kind) {
-                if (!BUGGY && kind in proto) return proto[kind];
-                switch (kind) {
-                  case "keys":
-                  case "values":
-                    return function() {
-                        return new Constructor(this, kind);
-                    };
-                }
-                return function() {
-                    return new Constructor(this, kind);
-                };
-            };
-            var TAG = NAME + " Iterator";
-            var DEF_VALUES = "values" == DEFAULT;
-            var VALUES_BUG = false;
-            var proto = Base.prototype;
-            var $native = proto[ITERATOR] || proto["@@iterator"] || DEFAULT && proto[DEFAULT];
-            var $default = !BUGGY && $native || getMethod(DEFAULT);
-            var $entries = DEFAULT ? DEF_VALUES ? getMethod("entries") : $default : void 0;
-            var $anyNative = "Array" == NAME ? proto.entries || $native : $native;
-            var methods, key, IteratorPrototype;
-            // Fix native
-            if ($anyNative) {
-                IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
-                if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-                    // Set @@toStringTag to native iterators
-                    setToStringTag(IteratorPrototype, TAG, true);
-                    // fix for some old engines
-                    LIBRARY || has(IteratorPrototype, ITERATOR) || hide(IteratorPrototype, ITERATOR, returnThis);
-                }
-            }
-            // fix Array#{values, @@iterator}.name in V8 / FF
-            if (DEF_VALUES && $native && "values" !== $native.name) {
-                VALUES_BUG = true;
-                $default = function() {
-                    return $native.call(this);
-                };
-            }
-            // Define iterator
-            LIBRARY && !FORCED || !BUGGY && !VALUES_BUG && proto[ITERATOR] || hide(proto, ITERATOR, $default);
-            // Plug for library
-            Iterators[NAME] = $default;
-            Iterators[TAG] = returnThis;
-            if (DEFAULT) {
-                methods = {
-                    values: DEF_VALUES ? $default : getMethod("values"),
-                    keys: IS_SET ? $default : getMethod("keys"),
-                    entries: $entries
-                };
-                if (FORCED) for (key in methods) key in proto || redefine(proto, key, methods[key]); else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-            }
-            return methods;
-        };
-    }, /* 28 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var shared = __webpack_require__(36)("keys");
-        var uid = __webpack_require__(17);
-        module.exports = function(key) {
-            return shared[key] || (shared[key] = uid(key));
-        };
-    }, /* 29 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var def = __webpack_require__(10).f;
-        var has = __webpack_require__(6);
-        var TAG = __webpack_require__(0)("toStringTag");
-        module.exports = function(it, tag, stat) {
-            it && !has(it = stat ? it : it.prototype, TAG) && def(it, TAG, {
-                configurable: true,
-                value: tag
-            });
-        };
-    }, /* 30 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export MapPolyfill */
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(91);
-        var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
-            return typeof obj;
-        } : function(obj) {
-            return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-        };
-        var MapPolyfill = function() {
-            //-------------------------------------
-            // POLYFILL FOR ES6 MAP
-            // http://devdocs.io/javascript/global_objects/map
-            //-------------------------------------
-            // Code below as taken from es6-shim project by Paul Millr. It was a
-            // copy and paste to grab only the code associated with Map.
-            //
-            // For more details:
-            // https://github.com/paulmillr/es6-shim/blob/master/es6-shim.js
-            // https://github.com/paulmillr/es6-shim
-            //
-            // @license es6-shim Copyright 2013-2016 by Paul Miller (http://paulmillr.com) and contributors,  MIT License
-            //
-            // es6-shim: v0.35.1
-            // see https://github.com/paulmillr/es6-shim/blob/0.35.1/LICENSE
-            // Details and documentation:
-            // https://github.com/paulmillr/es6-shim/
-            // [PT] Moved to common module
-            //
-            // var getGlobal = function () {
-            //     /* global self, window, global */
-            //     // the only reliable means to get the global object is
-            //     // `Function('return this')()`
-            //     // However, this causes CSP violations in Chrome apps.
-            //     if (typeof self !== 'undefined') { return self; }
-            //     if (typeof window !== 'undefined') { return window; }
-            //     if (typeof global !== 'undefined') { return global; }
-            //     throw new Error('unable to locate global object');
-            // };
-            var globals = Object(__WEBPACK_IMPORTED_MODULE_0__getGlobal__.a)();
-            //[PT] use global if one exists
-            if ("undefined" !== typeof globals.Map && "undefined" !== typeof globals.Map.prototype.keys && "undefined" !== typeof globals.Map.prototype.values && "undefined" !== typeof globals.Map.prototype.entries) return globals.Map;
-            // ------------------- START POLYFILL ---------------------------------
-            var _forEach = Function.call.bind(Array.prototype.forEach);
-            var _toString = Function.call.bind(Object.prototype.toString);
-            var _apply = Function.call.bind(Function.apply);
-            var _call = Function.call.bind(Function.call);
-            var keys = Object.keys;
-            var _reduce = Function.call.bind(Array.prototype.reduce);
-            var isArray = Array.isArray;
-            var create = Object.create;
-            var throwsError = function(func) {
-                try {
-                    func();
-                    return false;
-                } catch (e) {
-                    return true;
-                }
-            };
-            var isCallable = function(x) {
-                return "function" === typeof x;
-            };
-            var _hasOwnProperty = Function.call.bind(Object.prototype.hasOwnProperty);
-            var $String = String;
-            var emptyObject = function() {
-                // accomodate some older not-quite-ES5 browsers
-                return Object.create ? Object.create(null) : {};
-            };
-            // taken directly from https://github.com/ljharb/is-arguments/blob/master/index.js
-            // can be replaced with require('is-arguments') if we ever use a build process instead
-            var isStandardArguments = function(value) {
-                return "[object Arguments]" === _toString(value);
-            };
-            var isLegacyArguments = function(value) {
-                return null !== value && "object" === ("undefined" === typeof value ? "undefined" : _typeof(value)) && "number" === typeof value.length && value.length >= 0 && "[object Array]" !== _toString(value) && "[object Function]" === _toString(value.callee);
-            };
-            var isArguments = isStandardArguments(arguments) ? isStandardArguments : isLegacyArguments;
-            var numberIsNaN = Number.isNaN || function(value) {
-                // NaN !== NaN, but they are identical.
-                // NaNs are the only non-reflexive value, i.e., if x !== x,
-                // then x is NaN.
-                // isNaN is broken: it converts its argument to number, so
-                // isNaN('foo') => true
-                return value !== value;
-            };
-            var supportsDescriptors = !!Object.defineProperty && function() {
-                // if Object.defineProperty exists but throws, it's IE 8
-                return !throwsError(function() {
-                    Object.defineProperty({}, "x", {
-                        get: function() {}
-                    });
-                });
-            }();
-            var defineProperty = function(object, name, value, force) {
-                if (!force && name in object) return;
-                supportsDescriptors ? Object.defineProperty(object, name, {
-                    configurable: true,
-                    enumerable: false,
-                    writable: true,
-                    value: value
-                }) : object[name] = value;
-            };
-            // Our ArrayIterator is private; see
-            // https://github.com/paulmillr/es6-shim/issues/252
-            var ArrayIterator = function(array, kind) {
-                this.i = 0;
-                this.array = array;
-                this.kind = kind;
-            };
-            var _Symbol = globals.Symbol || {};
-            var Type = {
-                string: function(x) {
-                    return "[object String]" === _toString(x);
-                },
-                symbol: function(x) {
-                    return "function" === typeof globals.Symbol && "symbol" === ("undefined" === typeof x ? "undefined" : _typeof(x));
-                }
-            };
-            // This is a private name in the es6 spec, equal to '[Symbol.iterator]'
-            // we're going to use an arbitrary _-prefixed name to make our shims
-            // work properly with each other, even though we don't have full Iterator
-            // support.  That is, `Array.from(map.keys())` will work, but we don't
-            // pretend to export a "real" Iterator interface.
-            var $iterator$ = Type.symbol(_Symbol.iterator) ? _Symbol.iterator : "_es6-shim iterator_";
-            // Firefox ships a partial implementation using the name @@iterator.
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=907077#c14
-            // So use that name if we detect it.
-            globals.Set && "function" === typeof new globals.Set()["@@iterator"] && ($iterator$ = "@@iterator");
-            var ES = {
-                // http://www.ecma-international.org/ecma-262/6.0/#sec-call
-                Call: function(F, V) {
-                    var args = arguments.length > 2 ? arguments[2] : [];
-                    if (!ES.IsCallable(F)) throw new TypeError(F + " is not a function");
-                    return _apply(F, V, args);
-                },
-                RequireObjectCoercible: function(x, optMessage) {
-                    /* jshint eqnull:true */
-                    if (null == x) throw new TypeError(optMessage || "Cannot call method on " + x);
-                    return x;
-                },
-                // This might miss the "(non-standard exotic and does not implement
-                // [[Call]])" case from
-                // http://www.ecma-international.org/ecma-262/6.0/#sec-typeof-operator-runtime-semantics-evaluation
-                // but we can't find any evidence these objects exist in practice.
-                // If we find some in the future, you could test `Object(x) === x`,
-                // which is reliable according to
-                // http://www.ecma-international.org/ecma-262/6.0/#sec-toobject
-                // but is not well optimized by runtimes and creates an object
-                // whenever it returns false, and thus is very slow.
-                TypeIsObject: function(x) {
-                    if (void 0 === x || null === x || true === x || false === x) return false;
-                    return "function" === typeof x || "object" === ("undefined" === typeof x ? "undefined" : _typeof(x));
-                },
-                ToObject: function(o, optMessage) {
-                    return Object(ES.RequireObjectCoercible(o, optMessage));
-                },
-                IsCallable: isCallable,
-                SameValue: function(a, b) {
-                    if (a === b) {
-                        // 0 === -0, but they are not identical.
-                        if (0 === a) return 1 / a === 1 / b;
-                        return true;
-                    }
-                    return numberIsNaN(a) && numberIsNaN(b);
-                },
-                SameValueZero: function(a, b) {
-                    // same as SameValue except for SameValueZero(+0, -0) == true
-                    return a === b || numberIsNaN(a) && numberIsNaN(b);
-                },
-                GetIterator: function(o) {
-                    if (isArguments(o)) // special case support for `arguments`
-                    return new ArrayIterator(o, "value");
-                    var itFn = ES.GetMethod(o, $iterator$);
-                    if (!ES.IsCallable(itFn)) // Better diagnostics if itFn is null or undefined
-                    throw new TypeError("value is not an iterable");
-                    var it = ES.Call(itFn, o);
-                    if (!ES.TypeIsObject(it)) throw new TypeError("bad iterator");
-                    return it;
-                },
-                GetMethod: function(o, p) {
-                    var func = ES.ToObject(o)[p];
-                    if (void 0 === func || null === func) return;
-                    if (!ES.IsCallable(func)) throw new TypeError("Method not callable: " + p);
-                    return func;
-                },
-                IteratorComplete: function(iterResult) {
-                    return !!iterResult.done;
-                },
-                IteratorClose: function(iterator, completionIsThrow) {
-                    var returnMethod = ES.GetMethod(iterator, "return");
-                    if (void 0 === returnMethod) return;
-                    var innerResult, innerException;
-                    try {
-                        innerResult = ES.Call(returnMethod, iterator);
-                    } catch (e) {
-                        innerException = e;
-                    }
-                    if (completionIsThrow) return;
-                    if (innerException) throw innerException;
-                    if (!ES.TypeIsObject(innerResult)) throw new TypeError("Iterator's return method returned a non-object.");
-                },
-                IteratorNext: function(it) {
-                    var result = arguments.length > 1 ? it.next(arguments[1]) : it.next();
-                    if (!ES.TypeIsObject(result)) throw new TypeError("bad iterator");
-                    return result;
-                },
-                IteratorStep: function(it) {
-                    var result = ES.IteratorNext(it);
-                    var done = ES.IteratorComplete(result);
-                    return !done && result;
-                },
-                ToString: function(string) {
-                    return $String(string);
-                }
-            };
-            // Given an argument x, it will return an IteratorResult object,
-            // with value set to x and done to false.
-            // Given no arguments, it will return an iterator completion object.
-            var iteratorResult = function(x) {
-                return {
-                    value: x,
-                    done: 0 === arguments.length
-                };
-            };
-            var addIterator = function(prototype, impl) {
-                var implementation = impl || function() {
-                    return this;
-                };
-                defineProperty(prototype, $iterator$, implementation);
-                !prototype[$iterator$] && Type.symbol($iterator$) && (// implementations are buggy when $iterator$ is a Symbol
-                prototype[$iterator$] = implementation);
-            };
-            var emulateES6construct = function(o, defaultNewTarget, defaultProto, slots) {
-                // This is an es5 approximation to es6 construct semantics.  in es6,
-                // 'new Foo' invokes Foo.[[Construct]] which (for almost all objects)
-                // just sets the internal variable NewTarget (in es6 syntax `new.target`)
-                // to Foo and then returns Foo().
-                // Many ES6 object then have constructors of the form:
-                // 1. If NewTarget is undefined, throw a TypeError exception
-                // 2. Let xxx by OrdinaryCreateFromConstructor(NewTarget, yyy, zzz)
-                // So we're going to emulate those first two steps.
-                if (!ES.TypeIsObject(o)) throw new TypeError("Constructor requires `new`: " + defaultNewTarget.name);
-                var proto = defaultNewTarget.prototype;
-                ES.TypeIsObject(proto) || (proto = defaultProto);
-                var obj = create(proto);
-                for (var name in slots) if (_hasOwnProperty(slots, name)) {
-                    var value = slots[name];
-                    defineProperty(obj, name, value, true);
-                }
-                return obj;
-            };
-            var addIterableToMap = function(MapConstructor, map, iterable) {
-                if (isArray(iterable) || Type.string(iterable)) _forEach(iterable, function(entry) {
-                    if (!ES.TypeIsObject(entry)) throw new TypeError("Iterator value " + entry + " is not an entry object");
-                    map.set(entry[0], entry[1]);
-                }); else if (iterable instanceof MapConstructor) _call(MapConstructor.prototype.forEach, iterable, function(value, key) {
-                    map.set(key, value);
-                }); else {
-                    var iter, adder;
-                    if (null !== iterable && "undefined" !== typeof iterable) {
-                        adder = map.set;
-                        if (!ES.IsCallable(adder)) throw new TypeError("bad map");
-                        iter = ES.GetIterator(iterable);
-                    }
-                    if ("undefined" !== typeof iter) for (;;) {
-                        var next = ES.IteratorStep(iter);
-                        if (false === next) break;
-                        var nextItem = next.value;
-                        try {
-                            if (!ES.TypeIsObject(nextItem)) throw new TypeError("Iterator value " + nextItem + " is not an entry object");
-                            _call(adder, map, nextItem[0], nextItem[1]);
-                        } catch (e) {
-                            ES.IteratorClose(iter, true);
-                            throw e;
-                        }
-                    }
-                }
-            };
-            var Value = {
-                getter: function(object, name, _getter) {
-                    if (!supportsDescriptors) throw new TypeError("getters require true ES5 support");
-                    Object.defineProperty(object, name, {
-                        configurable: true,
-                        enumerable: false,
-                        get: _getter
-                    });
-                }
-            };
-            // Define configurable, writable and non-enumerable props
-            // if they don’t exist.
-            var defineProperties = function(object, map, forceOverride) {
-                _forEach(keys(map), function(name) {
-                    var method = map[name];
-                    defineProperty(object, name, method, !!forceOverride);
-                });
-            };
-            // Map and Set require a true ES5 environment
-            // Their fast path also requires that the environment preserve
-            // property insertion order, which is not guaranteed by the spec.
-            var testOrder = function(a) {
-                var b = keys(_reduce(a, function(o, k) {
-                    o[k] = true;
-                    return o;
-                }, {}));
-                return a.join(":") === b.join(":");
-            };
-            var preservesInsertionOrder = testOrder([ "z", "a", "bb" ]);
-            // some engines (eg, Chrome) only preserve insertion order for string keys
-            var preservesNumericInsertionOrder = testOrder([ "z", 1, "a", "3", 2 ]);
-            var fastkey = function(key) {
-                if (!preservesInsertionOrder) return null;
-                if ("undefined" === typeof key || null === key) return "^" + ES.ToString(key);
-                if ("string" === typeof key) return "$" + key;
-                if ("number" === typeof key) {
-                    // note that -0 will get coerced to "0" when used as a property key
-                    if (!preservesNumericInsertionOrder) return "n" + key;
-                    return key;
-                }
-                if ("boolean" === typeof key) return "b" + key;
-                return null;
-            };
-            var Map = function() {
-                var empty = {};
-                var MapEntry = function(key, value) {
-                    this.key = key;
-                    this.value = value;
-                    this.next = null;
-                    this.prev = null;
-                };
-                MapEntry.prototype.isRemoved = function() {
-                    return this.key === empty;
-                };
-                var isMap = function(map) {
-                    return !!map._es6map;
-                };
-                var requireMapSlot = function(map, method) {
-                    if (!ES.TypeIsObject(map) || !isMap(map)) throw new TypeError("Method Map.prototype." + method + " called on incompatible receiver " + ES.ToString(map));
-                };
-                var MapIterator = function(map, kind) {
-                    requireMapSlot(map, "[[MapIterator]]");
-                    this.head = map._head;
-                    this.i = this.head;
-                    this.kind = kind;
-                };
-                MapIterator.prototype = {
-                    next: function() {
-                        var i = this.i;
-                        var kind = this.kind;
-                        var head = this.head;
-                        if ("undefined" === typeof this.i) return iteratorResult();
-                        for (;i.isRemoved() && i !== head; ) // back up off of removed entries
-                        i = i.prev;
-                        // advance to next unreturned element.
-                        var result;
-                        for (;i.next !== head; ) {
-                            i = i.next;
-                            if (!i.isRemoved()) {
-                                result = "key" === kind ? i.key : "value" === kind ? i.value : [ i.key, i.value ];
-                                this.i = i;
-                                return iteratorResult(result);
-                            }
-                        }
-                        // once the iterator is done, it is done forever.
-                        this.i = void 0;
-                        return iteratorResult();
-                    }
-                };
-                addIterator(MapIterator.prototype);
-                var Map$prototype;
-                var MapShim = function Map() {
-                    if (!(this instanceof Map)) throw new TypeError('Constructor Map requires "new"');
-                    if (this && this._es6map) throw new TypeError("Bad construction");
-                    var map = emulateES6construct(this, Map, Map$prototype, {
-                        _es6map: true,
-                        _head: null,
-                        _storage: emptyObject(),
-                        _size: 0
-                    });
-                    var head = new MapEntry(null, null);
-                    // circular doubly-linked list.
-                    head.next = head.prev = head;
-                    map._head = head;
-                    // Optionally initialize map from iterable
-                    arguments.length > 0 && addIterableToMap(Map, map, arguments[0]);
-                    return map;
-                };
-                Map$prototype = MapShim.prototype;
-                Value.getter(Map$prototype, "size", function() {
-                    if ("undefined" === typeof this._size) throw new TypeError("size method called on incompatible Map");
-                    return this._size;
-                });
-                defineProperties(Map$prototype, {
-                    get: function(key) {
-                        requireMapSlot(this, "get");
-                        var fkey = fastkey(key);
-                        if (null !== fkey) {
-                            // fast O(1) path
-                            var entry = this._storage[fkey];
-                            return entry ? entry.value : void 0;
-                        }
-                        var head = this._head;
-                        var i = head;
-                        for (;(i = i.next) !== head; ) if (ES.SameValueZero(i.key, key)) return i.value;
-                    },
-                    has: function(key) {
-                        requireMapSlot(this, "has");
-                        var fkey = fastkey(key);
-                        if (null !== fkey) // fast O(1) path
-                        return "undefined" !== typeof this._storage[fkey];
-                        var head = this._head;
-                        var i = head;
-                        for (;(i = i.next) !== head; ) if (ES.SameValueZero(i.key, key)) return true;
-                        return false;
-                    },
-                    set: function(key, value) {
-                        requireMapSlot(this, "set");
-                        var head = this._head;
-                        var i = head;
-                        var entry;
-                        var fkey = fastkey(key);
-                        if (null !== fkey) {
-                            // fast O(1) path
-                            if ("undefined" !== typeof this._storage[fkey]) {
-                                this._storage[fkey].value = value;
-                                return this;
-                            }
-                            entry = this._storage[fkey] = new MapEntry(key, value);
-                            i = head.prev;
-                        }
-                        for (;(i = i.next) !== head; ) if (ES.SameValueZero(i.key, key)) {
-                            i.value = value;
-                            return this;
-                        }
-                        entry = entry || new MapEntry(key, value);
-                        ES.SameValue(-0, key) && (entry.key = 0);
-                        entry.next = this._head;
-                        entry.prev = this._head.prev;
-                        entry.prev.next = entry;
-                        entry.next.prev = entry;
-                        this._size += 1;
-                        return this;
-                    },
-                    delete: function(key) {
-                        requireMapSlot(this, "delete");
-                        var head = this._head;
-                        var i = head;
-                        var fkey = fastkey(key);
-                        if (null !== fkey) {
-                            // fast O(1) path
-                            if ("undefined" === typeof this._storage[fkey]) return false;
-                            i = this._storage[fkey].prev;
-                            delete this._storage[fkey];
-                        }
-                        for (;(i = i.next) !== head; ) if (ES.SameValueZero(i.key, key)) {
-                            i.key = i.value = empty;
-                            i.prev.next = i.next;
-                            i.next.prev = i.prev;
-                            this._size -= 1;
-                            return true;
-                        }
-                        return false;
-                    },
-                    clear: function() {
-                        requireMapSlot(this, "clear");
-                        this._size = 0;
-                        this._storage = emptyObject();
-                        var head = this._head;
-                        var i = head;
-                        var p = i.next;
-                        for (;(i = p) !== head; ) {
-                            i.key = i.value = empty;
-                            p = i.next;
-                            i.next = i.prev = head;
-                        }
-                        head.next = head.prev = head;
-                    },
-                    keys: function() {
-                        requireMapSlot(this, "keys");
-                        return new MapIterator(this, "key");
-                    },
-                    values: function() {
-                        requireMapSlot(this, "values");
-                        return new MapIterator(this, "value");
-                    },
-                    entries: function() {
-                        requireMapSlot(this, "entries");
-                        return new MapIterator(this, "key+value");
-                    },
-                    forEach: function(callback) {
-                        requireMapSlot(this, "forEach");
-                        var context = arguments.length > 1 ? arguments[1] : null;
-                        var it = this.entries();
-                        for (var entry = it.next(); !entry.done; entry = it.next()) context ? _call(callback, context, entry.value[1], entry.value[0], this) : callback(entry.value[1], entry.value[0], this);
-                    }
-                });
-                addIterator(Map$prototype, Map$prototype.entries);
-                return MapShim;
-            }();
-            return Map;
-        }();
-        /* harmony default export */
-        __webpack_exports__.a = MapPolyfill;
-    }, /* 31 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export EventEmitter */
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Compose__ = __webpack_require__(15);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(16);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__es6_Set__ = __webpack_require__(7);
-        //----------------------------------------------------------------
-        var PRIVATE = __WEBPACK_IMPORTED_MODULE_1__dataStore__.a.create();
-        var arraySlice = Function.call.bind(Array.prototype.slice);
-        var isFunction = function(fn) {
-            return "function" === typeof fn;
-        };
-        var objectKeys = Object.keys;
-        /**
- * Emits events. Use it to extend other modules and thus add events to them.
- *
- * @class EventEmitter
- * @extends Compose
- */
-        var EventEmitter = __WEBPACK_IMPORTED_MODULE_0__Compose__.a.extend(/** @lends EventEmitter.prototype */ {
-            /**
-     * Add a callback to a given event name
-     *
-     * @param {String} evName
-     *  The event name to be listened to or a list of event sperated by a space.
-     *  The EventEmitter instance can be used as the `evName` as well which will
-     *  essentially listen to all events.
-     *  Note that this special event however, will change the arguments
-     *  passed to the callback by pre-pending the Event Name (`String`) and
-     *  appending the Component instance.
-     *
-     * @param {Function} callback
-     *  A callback function to listen to the event. The callback function
-     *  can cancel any queued event callbacks by returning `true` (boolean).
-     *
-     * @return {EventEmitter#EventListener}
-     *
-     * @example
-     *
-     * events.on("some-event", (...args) => {});
-     *
-     * // List to all events
-     * events.on(events, (evNameTriggered, ...args) => {}
-     */
-            on: function(evName, callback) {
-                var _this = this;
-                var _getSetup$call = getSetup.call(this), all = _getSetup$call.all, listeners = _getSetup$call.listeners;
-                var events = getEventNameList(evName).reduce(function(eventList, eventName) {
-                    var off = void 0;
-                    // If eventName is `this` then listen to all events
-                    if (eventName === _this) {
-                        all.add(callback);
-                        off = function() {
-                            return all.delete(callback);
-                        };
-                    } else {
-                        eventName in listeners || (listeners[eventName] = new __WEBPACK_IMPORTED_MODULE_2__es6_Set__.a());
-                        listeners[eventName].add(callback);
-                        off = function() {
-                            return listeners[eventName].delete(callback);
-                        };
-                    }
-                    eventList[eventName] = {
-                        off: off
-                    };
-                    return eventList;
-                }, {});
-                /**
-         * EventEmitter Listener object, returned when one of the listener setter methods
-         * (ex. `on()`, `once()`, `pipe`) are used.
-         *
-         * @typedef {Object} EventEmitter~EventListener
-         *
-         * @property {Object} listeners
-         *  An object with the individual listeners. Each respective event listener
-         *  has an `off()` method to turn that listener off.
-         *
-         * @property {Function} off
-         *  Remove callback from event.
-         */
-                var response = {
-                    off: function() {
-                        objectKeys(events).forEach(function(eventName) {
-                            return events[eventName].off();
-                        });
-                    }
-                };
-                response.listeners = events;
-                return response;
-            },
-            /**
-     * Remove a callback from a given event
-     *
-     * @param {String} evName
-     * @param {Function} callback
-     *
-     */
-            off: function(evName, callback) {
-                var _getSetup$call2 = getSetup.call(this), all = _getSetup$call2.all, listeners = _getSetup$call2.listeners;
-                if (evName === this) {
-                    all.delete(callback);
-                    return;
-                }
-                listeners[evName] && listeners.delete(callback);
-            },
-            /**
-     * Add a callback to a given event name that is executed only once.
-     *
-     * @param {String} evName
-     *  The event name. This can be a list of event delimited with a space. Each
-     *  event listeners will be triggered at most once.
-     * @param {Function} callback
-     *
-     * @return {EventEmitter#EventListener}
-     */
-            once: function(evName, callback) {
-                var _this2 = this;
-                var events = getEventNameList(evName).reduce(function(eventListeners, eventName) {
-                    var eventNameListener = _this2.on(evName, function() {
-                        eventNameListener.off();
-                        callback.apply(void 0, arguments);
-                    });
-                    eventListeners[eventName] = eventNameListener;
-                    return eventListeners;
-                }, {});
-                var response = {
-                    off: function() {
-                        objectKeys(events).forEach(function(eventName) {
-                            return events[eventName].off();
-                        });
-                    }
-                };
-                response.listeners = events;
-                return response;
-            },
-            /**
-     * Emit an event and execute any callback listening. Any of the listening
-     * events can cancel the calling of queued callbacks by returning `true`
-     * (boolean)
-     *
-     * @param {String} evName
-     *  The event name to be triggered. __NOTE__: can not be a `"*"` or the EventEmitter
-     *  instance since they holds special meaning.
-     *
-     * @param {...*} callbackArgs
-     */
-            emit: function(evName) {
-                if ("*" === evName || evName === this) {
-                    console.log("EventEmitter#emit(): can not emit to events to '*'");
-                    // jshint ignore:line
-                    return;
-                }
-                var setup = getSetup.call(this);
-                var eventListeners = setup.listeners;
-                var eventPipes = setup.pipes;
-                var eventAll = setup.all;
-                var args = arraySlice(arguments, 1);
-                var isCanceled = false;
-                var callbackHandler = function(callback) {
-                    if (isFunction(callback)) {
-                        var response = callback.apply(callback, args);
-                        // if a boolean true was returned, don't call any more listeners.
-                        if (true === response) {
-                            isCanceled = true;
-                            return true;
-                        }
-                    }
-                };
-                // Regular event listeners
-                if (eventListeners[evName] && eventListeners[evName].size) {
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = void 0;
-                    try {
-                        for (var _step, _iterator = eventListeners[evName][Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            var cb = _step.value;
-                            if (callbackHandler(cb)) break;
-                        }
-                    } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
-                    } finally {
-                        try {
-                            !_iteratorNormalCompletion && _iterator.return && _iterator.return();
-                        } finally {
-                            if (_didIteratorError) throw _iteratorError;
-                        }
-                    }
-                }
-                // Event listeners for all events
-                if (!isCanceled && ("*" in eventListeners || eventAll.size)) {
-                    // Special event "*": pass event name and instance
-                    args = arraySlice(arguments, 0);
-                    args.push(this);
-                    if (eventListeners["*"] && eventListeners["*"].size) {
-                        var _iteratorNormalCompletion2 = true;
-                        var _didIteratorError2 = false;
-                        var _iteratorError2 = void 0;
-                        try {
-                            for (var _step2, _iterator2 = eventListeners["*"][Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                                var _cb = _step2.value;
-                                if (callbackHandler(_cb)) break;
-                            }
-                        } catch (err) {
-                            _didIteratorError2 = true;
-                            _iteratorError2 = err;
-                        } finally {
-                            try {
-                                !_iteratorNormalCompletion2 && _iterator2.return && _iterator2.return();
-                            } finally {
-                                if (_didIteratorError2) throw _iteratorError2;
-                            }
-                        }
-                    }
-                    if (eventAll.size) {
-                        var _iteratorNormalCompletion3 = true;
-                        var _didIteratorError3 = false;
-                        var _iteratorError3 = void 0;
-                        try {
-                            for (var _step3, _iterator3 = eventAll[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                                var _cb2 = _step3.value;
-                                if (callbackHandler(_cb2)) break;
-                            }
-                        } catch (err) {
-                            _didIteratorError3 = true;
-                            _iteratorError3 = err;
-                        } finally {
-                            try {
-                                !_iteratorNormalCompletion3 && _iterator3.return && _iterator3.return();
-                            } finally {
-                                if (_didIteratorError3) throw _iteratorError3;
-                            }
-                        }
-                    }
-                    // set args back to original
-                    args = arraySlice(arguments, 1);
-                }
-                if (eventPipes.size) {
-                    var _iteratorNormalCompletion4 = true;
-                    var _didIteratorError4 = false;
-                    var _iteratorError4 = void 0;
-                    try {
-                        for (var _step4, _iterator4 = eventPipes[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                            var pipe = _step4.value;
-                            pipe && pipe(evName, args);
-                        }
-                    } catch (err) {
-                        _didIteratorError4 = true;
-                        _iteratorError4 = err;
-                    } finally {
-                        try {
-                            !_iteratorNormalCompletion4 && _iterator4.return && _iterator4.return();
-                        } finally {
-                            if (_didIteratorError4) throw _iteratorError4;
-                        }
-                    }
-                }
-            },
-            /**
-     * Emit the events from one instance of EventEmitter to another. Useful
-     * for when multiple components are used together as part of a larger
-     * component and have the need to emit events to a common EventEmitter.
-     *
-     * @param {EventEmitter} pipeTo
-     *  The EventEmitter instance object to where events should be piped.
-     *  Can also be an object/class having an `emit(evName, data)` method.
-     *
-     * @param {String} [prefix]
-     *  If defined, prefix will be added to any event emited. Example:
-     *  if defining `foo-` as the prefix, then every event emitted will
-     *  prefixed wth this value. So a `click` event on the source will
-     *  be piped as `foo-click`.
-     *
-     * @param {Boolean} [includeInstance=true]
-     *  When set to `true` (default), the piped event will include the source
-     *  instance as an additional argument to the event that is piped.
-     *
-     *  @return {EventListener}
-     */
-            pipe: function(pipeTo, prefix, includeInstance) {
-                var _this3 = this;
-                if (!pipeTo || !pipeTo.emit) return {
-                    off: function() {}
-                };
-                var pipes = getSetup.call(this).pipes;
-                var pipeEvToReceiver = function(triggeredEvName, args) {
-                    prefix ? args.unshift(prefix + triggeredEvName) : args.unshift(triggeredEvName);
-                    (includeInstance || "undefined" === typeof includeInstance) && args.push(_this3);
-                    pipeTo.emit.apply(pipeTo, args);
-                };
-                pipes.add(pipeEvToReceiver);
-                return {
-                    off: function() {
-                        pipes.delete(pipeEvToReceiver);
-                    }
-                };
-            },
-            /**
-     * Returns a boolean indicating if the current EventEmitter has listener
-     * @returns {Boolean}
-     */
-            hasListeners: function() {
-                var _getSetup$call3 = getSetup.call(this), listeners = _getSetup$call3.listeners, pipes = _getSetup$call3.pipes;
-                return objectKeys(listeners).some(function(evName) {
-                    return !!listeners[evName].size;
-                }) || !!pipes.size;
-            }
-        });
-        /**
- * Returns the instance setup object. Creates it if it does not have one.
- * @private
- * @this EventEmitter
- */
-        function getSetup() {
-            if (!PRIVATE.has(this)) {
-                /*
-            listeners: {
-                'evName': Set[ Callbacks ]
-            },
-            pipes: Set[ Callbacks ]
-            all: Set[ Callbacks ]
-        */
-                PRIVATE.set(this, {
-                    listeners: {},
-                    pipes: new __WEBPACK_IMPORTED_MODULE_2__es6_Set__.a(),
-                    all: new __WEBPACK_IMPORTED_MODULE_2__es6_Set__.a()
-                });
-                // When this object is destroyed, remove all data
-                this.onDestroy && this.onDestroy(function() {
-                    PRIVATE.has(this) && PRIVATE.delete(this);
-                }.bind(this));
-            }
-            return PRIVATE.get(this);
-        }
-        function getEventNameList(eventNamesStr) {
-            if ("string" === typeof eventNamesStr) return eventNamesStr.split(/\s+/);
-            return [ eventNamesStr ];
-        }
-        /**
- * Adds event emitter functionality to an object
- *
- * @param {Object} target
- */
-        EventEmitter.mixin = function(target) {
-            target && [ "on", "off", "emit", "once", "pipe" ].forEach(function(method) {
-                Object.defineProperty(target, method, {
-                    configurable: true,
-                    value: EventEmitter.prototype[method].bind(target)
-                });
-            });
-        };
-        /* harmony default export */
-        __webpack_exports__.a = EventEmitter;
-    }, /* 32 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "d", function() {
-            return PRIVATE;
-        });
-        /* unused harmony export INTERNAL_EVENTS */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return EV_STOP_DEPENDEE_NOTIFICATION;
-        });
-        /* unused harmony export ARRAY_PROTOTYPE */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "c", function() {
-            return OBJECT_PROTOTYPE;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "b", function() {
-            return IS_COMPUTED_NOTIFIER;
-        });
-        /* unused harmony export OBSERVABLE_FLAG */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "f", function() {
-            return bindCallTo;
-        });
-        /* unused harmony export dependeeList */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "j", function() {
-            return onInternalEvent;
-        });
-        /* unused harmony export emitInternalEvent */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "g", function() {
-            return isArray;
-        });
-        /* unused harmony export arrayIndexOf */
-        /* unused harmony export arraySplice */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "e", function() {
-            return arrayForEach;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "i", function() {
-            return isPureObject;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "h", function() {
-            return isObservable;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "m", function() {
-            return setObservableFlag;
-        });
-        /* harmony export (immutable) */
-        __webpack_exports__.l = setDependencyTracker;
-        /* harmony export (immutable) */
-        __webpack_exports__.p = unsetDependencyTracker;
-        /* harmony export (immutable) */
-        __webpack_exports__.n = stopDependeeNotifications;
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "k", function() {
-            return queueDependeeNotifier;
-        });
-        /* harmony export (immutable) */
-        __webpack_exports__.o = storeDependeeNotifiers;
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_EventEmitter__ = __webpack_require__(31);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(22);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(16);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
-        //=======================================================================
-        var NOOP = function() {};
-        var PRIVATE = __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_dataStore__.a.create();
-        var INTERNAL_EVENTS = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_EventEmitter__.a.create();
-        var EV_STOP_DEPENDEE_NOTIFICATION = "1";
-        var ARRAY_PROTOTYPE = Array.prototype;
-        var OBJECT_PROTOTYPE = Object.prototype;
-        var IS_COMPUTED_NOTIFIER = "__od_cn__";
-        var bindCallTo = Function.call.bind.bind(Function.call);
-        var dependeeList = new __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_es6_Set__.a();
-        var onInternalEvent = INTERNAL_EVENTS.on.bind(INTERNAL_EVENTS);
-        var emitInternalEvent = INTERNAL_EVENTS.emit.bind(INTERNAL_EVENTS);
-        var isArray = Array.isArray;
-        bindCallTo(ARRAY_PROTOTYPE.indexOf);
-        bindCallTo(ARRAY_PROTOTYPE.splice);
-        var arrayForEach = bindCallTo(ARRAY_PROTOTYPE.forEach);
-        var isPureObject = function(obj) {
-            return obj && "[object Object]" === OBJECT_PROTOTYPE.toString.call(obj);
-        };
-        var isObservable = function(obj) {
-            return obj && obj.___observable_data___ === NOOP;
-        };
-        var setObservableFlag = function(obj) {
-            return obj && Object.defineProperty(obj, "___observable_data___", {
-                get: function() {
-                    return NOOP;
-                }
-            });
-        };
-        /**
- * Allows for adding a Dependee notifier to the global list of dependency trackers.
- *
- * @param {Function} dependeeNotifier
- */
-        function setDependencyTracker(dependeeNotifier) {
-            dependeeNotifier && dependeeList.add(dependeeNotifier);
-        }
-        /**
- * Removes a Dependee notifier from the global list of dependency trackers.
- *
- * @param {Function} dependeeNotifier
- */
-        function unsetDependencyTracker(dependeeNotifier) {
-            if (!dependeeNotifier) return;
-            dependeeList.delete(dependeeNotifier);
-        }
-        /**
- * Removes a Dependee notifier from any stored ObservableProperty list of dependees, thus
- * stopping all notifications to that depenedee.
- *
- * @param {Function} dependeeNotifier
- */
-        function stopDependeeNotifications(dependeeNotifier) {
-            dependeeNotifier && emitInternalEvent(EV_STOP_DEPENDEE_NOTIFICATION, dependeeNotifier);
-        }
-        var queueDependeeNotifier = function() {
-            var dependeeNotifiers = new __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_es6_Set__.a();
-            var execNotifiers = function() {
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = void 0;
-                try {
-                    for (var _step, _iterator = dependeeNotifiers[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var notifierCb = _step.value;
-                        notifierCb();
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        !_iteratorNormalCompletion && _iterator.return && _iterator.return();
-                    } finally {
-                        if (_didIteratorError) throw _iteratorError;
-                    }
-                }
-                dependeeNotifiers.clear();
-            };
-            return function(notifierCb) {
-                // Computed property notifiers are lightweight, so execute
-                // these now and don't queue them.
-                if (notifierCb[IS_COMPUTED_NOTIFIER]) {
-                    notifierCb();
-                    return;
-                }
-                if (!notifierCb || dependeeNotifiers.has(notifierCb)) return;
-                var callNextTick = !dependeeNotifiers.size;
-                dependeeNotifiers.add(notifierCb);
-                callNextTick && Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_nextTick__.a)(execNotifiers);
-            };
-        }();
-        function storeDependeeNotifiers(store) {
-            if (store && dependeeList.size) {
-                var _iteratorNormalCompletion2 = true;
-                var _didIteratorError2 = false;
-                var _iteratorError2 = void 0;
-                try {
-                    for (var _step2, _iterator2 = dependeeList[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var dependeeCallback = _step2.value;
-                        store.add(dependeeCallback);
-                    }
-                } catch (err) {
-                    _didIteratorError2 = true;
-                    _iteratorError2 = err;
-                } finally {
-                    try {
-                        !_iteratorNormalCompletion2 && _iterator2.return && _iterator2.return();
-                    } finally {
-                        if (_didIteratorError2) throw _iteratorError2;
-                    }
-                }
-            }
-        }
-    }, /* 33 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export createComputedProp */
-        /* harmony export (immutable) */
-        __webpack_exports__.b = observableAssign;
-        /* harmony export (immutable) */
-        __webpack_exports__.a = makeObservable;
-        /* harmony export (immutable) */
-        __webpack_exports__.f = watchProp;
-        /* unused harmony export watchPropOnce */
-        /* unused harmony export unwatchProp */
-        /* unused harmony export notifyPropWatchers */
-        /* unused harmony export observableMixin */
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(15);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_objectExtend__ = __webpack_require__(34);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_EventEmitter__ = __webpack_require__(31);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(22);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__common__ = __webpack_require__(32);
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "c", function() {
-            return __WEBPACK_IMPORTED_MODULE_5__common__.l;
-        });
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "e", function() {
-            return __WEBPACK_IMPORTED_MODULE_5__common__.p;
-        });
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "d", function() {
-            return __WEBPACK_IMPORTED_MODULE_5__common__.n;
-        });
-        function _toConsumableArray(arr) {
-            if (Array.isArray(arr)) {
-                for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-                return arr2;
-            }
-            return Array.from(arr);
-        }
-        //=======================================================
-        var OBJECT = Object;
-        // aliases
-        var objectCreate = OBJECT.create;
-        var objectDefineProperty = OBJECT.defineProperty;
-        var objectHasOwnProperty = Object(__WEBPACK_IMPORTED_MODULE_5__common__.f)(__WEBPACK_IMPORTED_MODULE_5__common__.c.hasOwnProperty);
-        var objectKeys = Object.keys;
-        var noopEventListener = objectCreate({
-            off: function() {}
-        });
-        /**
- * Adds the ability to observe `Object` property values for changes.
- * Uses an internal `EventEmitter` instance to list and trigger events,
- * and `Object.defineProperty` getter/setters to setup watchers on
- * property values.
- *
- * Currently has no support for addition or deletion from the object,
- * but with the ES7 forth coming Proxy functionality, that will be
- * added.
- *
- * @class ObservableObject
- * @extends Compose
- *
- * @param {Object} [model]
- * @param {Object} [options]
- * @param {Boolean} [options.watchAll=true]
- *  if `model` was given on input, then all properties will be automatically made watchable.
- * @param {Boolean} [options.deep=true]
- *  If set to true, the model is walked and all deep objects made observable as well
- *
- * @example
- *
- * // Used as a mixin
- * var myObj = {
- *      first: "paul",
- *      last: "tavares"
- * };
- *
- * ObservableObject.mixin(myObj);
- *
- * myObj.on("first", function(newValue, oldValue){
- *      alert("first name was changed");
- * });
- *
- * @example
- *
- * // Used as part of a class prototype
- * var MyModel = Compose.extend(ObservableObject);
- *
- * var user = MyModel.create({
- *      first: "paul",
- *      last: "tavares"
- * });
- *
- * user.on("first", function(newValue, oldValue){
- *  alert("first name was change")
- * });
- *
- */
-        var ObservableObject = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__.a.extend(/** @lends ObservableObject.prototype */ {
-            init: function(model, options) {
-                var opt = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_objectExtend__.a)({}, this.getFactory().defaults, options);
-                if (model) {
-                    // FIXME: need to create prop that uses original getter/setters from `model` - or no?
-                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_objectExtend__.a)(this, model);
-                    opt.watchAll && makeObservable(this, null, opt.deep);
-                    getInstance(this).opt = opt;
-                }
-            },
-            /**
-     * Add a callback to changes on a given property
-     *
-     * @param {String|Object} prop
-     *  Object property name. If wanting to list to all changes to the object, the
-     *  object instance itself can be passed as the prop.
-     *
-     * @param {Function} callback
-     *  A callback function to list to the event. The callback function
-     *  can cancel any queued event callbacks by returning `true` (boolean).
-     *
-     * @return {EventListener}
-     *
-     * @example
-     *
-     * obj.on("firstName", () => {});
-     *
-     * // List to all changes
-     * obj.on(obj, () => {});
-     */
-            on: function(prop, callback) {
-                return watchProp(this, prop, callback);
-            },
-            /**
-     * Remove a callback the listening queue of a for a given property name
-     *
-     * @param {String} prop
-     *  Object property name
-     *
-     * @param {Function} callback
-     *  The callback that should be removed.
-     */
-            off: function(prop, callback) {
-                unwatchProp(this, prop, callback);
-            },
-            /**
-     * Add a callback for changes on a given property that is called only once
-     *
-     * @param {String} prop
-     *  Object property name
-     *
-     * @param {Function} callback
-     *  The callback that should be removed.
-     */
-            once: function(prop, callback) {
-                return watchPropOnce(this, prop, callback);
-            },
-            /**
-     * Emit an event and execute any callback listening. Any of the listening
-     * events can cancel the calling of queued callbacks by returning `true`
-     * (boolean)
-     *
-     * @param {String} prop
-     */
-            emit: function(prop) {
-                return notifyPropWatchers(this, prop);
-            },
-            /**
-     * Copies the properties of one or more objects into the current observable
-     * and makes those properties "watchable".
-     *
-     * @param {...Object} args
-     *
-     * @returns {Object}
-     */
-            assign: function() {
-                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
-                return observableAssign.apply(void 0, [ this ].concat(_toConsumableArray(args)));
-            },
-            /**
-     * Sets a property on the observable object and automatically makes it watchable
-     *
-     * @param {String} propName
-     * @param {*} [value]
-     * @returns {*}
-     */
-            setProp: function(propName, value) {
-                makePropWatchable(this, propName);
-                return this[propName] = value;
-            }
-        });
-        /**
- * Returns the private Instance data for this object
- *
- * @private
- * @param {Object} observableObj
- *
- * @return {EventEmitter}
- */
-        function getInstance(observableObj) {
-            if (!__WEBPACK_IMPORTED_MODULE_5__common__.d.has(observableObj)) {
-                var instData = __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_EventEmitter__.a.create();
-                var watched = instData.watched = {};
-                var isQueued = false;
-                Object(__WEBPACK_IMPORTED_MODULE_5__common__.m)(observableObj);
-                instData.opt = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_objectExtend__.a)({}, ObservableObject.defaults);
-                instData.notify = function() {
-                    if (isQueued) return;
-                    isQueued = true;
-                    Object(__WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_nextTick__.a)(function() {
-                        instData.emit("");
-                        isQueued = false;
-                    });
-                };
-                __WEBPACK_IMPORTED_MODULE_5__common__.d.set(observableObj, instData);
-                observableObj.onDestroy && observableObj.onDestroy(function() {
-                    objectKeys(watched).forEach(function(propName) {
-                        watched[propName].destroy();
-                        // FIXME remove property getter/setter on the object (if still there)
-                        delete watched[propName];
-                    });
-                    delete instData.watched;
-                    __WEBPACK_IMPORTED_MODULE_5__common__.d.delete(observableObj);
-                    instData.destroy();
-                }.bind(observableObj));
-            }
-            return __WEBPACK_IMPORTED_MODULE_5__common__.d.get(observableObj);
-        }
-        /**
- * A property setup
- *
- * @private
- * @class Observable~PropertySetup
- * @extends Compose
- */
-        var PropertySetup = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__.a.extend(/** @lends Observable~PropertySetup.prototype */ {
-            init: function(observable, propName) {
-                var _this = this;
-                this.dependees = new __WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_es6_Set__.a();
-                this.propName = propName;
-                this._obj = observable;
-                this.onDestroy(function() {
-                    _this.dependees.clear();
-                    _this.rmDepEvListener && _this.rmDepEvListener.off();
-                    _this._obj = null;
-                });
-            },
-            propName: "",
-            /** @type Array */
-            dependees: null,
-            oldVal: null,
-            newVal: null,
-            queued: false,
-            isComputed: false,
-            /**
-     * Notifies everyone that is listening for events on this property
-     *
-     * @param [noDelay=false]
-     */
-            notify: function(noDelay) {
-                var _this2 = this;
-                var propSetup = this;
-                // Queue up calling all dependee notifiers
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = void 0;
-                try {
-                    for (var _step, _iterator = this.dependees[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var cb = _step.value;
-                        Object(__WEBPACK_IMPORTED_MODULE_5__common__.k)(cb);
-                    }
-                } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
-                } finally {
-                    try {
-                        !_iteratorNormalCompletion && _iterator.return && _iterator.return();
-                    } finally {
-                        if (_didIteratorError) throw _iteratorError;
-                    }
-                }
-                if (propSetup.queued) return;
-                propSetup.queued = true;
-                if (noDelay) {
-                    this._emit();
-                    return;
-                }
-                Object(__WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_nextTick__.a)(function() {
-                    return _this2._emit();
-                });
-            },
-            _emit: function() {
-                this.queued = false;
-                getInstance(this._obj).emit(this.propName, this.newVal, this.oldVal);
-                this.oldVal = null;
-            },
-            /**
-     * Removes a callback from the list of dependees
-     * @param {Function} cb
-     */
-            removeDependee: function(cb) {
-                this.dependees.delete(cb);
-                // Remove listener if no dependees
-                if (this.rmDepEvListener && 0 === this.dependees.size) {
-                    this.rmDepEvListener.off();
-                    this.rmDepEvListener = null;
-                }
-            },
-            /**
-     * Stores global dependees into this Property list of dependees
-     */
-            storeDependees: function() {
-                Object(__WEBPACK_IMPORTED_MODULE_5__common__.o)(this.dependees);
-                // If we have dependees, then setup an internal event bus listener
-                this.dependees.size > 0 && !this.rmDepEvListener && (this.rmDepEvListener = Object(__WEBPACK_IMPORTED_MODULE_5__common__.j)(__WEBPACK_IMPORTED_MODULE_5__common__.a, this.removeDependee.bind(this)));
-            }
-        });
-        /**
- * Checks to see if a given property on this object already has a watcher
- * and if not, it sets one up for it.
- *
- * @private
- * @param {ObservableObject} observable
- * @param {String} propName
- * @param {Function} [valueGetter]
- * @param {Function} [valueSetter]
- * @param {Boolean} [enumerable=true]
- *
- * @return {EventEmitter}
- */
-        function makePropWatchable(observable, propName, valueGetter, valueSetter) {
-            var enumerable = !(arguments.length > 4 && void 0 !== arguments[4]) || arguments[4];
-            var inst = getInstance(observable);
-            var watched = inst.watched;
-            if (watched[propName]) return inst;
-            var currentValue = void 0;
-            var emitNotification = !(propName in observable);
-            var propDescriptor = Object.getOwnPropertyDescriptor(observable, propName);
-            if (propDescriptor) {
-                if (false === propDescriptor.configurable) // TODO: should we throw()?
-                return;
-                valueGetter = valueGetter || propDescriptor.get;
-                valueSetter = valueSetter || propDescriptor.set;
-                valueGetter || (currentValue = propDescriptor.value);
-            }
-            // if we're able to remove the current property (ex. Constants would fail),
-            // then change this attribute to be watched
-            if (delete observable[propName]) {
-                var propSetup = watched[propName] = PropertySetup.create(observable, propName);
-                propSetup.oldVal = propSetup.newVal = currentValue;
-                objectDefineProperty(observable, propName, {
-                    enumerable: enumerable,
-                    configurable: true,
-                    // Getter will either delegate to the prior getter(),
-                    // or return the value that was originally assigned to the property
-                    get: function() {
-                        propSetup.storeDependees();
-                        return valueGetter ? valueGetter() : propSetup.newVal;
-                    },
-                    // Setter is how we detect changes to the value.
-                    set: function(newValue) {
-                        if (propSetup.isComputed) return;
-                        var oldValue = valueGetter ? valueGetter() : propSetup.newVal;
-                        if (valueSetter) newValue = valueSetter.call(observable, newValue); else {
-                            propSetup.oldVal = oldValue;
-                            propSetup.newVal = newValue;
-                        }
-                        // Dirty checking...
-                        // Only trigger if values are different. Also, only add a trigger
-                        // if one is not already queued.
-                        if (newValue !== oldValue) {
-                            inst.opt.deep && newValue && Object(__WEBPACK_IMPORTED_MODULE_5__common__.i)(newValue) && makeObservable(newValue, null, true);
-                            propSetup.notify();
-                        }
-                    }
-                });
-            } else console.log(new Error("Unable to watch property [" + propName + "] - delete failed"));
-            emitNotification && inst.notify();
-            return inst;
-        }
-        /**
- * Created a computed property on a given object
- *
- * @param {Object} observable
- * @param {String} propName
- * @param {Function} valueGenerator
- * @param {Boolean} [enumerable=true]
- */
-        function createComputedProp(observable, propName, valueGenerator) {
-            var enumerable = !(arguments.length > 3 && void 0 !== arguments[3]) || arguments[3];
-            if (observable && propName && valueGenerator) {
-                var runValueGenerator = true;
-                var propValue = void 0;
-                var dependencyChangeNotifier = function() {
-                    // Trigger the Object property setter(). This does nothing as far as the
-                    // computed value does, but provides compatibility for any code that
-                    // might have overwritten the setter in order ot also listen for changes
-                    // outside of this lib.
-                    observable[propName] = "";
-                    // Reset the internally cached prop value and set the flag to run the
-                    // generator and then notify listeners.
-                    propValue = null;
-                    runValueGenerator = true;
-                    getInstance(observable).watched[propName].notify();
-                };
-                var valueGetter = function() {
-                    // FIXME: should we detect circular loops?
-                    if (!runValueGenerator) return propValue;
-                    Object(__WEBPACK_IMPORTED_MODULE_5__common__.l)(dependencyChangeNotifier);
-                    try {
-                        propValue = valueGenerator.call(observable);
-                    } catch (e) {
-                        Object(__WEBPACK_IMPORTED_MODULE_5__common__.p)(dependencyChangeNotifier);
-                        throw e;
-                    }
-                    Object(__WEBPACK_IMPORTED_MODULE_5__common__.p)(dependencyChangeNotifier);
-                    runValueGenerator = false;
-                    return propValue;
-                };
-                var valueSetter = function() {
-                    /* FIXME: should this anything? */
-                    return propValue;
-                };
-                var inst = getInstance(observable);
-                dependencyChangeNotifier[__WEBPACK_IMPORTED_MODULE_5__common__.b] = true;
-                // If this propName is already being watched, then first destroy that instance
-                if (propName in inst.watched) {
-                    inst.watched[propName].destroy();
-                    delete inst.watched[propName];
-                }
-                makePropWatchable(observable, propName, valueGetter, valueSetter, enumerable);
-                inst.watched[propName].isComputed = true;
-                inst.watched[propName].onDestroy(function() {
-                    Object(__WEBPACK_IMPORTED_MODULE_5__common__.n)(dependencyChangeNotifier);
-                    delete inst.watched[propName];
-                    delete observable[propName];
-                    observable[propName] = propValue;
-                });
-                return Object.create({
-                    destroy: function() {
-                        inst.watched[propName] && inst.watched[propName].destroy(true);
-                    }
-                });
-            }
-        }
-        /**
- * Assign the properties of one (or more) objects to the observable and
- * makes those properties "watchable"
- *
- * @param {Object} observable
- * @param {...Object} objs
- *
- * @return {Object} observable
- */
-        function observableAssign(observable) {
-            for (var _len2 = arguments.length, objs = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) objs[_key2 - 1] = arguments[_key2];
-            objs.length && Object(__WEBPACK_IMPORTED_MODULE_5__common__.e)(objs, function(obj) {
-                Object(__WEBPACK_IMPORTED_MODULE_5__common__.e)(objectKeys(obj), function(key) {
-                    makePropWatchable(observable, key);
-                    observable[key] = obj[key];
-                });
-            });
-            return observable;
-        }
-        /**
- * Makes an Object observable or a given property of the object observable.
- *
- * @param {Object} observable
- *  The object that should be made observable.
- *
- * @param {String} [propName]
- *  if left unset, then all existing `own properties` of the object will
- *  be made observable.
- *
- * @param {Boolean} [deep=false]
- *  If set to `true` then the object, or the value the given `prop` (if defined)
- *  will be "walked" and any object found made an observable as well.
- *
- * @param {Function} [onEach]
- *  A callback function to be called as each property is "walked". The property value
- *  is provided on input to the callback
- */
-        function makeObservable(observable, propName, deep, onEach) {
-            if (observable) {
-                propName ? makePropWatchable(observable, propName) : Object(__WEBPACK_IMPORTED_MODULE_5__common__.e)(objectKeys(observable), function(prop) {
-                    return makePropWatchable(observable, prop);
-                });
-                deep && Object(__WEBPACK_IMPORTED_MODULE_5__common__.e)(objectKeys(observable), function(key) {
-                    observable[key] && Object(__WEBPACK_IMPORTED_MODULE_5__common__.i)(observable[key]) && makeObservable(observable[key], null, deep, onEach);
-                    onEach && onEach(observable[key]);
-                });
-            }
-        }
-        /**
- * Watch a given object property for changes.
- *
- * @param {Object} observable
- * @param {String} propName
- *  The `observable` property name or, if wanting to list to all property changes,
- *  the actual `observable` instance
- * @param {Function} notifier
- *
- * @returns {EventEmitter#EventListener}
- */
-        function watchProp(observable, propName, notifier) {
-            var inst = getInstance(observable);
-            if (propName === observable) return inst.on(inst, notifier);
-            if (objectHasOwnProperty(observable, propName)) {
-                makePropWatchable(observable, propName);
-                return inst.on(propName, notifier);
-            }
-            return noopEventListener;
-        }
-        /**
- * Watch for changes on a given object property only once
- * (automatically stops listening after the first invocation).
- *
- * @param {Object} observable
- * @param {String} propName
- * @param {Function} notifier
- * @returns {EventEmitter#EventListener}
- */
-        function watchPropOnce(observable, propName, notifier) {
-            var inst = getInstance(observable);
-            if (propName === observable) return inst.once(inst, notifier);
-            if (objectHasOwnProperty(observable, propName)) {
-                makePropWatchable(observable, propName);
-                return inst.once(propName, notifier);
-            }
-            return noopEventListener;
-        }
-        /**
- * Stop watching an object property.
- *
- * @param {Object} observable
- * @param {String} propName
- * @param {Function} notifier
- */
-        function unwatchProp(observable, propName, notifier) {
-            return getInstance(observable).off(propName, notifier);
-        }
-        /**
- * Notifies watchers of a given Observable property
- *
- * @param {Object} observable
- * @param {String} propName
- */
-        function notifyPropWatchers(observable, propName) {
-            var watched = getInstance(observable).watched;
-            watched[propName] && watched[propName].notify(true);
-        }
-        /**
- * Adds ObservableObject capabilities to an object.
- *
- * @method ObservableObject.mixin
- *
- * @param {Object} observable
- *
- * @return {Object}
- *  Same object that was given on input will be returned
- */
-        function observableMixin(observable) {
-            observable && Object(__WEBPACK_IMPORTED_MODULE_5__common__.e)(objectKeys(ObservableObject.prototype), function(method) {
-                method in observable && observable[method] === ObservableObject.prototype[method] || objectDefineProperty(observable, method, {
-                    value: ObservableObject.prototype[method],
-                    enumerable: false,
-                    configurable: true
-                });
-            });
-            return observable;
-        }
-        ObservableObject.createComputed = createComputedProp;
-        ObservableObject.mixin = observableMixin;
-        /**
- * Default options to the ObservableObject constructor
- *
- * @type Object
- * @name ObservableObject.defaults
- */
-        ObservableObject.defaults = {
-            watchAll: true,
-            deep: true
-        };
-    }, /* 34 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export objectExtend */
-        var OBJECT_TYPE = "[object Object]";
-        var _toString = Function.call.bind(Object.prototype.toString);
-        //============================================================
-        /**
- * Extends an object with the properties of another.
- *
- * @param {Object|Boolean} mergeIntoObj
- *  The object that will have the properties of every other object provided
- *  on input merged into. This can also be a `Boolean`, in which case,
- *  a deep merge of objects will be done - argument number 2 will
- *  become the `mergeIntoObj`.
- * @param {...Object} mergeObjects
- *
- * @return {Object}
- */
-        function objectExtend(mergeIntoObj) {
-            var response = mergeIntoObj || {};
-            for (var _len = arguments.length, mergeObjects = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) mergeObjects[_key - 1] = arguments[_key];
-            var total = mergeObjects.length;
-            var deepMerge = false;
-            var i = void 0;
-            var key = void 0;
-            if ("boolean" === typeof mergeIntoObj) {
-                deepMerge = mergeIntoObj;
-                response = mergeObjects.shift() || {};
-                total = mergeObjects.length;
-            }
-            for (i = 0; i < total; i++) {
-                if (!mergeObjects[i]) continue;
-                for (key in mergeObjects[i]) mergeObjects[i].hasOwnProperty(key) && (deepMerge && _toString(response[key]) === OBJECT_TYPE && _toString(mergeObjects[i][key]) === OBJECT_TYPE ? response[key] = objectExtend(true, response[key], mergeObjects[i][key]) : response[key] = mergeObjects[i][key]);
-            }
-            return response;
-        }
-        /* harmony default export */
-        __webpack_exports__.a = objectExtend;
-    }, /* 35 */
-    /***/
-    function(module, exports) {
-        var toString = {}.toString;
-        module.exports = function(it) {
-            return toString.call(it).slice(8, -1);
-        };
-    }, /* 36 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(3);
-        var store = global["__core-js_shared__"] || (global["__core-js_shared__"] = {});
-        module.exports = function(key) {
-            return store[key] || (store[key] = {});
-        };
-    }, /* 37 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        module.exports = !__webpack_require__(5) && !__webpack_require__(18)(function() {
-            return 7 != Object.defineProperty(__webpack_require__(38)("div"), "a", {
-                get: function() {
-                    return 7;
-                }
-            }).a;
-        });
-    }, /* 38 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(4);
-        var document = __webpack_require__(3).document;
-        // typeof document.createElement is 'object' in old IE
-        var is = isObject(document) && isObject(document.createElement);
-        module.exports = function(it) {
-            return is ? document.createElement(it) : {};
-        };
-    }, /* 39 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 7.1.1 ToPrimitive(input [, PreferredType])
-        var isObject = __webpack_require__(4);
-        // instead of the ES6 spec version, we didn't implement @@toPrimitive case
-        // and the second argument - flag - preferred type is a string
-        module.exports = function(it, S) {
-            if (!isObject(it)) return it;
-            var fn, val;
-            if (S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
-            if ("function" == typeof (fn = it.valueOf) && !isObject(val = fn.call(it))) return val;
-            if (!S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
-            throw TypeError("Can't convert object to primitive value");
-        };
-    }, /* 40 */
-    /***/
-    function(module, exports) {
-        module.exports = function(it) {
-            if ("function" != typeof it) throw TypeError(it + " is not a function!");
-            return it;
-        };
-    }, /* 41 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-        var anObject = __webpack_require__(11);
-        var dPs = __webpack_require__(61);
-        var enumBugKeys = __webpack_require__(44);
-        var IE_PROTO = __webpack_require__(28)("IE_PROTO");
-        var Empty = function() {};
-        // Create object with fake `null` prototype: use iframe Object with cleared prototype
-        var _createDict = function() {
-            // Thrash, waste and sodomy: IE GC bug
-            var iframe = __webpack_require__(38)("iframe");
-            var i = enumBugKeys.length;
-            var iframeDocument;
-            iframe.style.display = "none";
-            __webpack_require__(66).appendChild(iframe);
-            iframe.src = "javascript:";
-            // eslint-disable-line no-script-url
-            // createDict = iframe.contentWindow.Object;
-            // html.removeChild(iframe);
-            iframeDocument = iframe.contentWindow.document;
-            iframeDocument.open();
-            iframeDocument.write("<script>document.F=Object<\/script>");
-            iframeDocument.close();
-            _createDict = iframeDocument.F;
-            for (;i--; ) delete _createDict.prototype[enumBugKeys[i]];
-            return _createDict();
-        };
-        module.exports = Object.create || function(O, Properties) {
-            var result;
-            if (null !== O) {
-                Empty.prototype = anObject(O);
-                result = new Empty();
-                Empty.prototype = null;
-                // add "__proto__" for Object.getPrototypeOf polyfill
-                result[IE_PROTO] = O;
-            } else result = _createDict();
-            return void 0 === Properties ? result : dPs(result, Properties);
-        };
-    }, /* 42 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-        var $keys = __webpack_require__(62);
-        var enumBugKeys = __webpack_require__(44);
-        module.exports = Object.keys || function(O) {
-            return $keys(O, enumBugKeys);
-        };
-    }, /* 43 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 7.1.15 ToLength
-        var toInteger = __webpack_require__(25);
-        var min = Math.min;
-        module.exports = function(it) {
-            return it > 0 ? min(toInteger(it), 9007199254740991) : 0;
-        };
-    }, /* 44 */
-    /***/
-    function(module, exports) {
-        // IE 8- don't enum bug keys
-        module.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
-    }, /* 45 */
-    /***/
-    function(module, exports) {
-        module.exports = function(done, value) {
-            return {
-                value: value,
-                done: !!done
-            };
-        };
-    }, /* 46 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var redefine = __webpack_require__(8);
-        module.exports = function(target, src, safe) {
-            for (var key in src) redefine(target, key, src[key], safe);
-            return target;
-        };
-    }, /* 47 */
-    /***/
-    function(module, exports) {
-        module.exports = function(it, Constructor, name, forbiddenField) {
-            if (!(it instanceof Constructor) || void 0 !== forbiddenField && forbiddenField in it) throw TypeError(name + ": incorrect invocation!");
-            return it;
-        };
-    }, /* 48 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
-            return typeof obj;
-        } : function(obj) {
-            return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-        };
-        var META = __webpack_require__(17)("meta");
-        var isObject = __webpack_require__(4);
-        var has = __webpack_require__(6);
-        var setDesc = __webpack_require__(10).f;
-        var id = 0;
-        var isExtensible = Object.isExtensible || function() {
-            return true;
-        };
-        var FREEZE = !__webpack_require__(18)(function() {
-            return isExtensible(Object.preventExtensions({}));
-        });
-        var setMeta = function(it) {
-            setDesc(it, META, {
-                value: {
-                    i: "O" + ++id,
-                    // object ID
-                    w: {}
-                }
-            });
-        };
-        var fastKey = function(it, create) {
-            // return primitive with prefix
-            if (!isObject(it)) return "symbol" == ("undefined" === typeof it ? "undefined" : _typeof(it)) ? it : ("string" == typeof it ? "S" : "P") + it;
-            if (!has(it, META)) {
-                // can't set metadata to uncaught frozen object
-                if (!isExtensible(it)) return "F";
-                // not necessary to add metadata
-                if (!create) return "E";
-                // add missing metadata
-                setMeta(it);
-            }
-            return it[META].i;
-        };
-        var getWeak = function(it, create) {
-            if (!has(it, META)) {
-                // can't set metadata to uncaught frozen object
-                if (!isExtensible(it)) return true;
-                // not necessary to add metadata
-                if (!create) return false;
-                // add missing metadata
-                setMeta(it);
-            }
-            return it[META].w;
-        };
-        // add metadata on freeze-family methods calling
-        var onFreeze = function(it) {
-            FREEZE && meta.NEED && isExtensible(it) && !has(it, META) && setMeta(it);
-            return it;
-        };
-        var meta = module.exports = {
-            KEY: META,
-            NEED: false,
-            fastKey: fastKey,
-            getWeak: getWeak,
-            onFreeze: onFreeze
-        };
-    }, /* 49 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(4);
-        module.exports = function(it, TYPE) {
-            if (!isObject(it) || it._t !== TYPE) throw TypeError("Incompatible receiver, " + TYPE + " required!");
-            return it;
-        };
-    }, /* 50 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* harmony export (immutable) */
-        __webpack_exports__.a = observeAll;
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__ObservableArray__ = __webpack_require__(93);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__ObservableObject__ = __webpack_require__(33);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__common__ = __webpack_require__(32);
-        /* unused harmony reexport ObservableArray */
-        /* unused harmony reexport ObservableObject */
-        function _toConsumableArray(arr) {
-            if (Array.isArray(arr)) {
-                for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-                return arr2;
-            }
-            return Array.from(arr);
-        }
-        //==================================================================
-        /**
- * Observes all data - object and arrays - given on input.
- *
- * @param {...Object|...Array} data
- */
-        function observeAll() {
-            for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) data[_key] = arguments[_key];
-            Object(__WEBPACK_IMPORTED_MODULE_2__common__.e)(data, function(dataItem) {
-                if (Object(__WEBPACK_IMPORTED_MODULE_2__common__.h)(dataItem)) return;
-                if (Object(__WEBPACK_IMPORTED_MODULE_2__common__.i)(dataItem)) Object(__WEBPACK_IMPORTED_MODULE_1__ObservableObject__.a)(dataItem, null, true, function(propValue) {
-                    propValue && Object(__WEBPACK_IMPORTED_MODULE_2__common__.g)(propValue) && observeAll(propValue);
-                }); else if (Object(__WEBPACK_IMPORTED_MODULE_2__common__.g)(dataItem)) {
-                    Object(__WEBPACK_IMPORTED_MODULE_0__ObservableArray__.a)(dataItem);
-                    observeAll.apply(void 0, _toConsumableArray(dataItem));
-                }
-            });
-        }
-    }, /* 51 */
+    }, /* 13 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export AttrDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -3228,7 +1560,7 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = AttrDirective;
-    }, /* 52 */
+    }, /* 14 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -3240,27 +1572,27 @@
             return DomDataBindAll;
         });
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(53);
+        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(15);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__directives_Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_1__directives_Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__ = __webpack_require__(95);
+        var __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__ = __webpack_require__(23);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__ = __webpack_require__(99);
+        var __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__ = __webpack_require__(27);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__ = __webpack_require__(100);
+        var __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__ = __webpack_require__(28);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__ = __webpack_require__(101);
+        var __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__ = __webpack_require__(29);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__ = __webpack_require__(51);
+        var __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__ = __webpack_require__(13);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__ = __webpack_require__(102);
+        var __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__ = __webpack_require__(30);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__ = __webpack_require__(103);
+        var __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__ = __webpack_require__(31);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__ = __webpack_require__(105);
+        var __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__ = __webpack_require__(33);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__ = __webpack_require__(106);
+        var __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__ = __webpack_require__(34);
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "DomDataBind", function() {
             return __WEBPACK_IMPORTED_MODULE_0__DomDataBind__.a;
@@ -3309,23 +1641,23 @@
         DomDataBindAll.directives = [ __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__.a, __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__.a, __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__.a, __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__.a, __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__.a, __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__.a, __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__.a, __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__.a, __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__.a ];
         /* harmony default export */
         __webpack_exports__.default = DomDataBindAll;
-    }, /* 53 */
+    }, /* 15 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export DomDataBind */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(15);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(30);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(8);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observable_data__ = __webpack_require__(50);
+        var __WEBPACK_IMPORTED_MODULE_3_observables__ = __webpack_require__(4);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__ = __webpack_require__(94);
+        var __WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__ = __webpack_require__(22);
         var TEMPLATES = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a();
         // Local aliases
         var _NodeFilter = NodeFilter;
@@ -3373,19 +1705,29 @@
                     directives: Factory.directives.slice(0)
                 };
                 __WEBPACK_IMPORTED_MODULE_4__utils__.a.set(this, state);
-                var bindings = state.bindings = getBindingsFromDom(this, ele);
-                Object(__WEBPACK_IMPORTED_MODULE_3_observable_data__.a)(data);
-                Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(bindings, function(binding) {
-                    return binding.render(data);
-                });
+                state.bindings = getBindingsFromDom(this, ele);
+                data && this.setData(data);
                 this.onDestroy(function() {
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(state.bindings, function(binding) {
+                        return binding.destroy();
+                    });
                     delete state.data;
                     delete state.directives;
                     delete state.bindings;
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(bindings, function(binding) {
-                        return binding.destroy();
-                    });
                     Factory.getDestroyCallback(state, __WEBPACK_IMPORTED_MODULE_4__utils__.a)();
+                });
+            },
+            /**
+     * Set data on to the DOM provided during initialization.
+     * In most cases, you should never have the need to call this method. Data
+     * provided during initialization is "live" and changes are automatically
+     * reflected to dom.
+     */
+            setData: function(data) {
+                Object(__WEBPACK_IMPORTED_MODULE_3_observables__.b)(data);
+                var bindings = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(this).bindings;
+                Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(bindings, function(binding) {
+                    return binding.render(data);
                 });
             }
         });
@@ -3575,13 +1917,53 @@
             directiveInstances[directiveSignature] || (directiveInstances[directiveSignature] = new Directive(attrName, attrValue));
             return directiveInstances[directiveSignature];
         }
-    }, /* 54 */
+    }, /* 16 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export objectExtend */
+        var OBJECT_TYPE = "[object Object]";
+        var _toString = Function.call.bind(Object.prototype.toString);
+        //============================================================
+        /**
+ * Extends an object with the properties of another.
+ *
+ * @param {Object|Boolean} mergeIntoObj
+ *  The object that will have the properties of every other object provided
+ *  on input merged into. This can also be a `Boolean`, in which case,
+ *  a deep merge of objects will be done - argument number 2 will
+ *  become the `mergeIntoObj`.
+ * @param {...Object} mergeObjects
+ *
+ * @return {Object}
+ */
+        function objectExtend(mergeIntoObj) {
+            var response = mergeIntoObj || {};
+            for (var _len = arguments.length, mergeObjects = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) mergeObjects[_key - 1] = arguments[_key];
+            var total = mergeObjects.length;
+            var deepMerge = false;
+            var i = void 0;
+            var key = void 0;
+            if ("boolean" === typeof mergeIntoObj) {
+                deepMerge = mergeIntoObj;
+                response = mergeObjects.shift() || {};
+                total = mergeObjects.length;
+            }
+            for (i = 0; i < total; i++) {
+                if (!mergeObjects[i]) continue;
+                for (key in mergeObjects[i]) mergeObjects[i].hasOwnProperty(key) && (deepMerge && _toString(response[key]) === OBJECT_TYPE && _toString(mergeObjects[i][key]) === OBJECT_TYPE ? response[key] = objectExtend(true, response[key], mergeObjects[i][key]) : response[key] = mergeObjects[i][key]);
+            }
+            return response;
+        }
+        /* harmony default export */
+        __webpack_exports__.a = objectExtend;
+    }, /* 17 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export queueCallback */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(8);
         function _toConsumableArray(arr) {
             if (Array.isArray(arr)) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -3618,814 +2000,7 @@
                 cb = null;
             }
         }
-    }, /* 55 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        __webpack_require__(56);
-        __webpack_require__(57);
-        __webpack_require__(69);
-        __webpack_require__(72);
-        __webpack_require__(84);
-        __webpack_require__(87);
-        __webpack_require__(89);
-        module.exports = __webpack_require__(19).Set;
-    }, /* 56 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        // 19.1.3.6 Object.prototype.toString()
-        var classof = __webpack_require__(23);
-        var test = {};
-        test[__webpack_require__(0)("toStringTag")] = "z";
-        test + "" != "[object z]" && __webpack_require__(8)(Object.prototype, "toString", function() {
-            return "[object " + classof(this) + "]";
-        }, true);
-    }, /* 57 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var $at = __webpack_require__(58)(true);
-        // 21.1.3.27 String.prototype[@@iterator]()
-        __webpack_require__(27)(String, "String", function(iterated) {
-            this._t = String(iterated);
-            // target
-            this._i = 0;
-        }, function() {
-            var O = this._t;
-            var index = this._i;
-            var point;
-            if (index >= O.length) return {
-                value: void 0,
-                done: true
-            };
-            point = $at(O, index);
-            this._i += point.length;
-            return {
-                value: point,
-                done: false
-            };
-        });
-    }, /* 58 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var toInteger = __webpack_require__(25);
-        var defined = __webpack_require__(26);
-        // true  -> String#at
-        // false -> String#codePointAt
-        module.exports = function(TO_STRING) {
-            return function(that, pos) {
-                var s = String(defined(that));
-                var i = toInteger(pos);
-                var l = s.length;
-                var a, b;
-                if (i < 0 || i >= l) return TO_STRING ? "" : void 0;
-                a = s.charCodeAt(i);
-                return a < 55296 || a > 56319 || i + 1 === l || (b = s.charCodeAt(i + 1)) < 56320 || b > 57343 ? TO_STRING ? s.charAt(i) : a : TO_STRING ? s.slice(i, i + 2) : b - 56320 + (a - 55296 << 10) + 65536;
-            };
-        };
-    }, /* 59 */
-    /***/
-    function(module, exports) {
-        module.exports = false;
-    }, /* 60 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var create = __webpack_require__(41);
-        var descriptor = __webpack_require__(24);
-        var setToStringTag = __webpack_require__(29);
-        var IteratorPrototype = {};
-        // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-        __webpack_require__(9)(IteratorPrototype, __webpack_require__(0)("iterator"), function() {
-            return this;
-        });
-        module.exports = function(Constructor, NAME, next) {
-            Constructor.prototype = create(IteratorPrototype, {
-                next: descriptor(1, next)
-            });
-            setToStringTag(Constructor, NAME + " Iterator");
-        };
-    }, /* 61 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var dP = __webpack_require__(10);
-        var anObject = __webpack_require__(11);
-        var getKeys = __webpack_require__(42);
-        module.exports = __webpack_require__(5) ? Object.defineProperties : function(O, Properties) {
-            anObject(O);
-            var keys = getKeys(Properties);
-            var length = keys.length;
-            var i = 0;
-            var P;
-            for (;length > i; ) dP.f(O, P = keys[i++], Properties[P]);
-            return O;
-        };
-    }, /* 62 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var has = __webpack_require__(6);
-        var toIObject = __webpack_require__(20);
-        var arrayIndexOf = __webpack_require__(64)(false);
-        var IE_PROTO = __webpack_require__(28)("IE_PROTO");
-        module.exports = function(object, names) {
-            var O = toIObject(object);
-            var i = 0;
-            var result = [];
-            var key;
-            for (key in O) key != IE_PROTO && has(O, key) && result.push(key);
-            // Don't enum bug & hidden keys
-            for (;names.length > i; ) has(O, key = names[i++]) && (~arrayIndexOf(result, key) || result.push(key));
-            return result;
-        };
-    }, /* 63 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // fallback for non-array-like ES3 and non-enumerable old V8 strings
-        var cof = __webpack_require__(35);
-        // eslint-disable-next-line no-prototype-builtins
-        module.exports = Object("z").propertyIsEnumerable(0) ? Object : function(it) {
-            return "String" == cof(it) ? it.split("") : Object(it);
-        };
-    }, /* 64 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // false -> Array#indexOf
-        // true  -> Array#includes
-        var toIObject = __webpack_require__(20);
-        var toLength = __webpack_require__(43);
-        var toAbsoluteIndex = __webpack_require__(65);
-        module.exports = function(IS_INCLUDES) {
-            return function($this, el, fromIndex) {
-                var O = toIObject($this);
-                var length = toLength(O.length);
-                var index = toAbsoluteIndex(fromIndex, length);
-                var value;
-                // Array#includes uses SameValueZero equality algorithm
-                // eslint-disable-next-line no-self-compare
-                if (IS_INCLUDES && el != el) for (;length > index; ) {
-                    value = O[index++];
-                    // eslint-disable-next-line no-self-compare
-                    if (value != value) return true;
-                } else for (;length > index; index++) if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
-                return !IS_INCLUDES && -1;
-            };
-        };
-    }, /* 65 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var toInteger = __webpack_require__(25);
-        var max = Math.max;
-        var min = Math.min;
-        module.exports = function(index, length) {
-            index = toInteger(index);
-            return index < 0 ? max(index + length, 0) : min(index, length);
-        };
-    }, /* 66 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var document = __webpack_require__(3).document;
-        module.exports = document && document.documentElement;
-    }, /* 67 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-        var has = __webpack_require__(6);
-        var toObject = __webpack_require__(68);
-        var IE_PROTO = __webpack_require__(28)("IE_PROTO");
-        var ObjectProto = Object.prototype;
-        module.exports = Object.getPrototypeOf || function(O) {
-            O = toObject(O);
-            if (has(O, IE_PROTO)) return O[IE_PROTO];
-            if ("function" == typeof O.constructor && O instanceof O.constructor) return O.constructor.prototype;
-            return O instanceof Object ? ObjectProto : null;
-        };
-    }, /* 68 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 7.1.13 ToObject(argument)
-        var defined = __webpack_require__(26);
-        module.exports = function(it) {
-            return Object(defined(it));
-        };
-    }, /* 69 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var $iterators = __webpack_require__(70);
-        var getKeys = __webpack_require__(42);
-        var redefine = __webpack_require__(8);
-        var global = __webpack_require__(3);
-        var hide = __webpack_require__(9);
-        var Iterators = __webpack_require__(14);
-        var wks = __webpack_require__(0);
-        var ITERATOR = wks("iterator");
-        var TO_STRING_TAG = wks("toStringTag");
-        var ArrayValues = Iterators.Array;
-        var DOMIterables = {
-            CSSRuleList: true,
-            // TODO: Not spec compliant, should be false.
-            CSSStyleDeclaration: false,
-            CSSValueList: false,
-            ClientRectList: false,
-            DOMRectList: false,
-            DOMStringList: false,
-            DOMTokenList: true,
-            DataTransferItemList: false,
-            FileList: false,
-            HTMLAllCollection: false,
-            HTMLCollection: false,
-            HTMLFormElement: false,
-            HTMLSelectElement: false,
-            MediaList: true,
-            // TODO: Not spec compliant, should be false.
-            MimeTypeArray: false,
-            NamedNodeMap: false,
-            NodeList: true,
-            PaintRequestList: false,
-            Plugin: false,
-            PluginArray: false,
-            SVGLengthList: false,
-            SVGNumberList: false,
-            SVGPathSegList: false,
-            SVGPointList: false,
-            SVGStringList: false,
-            SVGTransformList: false,
-            SourceBufferList: false,
-            StyleSheetList: true,
-            // TODO: Not spec compliant, should be false.
-            TextTrackCueList: false,
-            TextTrackList: false,
-            TouchList: false
-        };
-        for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++) {
-            var NAME = collections[i];
-            var explicit = DOMIterables[NAME];
-            var Collection = global[NAME];
-            var proto = Collection && Collection.prototype;
-            var key;
-            if (proto) {
-                proto[ITERATOR] || hide(proto, ITERATOR, ArrayValues);
-                proto[TO_STRING_TAG] || hide(proto, TO_STRING_TAG, NAME);
-                Iterators[NAME] = ArrayValues;
-                if (explicit) for (key in $iterators) proto[key] || redefine(proto, key, $iterators[key], true);
-            }
-        }
-    }, /* 70 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var addToUnscopables = __webpack_require__(71);
-        var step = __webpack_require__(45);
-        var Iterators = __webpack_require__(14);
-        var toIObject = __webpack_require__(20);
-        // 22.1.3.4 Array.prototype.entries()
-        // 22.1.3.13 Array.prototype.keys()
-        // 22.1.3.29 Array.prototype.values()
-        // 22.1.3.30 Array.prototype[@@iterator]()
-        module.exports = __webpack_require__(27)(Array, "Array", function(iterated, kind) {
-            this._t = toIObject(iterated);
-            // target
-            this._i = 0;
-            // next index
-            this._k = kind;
-        }, function() {
-            var O = this._t;
-            var kind = this._k;
-            var index = this._i++;
-            if (!O || index >= O.length) {
-                this._t = void 0;
-                return step(1);
-            }
-            if ("keys" == kind) return step(0, index);
-            if ("values" == kind) return step(0, O[index]);
-            return step(0, [ index, O[index] ]);
-        }, "values");
-        // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-        Iterators.Arguments = Iterators.Array;
-        addToUnscopables("keys");
-        addToUnscopables("values");
-        addToUnscopables("entries");
-    }, /* 71 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // 22.1.3.31 Array.prototype[@@unscopables]
-        var UNSCOPABLES = __webpack_require__(0)("unscopables");
-        var ArrayProto = Array.prototype;
-        void 0 == ArrayProto[UNSCOPABLES] && __webpack_require__(9)(ArrayProto, UNSCOPABLES, {});
-        module.exports = function(key) {
-            ArrayProto[UNSCOPABLES][key] = true;
-        };
-    }, /* 72 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var strong = __webpack_require__(73);
-        var validate = __webpack_require__(49);
-        // 23.2 Set Objects
-        module.exports = __webpack_require__(78)("Set", function(get) {
-            return function() {
-                return get(this, arguments.length > 0 ? arguments[0] : void 0);
-            };
-        }, {
-            // 23.2.3.1 Set.prototype.add(value)
-            add: function(value) {
-                return strong.def(validate(this, "Set"), value = 0 === value ? 0 : value, value);
-            }
-        }, strong);
-    }, /* 73 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var dP = __webpack_require__(10).f;
-        var create = __webpack_require__(41);
-        var redefineAll = __webpack_require__(46);
-        var ctx = __webpack_require__(13);
-        var anInstance = __webpack_require__(47);
-        var forOf = __webpack_require__(21);
-        var $iterDefine = __webpack_require__(27);
-        var step = __webpack_require__(45);
-        var setSpecies = __webpack_require__(77);
-        var DESCRIPTORS = __webpack_require__(5);
-        var fastKey = __webpack_require__(48).fastKey;
-        var validate = __webpack_require__(49);
-        var SIZE = DESCRIPTORS ? "_s" : "size";
-        var getEntry = function(that, key) {
-            // fast case
-            var index = fastKey(key);
-            var entry;
-            if ("F" !== index) return that._i[index];
-            // frozen object case
-            for (entry = that._f; entry; entry = entry.n) if (entry.k == key) return entry;
-        };
-        module.exports = {
-            getConstructor: function(wrapper, NAME, IS_MAP, ADDER) {
-                var C = wrapper(function(that, iterable) {
-                    anInstance(that, C, NAME, "_i");
-                    that._t = NAME;
-                    // collection type
-                    that._i = create(null);
-                    // index
-                    that._f = void 0;
-                    // first entry
-                    that._l = void 0;
-                    // last entry
-                    that[SIZE] = 0;
-                    // size
-                    void 0 != iterable && forOf(iterable, IS_MAP, that[ADDER], that);
-                });
-                redefineAll(C.prototype, {
-                    // 23.1.3.1 Map.prototype.clear()
-                    // 23.2.3.2 Set.prototype.clear()
-                    clear: function() {
-                        for (var that = validate(this, NAME), data = that._i, entry = that._f; entry; entry = entry.n) {
-                            entry.r = true;
-                            entry.p && (entry.p = entry.p.n = void 0);
-                            delete data[entry.i];
-                        }
-                        that._f = that._l = void 0;
-                        that[SIZE] = 0;
-                    },
-                    // 23.1.3.3 Map.prototype.delete(key)
-                    // 23.2.3.4 Set.prototype.delete(value)
-                    delete: function(key) {
-                        var that = validate(this, NAME);
-                        var entry = getEntry(that, key);
-                        if (entry) {
-                            var next = entry.n;
-                            var prev = entry.p;
-                            delete that._i[entry.i];
-                            entry.r = true;
-                            prev && (prev.n = next);
-                            next && (next.p = prev);
-                            that._f == entry && (that._f = next);
-                            that._l == entry && (that._l = prev);
-                            that[SIZE]--;
-                        }
-                        return !!entry;
-                    },
-                    // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
-                    // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
-                    forEach: function(callbackfn) {
-                        validate(this, NAME);
-                        var f = ctx(callbackfn, arguments.length > 1 ? arguments[1] : void 0, 3);
-                        var entry;
-                        for (;entry = entry ? entry.n : this._f; ) {
-                            f(entry.v, entry.k, this);
-                            // revert to the last existing entry
-                            for (;entry && entry.r; ) entry = entry.p;
-                        }
-                    },
-                    // 23.1.3.7 Map.prototype.has(key)
-                    // 23.2.3.7 Set.prototype.has(value)
-                    has: function(key) {
-                        return !!getEntry(validate(this, NAME), key);
-                    }
-                });
-                DESCRIPTORS && dP(C.prototype, "size", {
-                    get: function() {
-                        return validate(this, NAME)[SIZE];
-                    }
-                });
-                return C;
-            },
-            def: function(that, key, value) {
-                var entry = getEntry(that, key);
-                var prev, index;
-                // change existing entry
-                if (entry) entry.v = value; else {
-                    that._l = entry = {
-                        i: index = fastKey(key, true),
-                        // <- index
-                        k: key,
-                        // <- key
-                        v: value,
-                        // <- value
-                        p: prev = that._l,
-                        // <- previous entry
-                        n: void 0,
-                        // <- next entry
-                        r: false
-                    };
-                    that._f || (that._f = entry);
-                    prev && (prev.n = entry);
-                    that[SIZE]++;
-                    // add to index
-                    "F" !== index && (that._i[index] = entry);
-                }
-                return that;
-            },
-            getEntry: getEntry,
-            setStrong: function(C, NAME, IS_MAP) {
-                // add .keys, .values, .entries, [@@iterator]
-                // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
-                $iterDefine(C, NAME, function(iterated, kind) {
-                    this._t = validate(iterated, NAME);
-                    // target
-                    this._k = kind;
-                    // kind
-                    this._l = void 0;
-                }, function() {
-                    var that = this;
-                    var kind = that._k;
-                    var entry = that._l;
-                    // revert to the last existing entry
-                    for (;entry && entry.r; ) entry = entry.p;
-                    // get next entry
-                    if (!that._t || !(that._l = entry = entry ? entry.n : that._t._f)) {
-                        // or finish the iteration
-                        that._t = void 0;
-                        return step(1);
-                    }
-                    // return step by kind
-                    if ("keys" == kind) return step(0, entry.k);
-                    if ("values" == kind) return step(0, entry.v);
-                    return step(0, [ entry.k, entry.v ]);
-                }, IS_MAP ? "entries" : "values", !IS_MAP, true);
-                // add [@@species], 23.1.2.2, 23.2.2.2
-                setSpecies(NAME);
-            }
-        };
-    }, /* 74 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // call something on iterator step with safe closing on error
-        var anObject = __webpack_require__(11);
-        module.exports = function(iterator, fn, value, entries) {
-            try {
-                return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-            } catch (e) {
-                var ret = iterator.return;
-                void 0 !== ret && anObject(ret.call(iterator));
-                throw e;
-            }
-        };
-    }, /* 75 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // check on default Array iterator
-        var Iterators = __webpack_require__(14);
-        var ITERATOR = __webpack_require__(0)("iterator");
-        var ArrayProto = Array.prototype;
-        module.exports = function(it) {
-            return void 0 !== it && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-        };
-    }, /* 76 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var classof = __webpack_require__(23);
-        var ITERATOR = __webpack_require__(0)("iterator");
-        var Iterators = __webpack_require__(14);
-        module.exports = __webpack_require__(19).getIteratorMethod = function(it) {
-            if (void 0 != it) return it[ITERATOR] || it["@@iterator"] || Iterators[classof(it)];
-        };
-    }, /* 77 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var global = __webpack_require__(3);
-        var dP = __webpack_require__(10);
-        var DESCRIPTORS = __webpack_require__(5);
-        var SPECIES = __webpack_require__(0)("species");
-        module.exports = function(KEY) {
-            var C = global[KEY];
-            DESCRIPTORS && C && !C[SPECIES] && dP.f(C, SPECIES, {
-                configurable: true,
-                get: function() {
-                    return this;
-                }
-            });
-        };
-    }, /* 78 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        var global = __webpack_require__(3);
-        var $export = __webpack_require__(12);
-        var redefine = __webpack_require__(8);
-        var redefineAll = __webpack_require__(46);
-        var meta = __webpack_require__(48);
-        var forOf = __webpack_require__(21);
-        var anInstance = __webpack_require__(47);
-        var isObject = __webpack_require__(4);
-        var fails = __webpack_require__(18);
-        var $iterDetect = __webpack_require__(79);
-        var setToStringTag = __webpack_require__(29);
-        var inheritIfRequired = __webpack_require__(80);
-        module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
-            var Base = global[NAME];
-            var C = Base;
-            var ADDER = IS_MAP ? "set" : "add";
-            var proto = C && C.prototype;
-            var O = {};
-            var fixMethod = function(KEY) {
-                var fn = proto[KEY];
-                redefine(proto, KEY, "delete" == KEY ? function(a) {
-                    return !(IS_WEAK && !isObject(a)) && fn.call(this, 0 === a ? 0 : a);
-                } : "has" == KEY ? function(a) {
-                    return !(IS_WEAK && !isObject(a)) && fn.call(this, 0 === a ? 0 : a);
-                } : "get" == KEY ? function(a) {
-                    return IS_WEAK && !isObject(a) ? void 0 : fn.call(this, 0 === a ? 0 : a);
-                } : "add" == KEY ? function(a) {
-                    fn.call(this, 0 === a ? 0 : a);
-                    return this;
-                } : function(a, b) {
-                    fn.call(this, 0 === a ? 0 : a, b);
-                    return this;
-                });
-            };
-            if ("function" == typeof C && (IS_WEAK || proto.forEach && !fails(function() {
-                new C().entries().next();
-            }))) {
-                var instance = new C();
-                // early implementations not supports chaining
-                var HASNT_CHAINING = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance;
-                // V8 ~  Chromium 40- weak-collections throws on primitives, but should return false
-                var THROWS_ON_PRIMITIVES = fails(function() {
-                    instance.has(1);
-                });
-                // most early implementations doesn't supports iterables, most modern - not close it correctly
-                var ACCEPT_ITERABLES = $iterDetect(function(iter) {
-                    new C(iter);
-                });
-                // eslint-disable-line no-new
-                // for early implementations -0 and +0 not the same
-                var BUGGY_ZERO = !IS_WEAK && fails(function() {
-                    // V8 ~ Chromium 42- fails only with 5+ elements
-                    var $instance = new C();
-                    var index = 5;
-                    for (;index--; ) $instance[ADDER](index, index);
-                    return !$instance.has(-0);
-                });
-                if (!ACCEPT_ITERABLES) {
-                    C = wrapper(function(target, iterable) {
-                        anInstance(target, C, NAME);
-                        var that = inheritIfRequired(new Base(), target, C);
-                        void 0 != iterable && forOf(iterable, IS_MAP, that[ADDER], that);
-                        return that;
-                    });
-                    C.prototype = proto;
-                    proto.constructor = C;
-                }
-                if (THROWS_ON_PRIMITIVES || BUGGY_ZERO) {
-                    fixMethod("delete");
-                    fixMethod("has");
-                    IS_MAP && fixMethod("get");
-                }
-                (BUGGY_ZERO || HASNT_CHAINING) && fixMethod(ADDER);
-                // weak collections should not contains .clear method
-                IS_WEAK && proto.clear && delete proto.clear;
-            } else {
-                // create collection constructor
-                C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
-                redefineAll(C.prototype, methods);
-                meta.NEED = true;
-            }
-            setToStringTag(C, NAME);
-            O[NAME] = C;
-            $export($export.G + $export.W + $export.F * (C != Base), O);
-            IS_WEAK || common.setStrong(C, NAME, IS_MAP);
-            return C;
-        };
-    }, /* 79 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var ITERATOR = __webpack_require__(0)("iterator");
-        var SAFE_CLOSING = false;
-        try {
-            var riter = [ 7 ][ITERATOR]();
-            riter.return = function() {
-                SAFE_CLOSING = true;
-            };
-            // eslint-disable-next-line no-throw-literal
-            Array.from(riter, function() {
-                throw 2;
-            });
-        } catch (e) {}
-        module.exports = function(exec, skipClosing) {
-            if (!skipClosing && !SAFE_CLOSING) return false;
-            var safe = false;
-            try {
-                var arr = [ 7 ];
-                var iter = arr[ITERATOR]();
-                iter.next = function() {
-                    return {
-                        done: safe = true
-                    };
-                };
-                arr[ITERATOR] = function() {
-                    return iter;
-                };
-                exec(arr);
-            } catch (e) {}
-            return safe;
-        };
-    }, /* 80 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(4);
-        var setPrototypeOf = __webpack_require__(81).set;
-        module.exports = function(that, target, C) {
-            var S = target.constructor;
-            var P;
-            S !== C && "function" == typeof S && (P = S.prototype) !== C.prototype && isObject(P) && setPrototypeOf && setPrototypeOf(that, P);
-            return that;
-        };
-    }, /* 81 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // Works with __proto__ only. Old v8 can't work with null proto objects.
-        /* eslint-disable no-proto */
-        var isObject = __webpack_require__(4);
-        var anObject = __webpack_require__(11);
-        var check = function(O, proto) {
-            anObject(O);
-            if (!isObject(proto) && null !== proto) throw TypeError(proto + ": can't set as prototype!");
-        };
-        module.exports = {
-            set: Object.setPrototypeOf || ("__proto__" in {} ? // eslint-disable-line
-            function(test, buggy, set) {
-                try {
-                    set = __webpack_require__(13)(Function.call, __webpack_require__(82).f(Object.prototype, "__proto__").set, 2);
-                    set(test, []);
-                    buggy = !(test instanceof Array);
-                } catch (e) {
-                    buggy = true;
-                }
-                return function(O, proto) {
-                    check(O, proto);
-                    buggy ? O.__proto__ = proto : set(O, proto);
-                    return O;
-                };
-            }({}, false) : void 0),
-            check: check
-        };
-    }, /* 82 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var pIE = __webpack_require__(83);
-        var createDesc = __webpack_require__(24);
-        var toIObject = __webpack_require__(20);
-        var toPrimitive = __webpack_require__(39);
-        var has = __webpack_require__(6);
-        var IE8_DOM_DEFINE = __webpack_require__(37);
-        var gOPD = Object.getOwnPropertyDescriptor;
-        exports.f = __webpack_require__(5) ? gOPD : function(O, P) {
-            O = toIObject(O);
-            P = toPrimitive(P, true);
-            if (IE8_DOM_DEFINE) try {
-                return gOPD(O, P);
-            } catch (e) {}
-            if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
-        };
-    }, /* 83 */
-    /***/
-    function(module, exports) {
-        exports.f = {}.propertyIsEnumerable;
-    }, /* 84 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // https://github.com/DavidBruant/Map-Set.prototype.toJSON
-        var $export = __webpack_require__(12);
-        $export($export.P + $export.R, "Set", {
-            toJSON: __webpack_require__(85)("Set")
-        });
-    }, /* 85 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // https://github.com/DavidBruant/Map-Set.prototype.toJSON
-        var classof = __webpack_require__(23);
-        var from = __webpack_require__(86);
-        module.exports = function(NAME) {
-            return function() {
-                if (classof(this) != NAME) throw TypeError(NAME + "#toJSON isn't generic");
-                return from(this);
-            };
-        };
-    }, /* 86 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        var forOf = __webpack_require__(21);
-        module.exports = function(iter, ITERATOR) {
-            var result = [];
-            forOf(iter, false, result.push, result, ITERATOR);
-            return result;
-        };
-    }, /* 87 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // https://tc39.github.io/proposal-setmap-offrom/#sec-set.of
-        __webpack_require__(88)("Set");
-    }, /* 88 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        // https://tc39.github.io/proposal-setmap-offrom/
-        var $export = __webpack_require__(12);
-        module.exports = function(COLLECTION) {
-            $export($export.S, COLLECTION, {
-                of: function() {
-                    var length = arguments.length;
-                    var A = new Array(length);
-                    for (;length--; ) A[length] = arguments[length];
-                    return new this(A);
-                }
-            });
-        };
-    }, /* 89 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        // https://tc39.github.io/proposal-setmap-offrom/#sec-set.from
-        __webpack_require__(90)("Set");
-    }, /* 90 */
-    /***/
-    function(module, exports, __webpack_require__) {
-        "use strict";
-        // https://tc39.github.io/proposal-setmap-offrom/
-        var $export = __webpack_require__(12);
-        var aFunction = __webpack_require__(40);
-        var ctx = __webpack_require__(13);
-        var forOf = __webpack_require__(21);
-        module.exports = function(COLLECTION) {
-            $export($export.S, COLLECTION, {
-                from: function(source) {
-                    var mapFn = arguments[1];
-                    var mapping, A, n, cb;
-                    aFunction(this);
-                    mapping = void 0 !== mapFn;
-                    mapping && aFunction(mapFn);
-                    if (void 0 == source) return new this();
-                    A = [];
-                    if (mapping) {
-                        n = 0;
-                        cb = ctx(mapFn, arguments[2], 2);
-                        forOf(source, false, function(nextItem) {
-                            A.push(cb(nextItem, n++));
-                        });
-                    } else forOf(source, false, A.push, A);
-                    return new this(A);
-                }
-            });
-        };
-    }, /* 91 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* WEBPACK VAR INJECTION */
-        (function(global) {
-            /* unused harmony export getGlobal */
-            var _GLOBAL = function() {
-                /* global self, window, global */
-                if ("undefined" !== typeof window) return window;
-                if ("undefined" !== typeof global) return global;
-                if ("undefined" !== typeof self) return self;
-                return Function("return this;")();
-            }();
-            function getGlobal() {
-                return _GLOBAL;
-            }
-            /* harmony default export */
-            __webpack_exports__.a = getGlobal;
-        }).call(__webpack_exports__, __webpack_require__(92));
-    }, /* 92 */
+    }, /* 18 */
     /***/
     function(module, exports) {
         var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
@@ -4449,290 +2024,161 @@
         // We return undefined, instead of nothing here, so it's
         // easier to handle this case. if(!global) { ...}
         module.exports = g;
-    }, /* 93 */
+    }, /* 19 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return Map;
+        });
+        /* unused harmony export FakeMap */
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(10);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(11);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
+        //======================================================
+        var Map = __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map && __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map.prototype[__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a] ? __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map : FakeMap;
+        function FakeMap() {}
+        Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.e)(FakeMap.prototype, function(obj, key, value) {
+            key in obj ? Object.defineProperty(obj, key, {
+                value: value,
+                enumerable: true,
+                configurable: true,
+                writable: true
+            }) : obj[key] = value;
+            return obj;
+        }({
+            constructor: {
+                value: FakeMap,
+                configurable: true
+            },
+            _: {
+                get: function() {
+                    Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.f)(this, "_", {
+                        value: {
+                            keys: [],
+                            values: []
+                        }
+                    });
+                    return this._;
+                }
+            },
+            get: {
+                value: function(key) {
+                    return this._.values[Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._.keys, key)];
+                }
+            },
+            set: {
+                value: function(key, _value) {
+                    if (-1 === Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._.keys, key)) {
+                        this._.keys.push(key);
+                        this._.values.push(_value);
+                    }
+                    return this;
+                }
+            },
+            has: {
+                value: function(key) {
+                    return -1 !== Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._.keys, key);
+                }
+            },
+            size: {
+                get: function() {
+                    return this._.keys.length;
+                }
+            },
+            clear: {
+                value: function() {
+                    Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.c)(this._.keys, 0);
+                    Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.c)(this._.values, 0);
+                }
+            },
+            delete: {
+                value: function(key) {
+                    var idx = Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.b)(this._.keys, key);
+                    if (-1 !== idx) {
+                        Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.c)(this._.keys, idx, 1);
+                        Object(__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.c)(this._.values, idx, 1);
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            keys: {
+                value: function() {
+                    return new __WEBPACK_IMPORTED_MODULE_1__Iterator__.a(this._.keys);
+                }
+            },
+            values: {
+                value: function() {
+                    return new __WEBPACK_IMPORTED_MODULE_1__Iterator__.a(this._.values);
+                }
+            },
+            entries: {
+                value: function() {
+                    return new __WEBPACK_IMPORTED_MODULE_1__Iterator__.a(this._.keys, this._.values);
+                }
+            },
+            forEach: {
+                value: function(cb) {
+                    var _this = this;
+                    this._.keys.forEach(function(item, i) {
+                        return cb(_this._.values[i], item, _this);
+                    });
+                }
+            }
+        }, __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a, {
+            value: function() {
+                return this.entries();
+            }
+        }));
+    }, /* 20 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export objectCreateComputedProp */
+        /* harmony import */
+        __webpack_require__(2);
+        /* harmony import */
+        __webpack_require__(5);
+    }, /* 21 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony export (immutable) */
-        __webpack_exports__.a = mixin;
+        __webpack_exports__.a = arrayWatch;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_EventEmitter__ = __webpack_require__(31);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(22);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__common__ = __webpack_require__(32);
-        /* unused harmony reexport setDependencyTracker */
-        /* unused harmony reexport unsetDependencyTracker */
-        /* unused harmony reexport stopDependeeNotifications */
-        function _toConsumableArray(arr) {
-            if (Array.isArray(arr)) {
-                for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-                return arr2;
-            }
-            return Array.from(arr);
-        }
-        //==============================================================
-        var ArrayPrototype = Array.prototype;
-        var objectDefineProp = Object.defineProperty;
-        var objectKeys = Object.keys;
-        var emit = Object(__WEBPACK_IMPORTED_MODULE_3__common__.f)(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_EventEmitter__.a.prototype.emit);
-        var changeMethods = [ "pop", "push", "shift", "splice", "unshift", "sort", "reverse" ];
-        var addMethods = [ "push", "splice", "unshift" ];
-        var removeMethods = [ "pop", "shift", "splice" ];
+        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(5);
+        //========================================================================
         /**
- * An Array like object with the added ability to listen to events.
- * It supports all methods available to a normal array, like `forEach`,
- * `some` and `reduce`
- *
- * @class ObservableArray
- *
- * @extends EventEmitter
- * @extends Array
- *
- * @fires ObservableArray#change
- */
-        var ObservableArray = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_EventEmitter__.a.extend(/** @lends ObservableArray.prototype */ {
-            /**
-     * The length of the array. Unlike the `length` property, this one is able
-     * to notify dependees if any are set to be track dependencies.
-     *
-     * @name len
-     * @type {Number}
-     */
-            // For backwards compatible with initial version
-            // use `len` property instead
-            size: function() {
-                Object(__WEBPACK_IMPORTED_MODULE_3__common__.o)(getInstance(this).dependees);
-                return this.length;
-            },
-            /**
-     * Returns a member of the collection given an index (zero based),
-     * or updates the item at a given index with a new value.
-     *
-     * @param {Number} index
-     * @param {*} [newValue]
-     */
-            item: function(index) {
-                var args = ArrayPrototype.slice.call(arguments, 0);
-                var _array = this;
-                Object(__WEBPACK_IMPORTED_MODULE_3__common__.o)(getInstance(this).dependees);
-                // GET mode..
-                if (1 === args.length) return _array[index];
-                // Update mode... Emits event
-                var events = getNewEventObject();
-                if (_array[index] === args[1]) events.updated = [ args[1] ]; else {
-                    events.removed = [ _array[index] ];
-                    events.added = [ args[1] ];
-                }
-                var updateResponse = _array[index] = args[1];
-                notifyDependees(_array, events);
-                return updateResponse;
-            }
-        });
-        function getInstance(obArray) {
-            if (!__WEBPACK_IMPORTED_MODULE_3__common__.d.has(obArray)) {
-                var dependees = new __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__.a();
-                var isQueued = false;
-                var nextEvent = null;
-                var storeEventData = function(events) {
-                    if (!events) return;
-                    nextEvent || (nextEvent = getNewEventObject());
-                    objectKeys(events).forEach(function(eventName) {
-                        var _nextEvent$eventName;
-                        if (!events[eventName]) return;
-                        nextEvent[eventName] || (nextEvent[eventName] = []);
-                        (_nextEvent$eventName = nextEvent[eventName]).push.apply(_nextEvent$eventName, _toConsumableArray(events[eventName]));
-                    });
-                };
-                var inst = {
-                    dependees: dependees,
-                    notify: function(events) {
-                        // Queue up calling all dependee notifiers
-                        var _iteratorNormalCompletion = true;
-                        var _didIteratorError = false;
-                        var _iteratorError = void 0;
-                        try {
-                            for (var _step, _iterator = dependees[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                                var cb = _step.value;
-                                Object(__WEBPACK_IMPORTED_MODULE_3__common__.k)(cb);
-                            }
-                        } catch (err) {
-                            _didIteratorError = true;
-                            _iteratorError = err;
-                        } finally {
-                            try {
-                                !_iteratorNormalCompletion && _iterator.return && _iterator.return();
-                            } finally {
-                                if (_didIteratorError) throw _iteratorError;
-                            }
-                        }
-                        storeEventData(events);
-                        if (isQueued) return;
-                        isQueued = true;
-                        Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_nextTick__.a)(function() {
-                            var eventData = nextEvent;
-                            nextEvent = null;
-                            /**
-                     * ObservableArray was changed.
-                     *
-                     * @event ObservableArray#change
-                     * @type {ObservableArray~ObservableArrayChangeEvent}
-                     */
-                            emit(obArray, "change", eventData);
-                            isQueued = false;
-                        });
-                    }
-                };
-                __WEBPACK_IMPORTED_MODULE_3__common__.d.set(obArray, inst);
-                var ev1 = Object(__WEBPACK_IMPORTED_MODULE_3__common__.j)(__WEBPACK_IMPORTED_MODULE_3__common__.a, function(cb) {
-                    dependees.delete(cb);
-                });
-                obArray.onDestroy && obArray.onDestroy(function() {
-                    dependees.clear();
-                    ev1.off();
-                    __WEBPACK_IMPORTED_MODULE_3__common__.d.delete(obArray);
-                });
-            }
-            return __WEBPACK_IMPORTED_MODULE_3__common__.d.get(obArray);
-        }
-        /**
- * Converts an array instance methods to a wrapped version that can detect changes
- * and also track dependee notifiers when data is accessed from the array
+ * Watch an array for changes.  Utiltiy will override the array's mutating methods
+ * so that notification can be provided to watchers when it changes
  *
  * @param {Array} arr
- *
- * @return {Array}
+ * @param {Function} [callback]
+ *  If not defined, then array is simply made "watchable"
  */
-        function makeArrayObservable(arr) {
-            // If it looks like this array is already an being observered, then exit.
-            if (Object(__WEBPACK_IMPORTED_MODULE_3__common__.h)(arr)) return;
-            Object(__WEBPACK_IMPORTED_MODULE_3__common__.m)(arr);
-            var arrCurrentProto = arr.__proto__;
-            // eslint-disable-line
-            var newArrProto = void 0;
-            // If we already have a wrapped prototype for this array's
-            // current prototype, then just use that
-            if (__WEBPACK_IMPORTED_MODULE_3__common__.d.has(arrCurrentProto)) newArrProto = __WEBPACK_IMPORTED_MODULE_3__common__.d.get(arrCurrentProto); else {
-                // Create new Array instance prototype
-                newArrProto = Object.create(arrCurrentProto);
-                // Add all methods of Array.prototype to the collection
-                Object.getOwnPropertyNames(ArrayPrototype).forEach(function(method) {
-                    if ("constructor" === method || "function" !== typeof ArrayPrototype[method]) return;
-                    var origMethod = newArrProto[method];
-                    var doEvents = -1 !== changeMethods.indexOf(method);
-                    var canAdd = -1 !== addMethods.indexOf(method);
-                    var canRemove = -1 !== removeMethods.indexOf(method);
-                    var isArraySplice = "splice" === method;
-                    objectDefineProp(newArrProto, method, {
-                        value: function() {
-                            var _this = this;
-                            Object(__WEBPACK_IMPORTED_MODULE_3__common__.o)(getInstance(this).dependees);
-                            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
-                            var response = origMethod.call.apply(origMethod, [ this ].concat(args));
-                            // If the response is an array, then add method to it that allows it
-                            // to be converted to an observable
-                            Object(__WEBPACK_IMPORTED_MODULE_3__common__.g)(response) && response !== this && objectDefineProp(response, "toObservable", {
-                                value: function() {
-                                    if (_this.getFactory) return _this.getFactory().create(response);
-                                    return mixin(response);
-                                }
-                            });
-                            // If Array method can manipulate the array, then emit event
-                            if (doEvents) {
-                                var events = getNewEventObject();
-                                // Add Events
-                                canAdd && (isArraySplice ? args.length > 2 && (events.added = args.slice(2)) : events.added = args);
-                                canRemove && (events.removed = isArraySplice ? response : [ response ]);
-                                notifyDependees(this, events);
-                            }
-                            return response;
-                        },
-                        writable: true,
-                        configurable: true
-                    });
-                });
-                // Add `len` property, which is shorthand for `length` but with added
-                // ability to observe for array changes when called and trigger notifiers
-                // when changed.
-                objectDefineProp(newArrProto, "len", {
-                    get: function() {
-                        Object(__WEBPACK_IMPORTED_MODULE_3__common__.o)(getInstance(this).dependees);
-                        return this.length;
-                    },
-                    set: function(n) {
-                        var response = this.length = n;
-                        notifyDependees(this);
-                        return response;
-                    },
-                    configurable: true
-                });
-                __WEBPACK_IMPORTED_MODULE_3__common__.d.set(arrCurrentProto, newArrProto);
-            }
-            arr.__proto__ = newArrProto;
-            // eslint-disable-line
-            return arr;
-        }
-        function notifyDependees(arrObj, events) {
-            getInstance(arrObj).notify(events);
-        }
-        /**
- * Make an array instance observable in place
- *
- * @param {Array} arr
- *
- * @return {Array}
- */
-        function mixin(arr) {
-            Object(__WEBPACK_IMPORTED_MODULE_3__common__.g)(arr) || (arr = []);
-            return ObservableArray.create(arr);
-        }
-        // Define the "create" factory method that will then redefine each
-        // our proxyied methods of Array prototype into the array instance
-        objectDefineProp(ObservableArray, "create", {
-            value: function(arrayInstance) {
-                var observable = arrayInstance || [];
-                var thisPrototype = this.prototype;
-                if (Object(__WEBPACK_IMPORTED_MODULE_3__common__.h)(observable)) return observable;
-                makeArrayObservable(observable);
-                var observableProto = observable.__proto__;
-                // eslint-disable-line
-                // Copy all methods in this prototype to the Array instance
-                for (var prop in thisPrototype) /* eslint-disable */
-                objectDefineProp(observableProto, prop, {
-                    value: thisPrototype[prop],
-                    writable: true,
-                    configurable: true
-                });
-                observable.init && observable.init.apply(observable, arguments);
-                return observable;
-            }
-        });
-        function getNewEventObject() {
-            /**
-     * The array was changed.
-     *
-     * @typedef {Object} ObservableArray~ObservableArrayChangeEvent
-     * @property {Array|null} added
-     * @property {Array|null} removed
-     * @property {Array|null} updated
-     */
-            return {
-                added: null,
-                removed: null,
-                updated: null
+        function arrayWatch(arr, callback) {
+            arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a] || Object(__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.b)(arr);
+            callback && arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].storeCallback(callback);
+            var unWatch = function() {
+                return arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].watchers.delete(callback);
             };
+            unWatch.destroy = unWatch;
+            return unWatch;
         }
-    }, /* 94 */
+    }, /* 22 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export TextBinding */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__directives_Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__directives_Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -4821,21 +2267,21 @@
         }(__WEBPACK_IMPORTED_MODULE_0__directives_Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = TextBinding;
-    }, /* 95 */
+    }, /* 23 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export ClassDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(96);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(24);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(97);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(25);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(98);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(26);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -4921,7 +2367,7 @@
                 newClasses[className] && !Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) ? Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__.a)(node, className) : !newClasses[className] && Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) && Object(__WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__.a)(node, className);
             });
         }
-    }, /* 96 */
+    }, /* 24 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -4942,7 +2388,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domHasClass;
-    }, /* 97 */
+    }, /* 25 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -4966,7 +2412,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddClass;
-    }, /* 98 */
+    }, /* 26 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -4984,15 +2430,15 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domRemoveClass;
-    }, /* 99 */
+    }, /* 27 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export StyleDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(1);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -5076,15 +2522,15 @@
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = StyleDirective;
-    }, /* 100 */
+    }, /* 28 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export IfDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -5202,15 +2648,15 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = IfDirective;
-    }, /* 101 */
+    }, /* 29 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export ShowDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -5293,13 +2739,13 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = ShowDirective;
-    }, /* 102 */
+    }, /* 30 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export PropDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(51);
+        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(13);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -5357,17 +2803,17 @@
         }(__WEBPACK_IMPORTED_MODULE_0__attr_directive__.a);
         /* harmony default export */
         __webpack_exports__.a = PropDirective;
-    }, /* 103 */
+    }, /* 31 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export OnDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(104);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(32);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -5486,7 +2932,7 @@
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = OnDirective;
-    }, /* 104 */
+    }, /* 32 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -5544,21 +2990,19 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddEventListener;
-    }, /* 105 */
+    }, /* 33 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export EachDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(30);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_observable_data_src_ObservableObject__ = __webpack_require__(33);
+        var __WEBPACK_IMPORTED_MODULE_1_observables__ = __webpack_require__(4);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_observable_data__ = __webpack_require__(50);
+        var __WEBPACK_IMPORTED_MODULE_2__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(2);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
         var _slicedToArray = function() {
             function sliceIterator(arr, i) {
                 var _arr = [];
@@ -5637,7 +3081,7 @@
         }
         var NOOP = function() {};
         var isEmptyList = function(list) {
-            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(list) && !Object.keys(list).length;
+            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(list) && !Object.keys(list).length;
         };
         /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -5668,14 +3112,14 @@
                     var _parseDirectiveValue = parseDirectiveValue((attrValue || "").trim()), _parseDirectiveValue2 = _slicedToArray(_parseDirectiveValue, 2), iteratorArgs = _parseDirectiveValue2[0], listVar = _parseDirectiveValue2[1];
                     this._attr = attr;
                     this._iteratorArgs = iteratorArgs;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(listVar || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.g)(listVar || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     var _this2 = this;
                     _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
                     if (!state.update) {
                         state.binders = [];
                         state.bindersByKey = new __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__.a();
@@ -5688,7 +3132,7 @@
                             if (state.value) {
                                 state.value = null;
                                 if (state.listChgEv) {
-                                    state.listChgEv.off();
+                                    state.listChgEv();
                                     state.listChgEv = null;
                                 }
                             }
@@ -5696,12 +3140,14 @@
                                 _this2.destroyChildBinders(state.binders, handler);
                                 return;
                             }
-                            Object(__WEBPACK_IMPORTED_MODULE_1_observable_data_src_ObservableObject__.e)(state.tracker);
+                            Object(__WEBPACK_IMPORTED_MODULE_1_observables__.e)(state.tracker);
                             // We don't need to be notified of changes for individual items.
                             state.value = newList;
                             // Make sure data is observable and setup event listners on it.
-                            Object(__WEBPACK_IMPORTED_MODULE_2_observable_data__.a)(newList);
-                            Array.isArray(newList) ? state.listChgEv = newList.on("change", state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newList) && (state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observable_data_src_ObservableObject__.f)(newList, newList, state.listIterator));
+                            Object(__WEBPACK_IMPORTED_MODULE_1_observables__.b)(newList);
+                            Array.isArray(newList) ? // state.listChgEv = newList.on("change", state.listIterator);
+                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables__.a)(newList, state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(newList) && (// state.listChgEv = watchProp(newList, newList, state.listIterator);
+                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables__.c)(newList, null, state.listIterator));
                             isEmptyList(newList) && state.binders ? _this2.destroyChildBinders(state.binders, handler) : _this2.iterateOverList(handler, newList);
                         };
                         // When handler is destroyed, remove data listeners
@@ -5725,11 +3171,11 @@
                         parentEle.textContent = "";
                         parentEle.appendChild(handler._placeholderEle);
                         setTimeout(function() {
-                            Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
+                            Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(binders.splice(0), function(binder) {
                                 return binder.destroy();
                             });
                         });
-                    } else Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
+                    } else Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(binders.splice(0), function(binder) {
                         return binder.destroy();
                     });
                 }
@@ -5745,16 +3191,16 @@
                 key: "iterateOverList",
                 value: function(handler, newData) {
                     var _state$binders;
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
                     var attachedEleBinder = [];
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
+                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
                     var isArray = Array.isArray(newData);
                     var data = void 0;
                     if (isArray) {
                         isArray = true;
                         data = newData;
                     } else {
-                        if (!Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newData)) return;
+                        if (!Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(newData)) return;
                         data = Object.keys(newData);
                     }
                     for (var i = 0, t = data.length; i < t; i++) {
@@ -5767,11 +3213,11 @@
                         attachedEleBinder.push(binder);
                         newDomElements.appendChild(newEle);
                     }
-                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
+                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
                     // store the new attached set of elements in their new positions, and
                     // clean up old Binders that are no longer being used/displayed
                     // FIXME: this needs to be more efficient!!!!!!
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
+                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
                         if (-1 === attachedEleBinder.indexOf(childBinder)) {
                             childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode && childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
                             childBinder.destroy();
@@ -5782,26 +3228,25 @@
             }, {
                 key: "getRowBinder",
                 value: function(handler, rowData) {
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
                     var itemBinder = null;
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
+                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
                     var rowKey = handler.getKey(rowData);
                     var rowEleBinder = void 0;
                     rowKey && (rowEleBinder = state.bindersByKey.get(rowKey));
                     // If a binder already exists for this key, then just update its data
                     if (rowEleBinder) {
                         delete rowData.$data;
-                        Object(__WEBPACK_IMPORTED_MODULE_1_observable_data_src_ObservableObject__.b)(rowEleBinder._loop.rowData, rowData);
+                        rowEleBinder.setData(rowData);
                         itemBinder = rowEleBinder;
                         return [ itemBinder, newDomElements ];
                     }
-                    var frag = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
+                    var frag = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
                     var rowEle = handler._n.cloneNode(true);
                     frag.appendChild(rowEle);
                     rowEleBinder = new handler._Factory(rowEle, rowData);
                     rowEleBinder._loop = {
                         rowEle: rowEle,
-                        rowData: rowData,
                         rowKey: rowKey,
                         pos: -1
                     };
@@ -5809,7 +3254,7 @@
                     rowKey && state.bindersByKey.set(rowKey, rowEleBinder);
                     itemBinder = rowEleBinder;
                     rowEleBinder.onDestroy(function() {
-                        rowEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(handler._placeholderEle.parentNode, rowEle);
+                        rowEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_3__utils__.p)(handler._placeholderEle.parentNode, rowEle);
                         rowKey && state.bindersByKey.delete(rowKey);
                     });
                     return [ itemBinder, newDomElements ];
@@ -5818,9 +3263,9 @@
                 key: "positionChildren",
                 value: function(eleParentNode, placeholderEle, childEleBinders) {
                     // FIXME: speed improvement = convert to while() looop
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(childEleBinders, function(childBinder, index) {
+                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(childEleBinders, function(childBinder, index) {
                         if (childBinder._loop.pos === index) return;
-                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
+                        Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
                         childBinder._loop.pos = index;
                     });
                 }
@@ -5829,18 +3274,18 @@
                 value: function(node, binder) {
                     var handler = _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "getNodeHandler", this).call(this, node);
                     handler._Factory = binder.getFactory();
-                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)("");
-                    handler.getKey = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(node, "_key") ? Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(node, "_key")) : NOOP;
+                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.e)("");
+                    handler.getKey = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.k)(node, "_key") ? Object(__WEBPACK_IMPORTED_MODULE_3__utils__.g)(Object(__WEBPACK_IMPORTED_MODULE_3__utils__.i)(node, "_key")) : NOOP;
                     handler._isSoleChild = hasDedicatedParent(node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(node.parentNode, handler._placeholderEle, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(node.parentNode, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(node, "_key");
+                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(node.parentNode, handler._placeholderEle, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.p)(node.parentNode, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.o)(node, "_key");
                     return handler;
                 }
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(ele, "_each") ? "_each" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_3__utils__.k)(ele, "_each") ? "_each" : "";
                 }
             }, {
                 key: "manages",
@@ -5849,7 +3294,7 @@
                 }
             } ]);
             return EachDirective;
-        }(__WEBPACK_IMPORTED_MODULE_3__Directive__.a);
+        }(__WEBPACK_IMPORTED_MODULE_2__Directive__.a);
         function parseDirectiveValue(attrValue) {
             var matches = /\(?(.+?)\)?\W?(?:of|in)\W(.*)/.exec(attrValue);
             if (matches) {
@@ -5868,15 +3313,15 @@
         }
         /* harmony default export */
         __webpack_exports__.a = EachDirective;
-    }, /* 106 */
+    }, /* 34 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export HtmlDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
