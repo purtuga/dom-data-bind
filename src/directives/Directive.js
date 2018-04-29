@@ -7,7 +7,7 @@ import {
 import {
     setDependencyTracker,
     unsetDependencyTracker
-} from "observables"
+} from "observables/src/objectWatchProp"
 
 //===================================================================================
 

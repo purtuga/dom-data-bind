@@ -107,7 +107,7 @@
         /******/
         // Load entry module and return exports
         /******/
-        return __webpack_require__(__webpack_require__.s = 14);
+        return __webpack_require__(__webpack_require__.s = 13);
     }([ /* 0 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -177,9 +177,9 @@
         /* harmony export (immutable) */
         __webpack_exports__.j = getNodeAttrNames;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
         //=====================================================
         var DOCUMENT = document;
         var FUNCTION = Function;
@@ -226,13 +226,13 @@
         "use strict";
         /* unused harmony export Directive */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(12);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(11);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(6);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(5);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observables__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__ = __webpack_require__(3);
         var _get = function get(object, property, receiver) {
             null === object && (object = Function.prototype);
             var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -342,7 +342,7 @@
                     var handlerState = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
                     if (handlerState) {
                         var newValue = "";
-                        Object(__WEBPACK_IMPORTED_MODULE_3_observables__.d)(handlerState.tracker);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.e)(handlerState.tracker);
                         try {
                             newValue = this._tokenValueGetter(handlerState.data || {});
                             // Update node
@@ -350,7 +350,7 @@
                         } catch (e) {
                             Object(__WEBPACK_IMPORTED_MODULE_2__utils__.n)(e);
                         }
-                        Object(__WEBPACK_IMPORTED_MODULE_3_observables__.e)(handlerState.tracker);
+                        Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.f)(handlerState.tracker);
                         handlerState.isQueued = false;
                         handlerState.value !== newValue && (handlerState.value = newValue);
                     }
@@ -488,50 +488,6 @@
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Map__ = __webpack_require__(19);
-        /* unused harmony reexport Map */
-        /* unused harmony reexport FakeMap */
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__Map__.a;
-        });
-    }, /* 4 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(5);
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "c", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.d;
-        });
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "b", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.c;
-        });
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "d", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.f;
-        });
-        /* unused harmony reexport stopTrackerNotification */
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "e", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.g;
-        });
-        /* harmony import */
-        __webpack_require__(20);
-        /* unused harmony reexport objectCreateComputedProp */
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__arrayWatch__ = __webpack_require__(21);
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return __WEBPACK_IMPORTED_MODULE_2__arrayWatch__.a;
-        });
-    }, /* 5 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return OBSERVABLE_IDENTIFIER;
@@ -541,22 +497,21 @@
         /* unused harmony export setupObjState */
         /* harmony export (immutable) */
         __webpack_exports__.c = makeObservable;
-        /* harmony export (immutable) */
-        __webpack_exports__.e = queueCallbackAndScheduleRun;
+        /* unused harmony export queueCallbackAndScheduleRun */
         /* unused harmony export destroyWatcher */
         /* harmony export (immutable) */
-        __webpack_exports__.f = setDependencyTracker;
+        __webpack_exports__.e = setDependencyTracker;
         /* harmony export (immutable) */
-        __webpack_exports__.g = unsetDependencyTracker;
+        __webpack_exports__.f = unsetDependencyTracker;
         /* unused harmony export stopTrackerNotification */
         /* harmony export (immutable) */
         __webpack_exports__.b = makeArrayWatchable;
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(2);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(9);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(8);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(12);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(11);
         function _toConsumableArray(arr) {
             if (Array.isArray(arr)) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -919,18 +874,30 @@
             }
             arr.__proto__ = arrCurrentProto[ARRAY_WATCHABLE_PROTO];
         }
-    }, /* 6 */
+    }, /* 4 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__Map__ = __webpack_require__(18);
+        /* unused harmony reexport Map */
+        /* unused harmony reexport FakeMap */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__Map__.a;
+        });
+    }, /* 5 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export getDestroyCallback */
         /* unused harmony export Compose */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(16);
+        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(15);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(17);
+        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(16);
         function _classCallCheck(instance, Constructor) {
             if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
         }
@@ -1159,7 +1126,7 @@
         Object(__WEBPACK_IMPORTED_MODULE_0__objectExtend__.a)(Compose, staticMethods);
         /* harmony default export */
         __webpack_exports__.a = Compose;
-    }, /* 7 */
+    }, /* 6 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1234,19 +1201,19 @@
         };
         /* harmony default export */
         __webpack_exports__.a = dataStore;
-    }, /* 8 */
+    }, /* 7 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Set__ = __webpack_require__(9);
+        var __WEBPACK_IMPORTED_MODULE_0__Set__ = __webpack_require__(8);
         /* unused harmony reexport Set */
         /* unused harmony reexport FakeSet */
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return __WEBPACK_IMPORTED_MODULE_0__Set__.a;
         });
-    }, /* 9 */
+    }, /* 8 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1256,9 +1223,9 @@
         });
         /* unused harmony export FakeSet */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(10);
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(9);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(11);
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(10);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
         //============================================================
@@ -1342,7 +1309,7 @@
                 return this.values();
             }
         }));
-    }, /* 10 */
+    }, /* 9 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1364,8 +1331,8 @@
                 if ("undefined" !== ("undefined" === typeof self ? "undefined" : _typeof(self))) return self;
                 return Function("return this;")();
             }();
-        }).call(__webpack_exports__, __webpack_require__(18));
-    }, /* 11 */
+        }).call(__webpack_exports__, __webpack_require__(17));
+    }, /* 10 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1412,7 +1379,7 @@
                 return this;
             }
         });
-    }, /* 12 */
+    }, /* 11 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1454,7 +1421,7 @@
         }();
         /* harmony default export */
         __webpack_exports__.a = nextTick;
-    }, /* 13 */
+    }, /* 12 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1560,7 +1527,7 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = AttrDirective;
-    }, /* 14 */
+    }, /* 13 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1572,27 +1539,27 @@
             return DomDataBindAll;
         });
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(15);
+        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(14);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__directives_Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__ = __webpack_require__(23);
+        var __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__ = __webpack_require__(20);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__ = __webpack_require__(27);
+        var __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__ = __webpack_require__(24);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__ = __webpack_require__(28);
+        var __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__ = __webpack_require__(25);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__ = __webpack_require__(29);
+        var __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__ = __webpack_require__(26);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__ = __webpack_require__(13);
+        var __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__ = __webpack_require__(12);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__ = __webpack_require__(30);
+        var __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__ = __webpack_require__(27);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__ = __webpack_require__(31);
+        var __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__ = __webpack_require__(28);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__ = __webpack_require__(33);
+        var __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__ = __webpack_require__(30);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__ = __webpack_require__(34);
+        var __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__ = __webpack_require__(32);
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "DomDataBind", function() {
             return __WEBPACK_IMPORTED_MODULE_0__DomDataBind__.a;
@@ -1641,23 +1608,23 @@
         DomDataBindAll.directives = [ __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__.a, __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__.a, __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__.a, __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__.a, __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__.a, __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__.a, __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__.a, __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__.a, __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__.a ];
         /* harmony default export */
         __webpack_exports__.default = DomDataBindAll;
-    }, /* 15 */
+    }, /* 14 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export DomDataBind */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(6);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(5);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(8);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observables__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__ = __webpack_require__(3);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__ = __webpack_require__(22);
+        var __WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__ = __webpack_require__(19);
         var TEMPLATES = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a();
         // Local aliases
         var _NodeFilter = NodeFilter;
@@ -1724,7 +1691,7 @@
      * reflected to dom.
      */
             setData: function(data) {
-                Object(__WEBPACK_IMPORTED_MODULE_3_observables__.b)(data);
+                Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.c)(data);
                 var bindings = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(this).bindings;
                 Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(bindings, function(binding) {
                     return binding.render(data);
@@ -1917,7 +1884,7 @@
             directiveInstances[directiveSignature] || (directiveInstances[directiveSignature] = new Directive(attrName, attrValue));
             return directiveInstances[directiveSignature];
         }
-    }, /* 16 */
+    }, /* 15 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1957,13 +1924,13 @@
         }
         /* harmony default export */
         __webpack_exports__.a = objectExtend;
-    }, /* 17 */
+    }, /* 16 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export queueCallback */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(8);
+        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(7);
         function _toConsumableArray(arr) {
             if (Array.isArray(arr)) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -2000,7 +1967,7 @@
                 cb = null;
             }
         }
-    }, /* 18 */
+    }, /* 17 */
     /***/
     function(module, exports) {
         var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
@@ -2024,7 +1991,7 @@
         // We return undefined, instead of nothing here, so it's
         // easier to handle this case. if(!global) { ...}
         module.exports = g;
-    }, /* 19 */
+    }, /* 18 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2034,9 +2001,9 @@
         });
         /* unused harmony export FakeMap */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(10);
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(9);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(11);
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(10);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
         //======================================================
@@ -2135,42 +2102,7 @@
                 return this.entries();
             }
         }));
-    }, /* 20 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export objectCreateComputedProp */
-        /* harmony import */
-        __webpack_require__(2);
-        /* harmony import */
-        __webpack_require__(5);
-    }, /* 21 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* harmony export (immutable) */
-        __webpack_exports__.a = arrayWatch;
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(5);
-        //========================================================================
-        /**
- * Watch an array for changes.  Utiltiy will override the array's mutating methods
- * so that notification can be provided to watchers when it changes
- *
- * @param {Array} arr
- * @param {Function} [callback]
- *  If not defined, then array is simply made "watchable"
- */
-        function arrayWatch(arr, callback) {
-            arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a] || Object(__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.b)(arr);
-            callback && arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].storeCallback(callback);
-            var unWatch = function() {
-                return arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].watchers.delete(callback);
-            };
-            unWatch.destroy = unWatch;
-            return unWatch;
-        }
-    }, /* 22 */
+    }, /* 19 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2267,17 +2199,17 @@
         }(__WEBPACK_IMPORTED_MODULE_0__directives_Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = TextBinding;
-    }, /* 23 */
+    }, /* 20 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export ClassDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(24);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(21);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(25);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(22);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(26);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(23);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(1);
         /* harmony import */
@@ -2367,7 +2299,7 @@
                 newClasses[className] && !Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) ? Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__.a)(node, className) : !newClasses[className] && Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) && Object(__WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__.a)(node, className);
             });
         }
-    }, /* 24 */
+    }, /* 21 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2388,7 +2320,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domHasClass;
-    }, /* 25 */
+    }, /* 22 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2412,7 +2344,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddClass;
-    }, /* 26 */
+    }, /* 23 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2430,7 +2362,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domRemoveClass;
-    }, /* 27 */
+    }, /* 24 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2522,7 +2454,7 @@
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = StyleDirective;
-    }, /* 28 */
+    }, /* 25 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2648,7 +2580,7 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = IfDirective;
-    }, /* 29 */
+    }, /* 26 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2739,13 +2671,13 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = ShowDirective;
-    }, /* 30 */
+    }, /* 27 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export PropDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(13);
+        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(12);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -2803,13 +2735,13 @@
         }(__WEBPACK_IMPORTED_MODULE_0__attr_directive__.a);
         /* harmony default export */
         __webpack_exports__.a = PropDirective;
-    }, /* 31 */
+    }, /* 28 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export OnDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(32);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(29);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(1);
         /* harmony import */
@@ -2932,7 +2864,7 @@
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = OnDirective;
-    }, /* 32 */
+    }, /* 29 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2990,19 +2922,21 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddEventListener;
-    }, /* 33 */
+    }, /* 30 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export EachDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_observables__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__ = __webpack_require__(3);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__Directive__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__ = __webpack_require__(31);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
+        var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(1);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
         var _slicedToArray = function() {
             function sliceIterator(arr, i) {
                 var _arr = [];
@@ -3081,7 +3015,7 @@
         }
         var NOOP = function() {};
         var isEmptyList = function(list) {
-            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(list) && !Object.keys(list).length;
+            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(list) && !Object.keys(list).length;
         };
         /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -3112,14 +3046,14 @@
                     var _parseDirectiveValue = parseDirectiveValue((attrValue || "").trim()), _parseDirectiveValue2 = _slicedToArray(_parseDirectiveValue, 2), iteratorArgs = _parseDirectiveValue2[0], listVar = _parseDirectiveValue2[1];
                     this._attr = attr;
                     this._iteratorArgs = iteratorArgs;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.g)(listVar || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(listVar || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     var _this2 = this;
                     _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
                     if (!state.update) {
                         state.binders = [];
                         state.bindersByKey = new __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__.a();
@@ -3140,14 +3074,14 @@
                                 _this2.destroyChildBinders(state.binders, handler);
                                 return;
                             }
-                            Object(__WEBPACK_IMPORTED_MODULE_1_observables__.e)(state.tracker);
+                            Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.f)(state.tracker);
                             // We don't need to be notified of changes for individual items.
                             state.value = newList;
                             // Make sure data is observable and setup event listners on it.
-                            Object(__WEBPACK_IMPORTED_MODULE_1_observables__.b)(newList);
+                            Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.c)(newList);
                             Array.isArray(newList) ? // state.listChgEv = newList.on("change", state.listIterator);
-                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables__.a)(newList, state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(newList) && (// state.listChgEv = watchProp(newList, newList, state.listIterator);
-                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables__.c)(newList, null, state.listIterator));
+                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__.a)(newList, state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newList) && (// state.listChgEv = watchProp(newList, newList, state.listIterator);
+                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.d)(newList, null, state.listIterator));
                             isEmptyList(newList) && state.binders ? _this2.destroyChildBinders(state.binders, handler) : _this2.iterateOverList(handler, newList);
                         };
                         // When handler is destroyed, remove data listeners
@@ -3171,11 +3105,11 @@
                         parentEle.textContent = "";
                         parentEle.appendChild(handler._placeholderEle);
                         setTimeout(function() {
-                            Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(binders.splice(0), function(binder) {
+                            Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
                                 return binder.destroy();
                             });
                         });
-                    } else Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(binders.splice(0), function(binder) {
+                    } else Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
                         return binder.destroy();
                     });
                 }
@@ -3191,16 +3125,16 @@
                 key: "iterateOverList",
                 value: function(handler, newData) {
                     var _state$binders;
-                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
                     var attachedEleBinder = [];
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
+                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
                     var isArray = Array.isArray(newData);
                     var data = void 0;
                     if (isArray) {
                         isArray = true;
                         data = newData;
                     } else {
-                        if (!Object(__WEBPACK_IMPORTED_MODULE_3__utils__.m)(newData)) return;
+                        if (!Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newData)) return;
                         data = Object.keys(newData);
                     }
                     for (var i = 0, t = data.length; i < t; i++) {
@@ -3213,11 +3147,11 @@
                         attachedEleBinder.push(binder);
                         newDomElements.appendChild(newEle);
                     }
-                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
+                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
                     // store the new attached set of elements in their new positions, and
                     // clean up old Binders that are no longer being used/displayed
                     // FIXME: this needs to be more efficient!!!!!!
-                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
                         if (-1 === attachedEleBinder.indexOf(childBinder)) {
                             childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode && childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
                             childBinder.destroy();
@@ -3228,9 +3162,9 @@
             }, {
                 key: "getRowBinder",
                 value: function(handler, rowData) {
-                    var state = __WEBPACK_IMPORTED_MODULE_3__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
                     var itemBinder = null;
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
+                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
                     var rowKey = handler.getKey(rowData);
                     var rowEleBinder = void 0;
                     rowKey && (rowEleBinder = state.bindersByKey.get(rowKey));
@@ -3241,7 +3175,7 @@
                         itemBinder = rowEleBinder;
                         return [ itemBinder, newDomElements ];
                     }
-                    var frag = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.f)();
+                    var frag = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
                     var rowEle = handler._n.cloneNode(true);
                     frag.appendChild(rowEle);
                     rowEleBinder = new handler._Factory(rowEle, rowData);
@@ -3254,7 +3188,7 @@
                     rowKey && state.bindersByKey.set(rowKey, rowEleBinder);
                     itemBinder = rowEleBinder;
                     rowEleBinder.onDestroy(function() {
-                        rowEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_3__utils__.p)(handler._placeholderEle.parentNode, rowEle);
+                        rowEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(handler._placeholderEle.parentNode, rowEle);
                         rowKey && state.bindersByKey.delete(rowKey);
                     });
                     return [ itemBinder, newDomElements ];
@@ -3263,9 +3197,9 @@
                 key: "positionChildren",
                 value: function(eleParentNode, placeholderEle, childEleBinders) {
                     // FIXME: speed improvement = convert to while() looop
-                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.c)(childEleBinders, function(childBinder, index) {
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(childEleBinders, function(childBinder, index) {
                         if (childBinder._loop.pos === index) return;
-                        Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
+                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
                         childBinder._loop.pos = index;
                     });
                 }
@@ -3274,18 +3208,18 @@
                 value: function(node, binder) {
                     var handler = _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "getNodeHandler", this).call(this, node);
                     handler._Factory = binder.getFactory();
-                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.e)("");
-                    handler.getKey = Object(__WEBPACK_IMPORTED_MODULE_3__utils__.k)(node, "_key") ? Object(__WEBPACK_IMPORTED_MODULE_3__utils__.g)(Object(__WEBPACK_IMPORTED_MODULE_3__utils__.i)(node, "_key")) : NOOP;
+                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)("");
+                    handler.getKey = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(node, "_key") ? Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(node, "_key")) : NOOP;
                     handler._isSoleChild = hasDedicatedParent(node);
-                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.l)(node.parentNode, handler._placeholderEle, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.p)(node.parentNode, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_3__utils__.o)(node, "_key");
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(node.parentNode, handler._placeholderEle, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(node.parentNode, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(node, "_key");
                     return handler;
                 }
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_3__utils__.k)(ele, "_each") ? "_each" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(ele, "_each") ? "_each" : "";
                 }
             }, {
                 key: "manages",
@@ -3294,7 +3228,7 @@
                 }
             } ]);
             return EachDirective;
-        }(__WEBPACK_IMPORTED_MODULE_2__Directive__.a);
+        }(__WEBPACK_IMPORTED_MODULE_3__Directive__.a);
         function parseDirectiveValue(attrValue) {
             var matches = /\(?(.+?)\)?\W?(?:of|in)\W(.*)/.exec(attrValue);
             if (matches) {
@@ -3313,7 +3247,33 @@
         }
         /* harmony default export */
         __webpack_exports__.a = EachDirective;
-    }, /* 34 */
+    }, /* 31 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (immutable) */
+        __webpack_exports__.a = arrayWatch;
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(3);
+        //========================================================================
+        /**
+ * Watch an array for changes.  Utiltiy will override the array's mutating methods
+ * so that notification can be provided to watchers when it changes
+ *
+ * @param {Array} arr
+ * @param {Function} [callback]
+ *  If not defined, then array is simply made "watchable"
+ */
+        function arrayWatch(arr, callback) {
+            arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a] || Object(__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.b)(arr);
+            callback && arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].storeCallback(callback);
+            var unWatch = function() {
+                return arr[__WEBPACK_IMPORTED_MODULE_0__objectWatchProp__.a].watchers.delete(callback);
+            };
+            unWatch.destroy = unWatch;
+            return unWatch;
+        }
+    }, /* 32 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";

@@ -1,7 +1,7 @@
 import Compose          from "common-micro-libs/src/jsutils/Compose"
 import Map              from "common-micro-libs/src/jsutils/es6-Map"
 import Set              from "common-micro-libs/src/jsutils/es6-Set"
-import { makeObservable }   from "observables"
+import { makeObservable }   from "observables/src/objectWatchProp"
 import {
     PRIVATE,
     UUID,
