@@ -58,7 +58,7 @@ const treeWalkerFilter      = {
  *
  */
 export const DomDataBind = Compose.extend({
-    init(ele, data = {}) {
+    init(ele, data) {
         const Factory = this.getFactory();
         const state = {
             ele,
@@ -122,7 +122,7 @@ function getBindingsFromDom(binder, ele) {
     eleTemplate.bindings.forEach((directives, path) => {
         const node = getNodeAt(ele, path);
         if (!node) {
-            logError(new Error(`Unable to find node!`));
+            logError(new Error(`dom-data-bind: Unable to find node!`));
             return;
         }
 

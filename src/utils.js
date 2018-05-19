@@ -22,6 +22,7 @@ export const removeAttribute    = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
 export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
 export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
 export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
+export const createTextNode     = _bind(DOCUMENT.createTextNode, DOCUMENT);
 export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
 export const logError           = _bind(console.error, console); // eslint-disable-line
 

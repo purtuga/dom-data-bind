@@ -1,13 +1,7 @@
-import nextTick         from "common-micro-libs/src/jsutils/nextTick"
-import Compose          from "common-micro-libs/src/jsutils/Compose"
-import {
-    PRIVATE,
-    removeAttribute,
-    logError    }       from "../utils"
-import {
-    setDependencyTracker,
-    unsetDependencyTracker
-} from "observables/src/objectWatchProp"
+import nextTick from "common-micro-libs/src/jsutils/nextTick"
+import Compose from "common-micro-libs/src/jsutils/Compose"
+import {logError, PRIVATE, removeAttribute} from "../utils"
+import {setDependencyTracker, unsetDependencyTracker} from "observables/src/objectWatchProp"
 
 //===================================================================================
 

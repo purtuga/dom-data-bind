@@ -1,4 +1,5 @@
 import DomDataBind      from "./DomDataBind"
+import render           from "./render"
 import Directive        from "./directives/Directive"
 import ClassDirective   from "./directives/class-directive"
 import StyleDirective   from "./directives/style-directive"
@@ -27,6 +28,7 @@ export default DomDataBindAll;
 export {
     DomDataBindAll,
     DomDataBind,
+    render,
     Directive,
     EachDirective,
     IfDirective,
