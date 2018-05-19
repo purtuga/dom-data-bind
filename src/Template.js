@@ -50,8 +50,8 @@ export class Template {
     cloneWith(data = {}) {
         makeObservable(data);
         const response = document.importNode(this._template.content, true);
-        response._bindingsNodeHandlers = applyBindings(response, this._bindings);
-        response._bindingsNodeHandlers.forEach(nodeHandler =>
+        response._domDataBindNodeHandlers = applyBindings(response, this._bindings);
+        response._domDataBindNodeHandlers.forEach(nodeHandler =>
             nodeHandler.render(data)
         );
         return response;
@@ -69,7 +69,9 @@ export default Template;
  *
  * @return {Map}
  */
-function getBindingFor(ele, directives) {
+export function getBindingFor(ele, directives) {
+    // FIXME: refactor this entire function to be faster and more efficient
+
 
     // template bindings Map() structure:
     //
@@ -214,7 +216,7 @@ function getBindingFor(ele, directives) {
  * @return {Array<NodeHandler>}
  *  An array of Node directive handlers is returned.
  */
-function applyBindings(frag, bindings) {
+export function applyBindings(frag, bindings) {
     const response = [];
 
     bindings.forEach((directives, path) => {
