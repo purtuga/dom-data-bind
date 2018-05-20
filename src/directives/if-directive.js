@@ -1,6 +1,7 @@
 import Directive    from "./Directive"
 import {
     PRIVATE,
+    DOM_DATA_BIND_PROP,
     arraySlice,
     hasAttribute,
     createComment,
@@ -33,7 +34,7 @@ export class IfDirective extends Directive {
             state.insertEle             = handler._placeholderEle;
             state.directives            = handler._directives;
             state.destroyRenderedEle    = destroyRenderedEle;
-            state.renderTemplate        = node.data;
+            state.renderTemplate        = handler._n.data;
             state.update                = renderUpdate;
             handler.onDestroy(() => state.destroyRenderedEle());
         }
@@ -56,7 +57,7 @@ function renderUpdate(showElement) {
     }
 
     if (showElement && !this.renderedEle) {
-        this.renderedEle = render(this.renderTemplate, this.data);
+        this.renderedEle = render(this.renderTemplate, this.data, this.directives);
         this.renderedEle._children = arraySlice(this.renderedEle.childNodes, 0);
         insertBefore(this.insertEle.parentNode, this.renderedEle, this.insertEle);
     }
@@ -69,7 +70,7 @@ function destroyRenderedEle() {
     // this === state object
     if (this.renderedEle) {
         this.renderedEle._children.forEach(e => e.parentNode && e.parentNode.removeChild(e));
-        this.renderedEle._destroyBindings();
+        this.renderedEle[DOM_DATA_BIND_PROP].destroy();
         this.renderedEle = null;
     }
 }

@@ -9,6 +9,7 @@ const ARRAY_PROTOTYPE       = Array.prototype;
 const VALUE_GETTERS         = new Map();
 const _bind                 = FUNCTION.bind.call.bind(FUNCTION.bind);
 
+export const DOM_DATA_BIND_PROP = "DomDataBind";
 export const PRIVATE            = dataStore.create();
 export const UUID               = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");

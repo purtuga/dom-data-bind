@@ -8,6 +8,7 @@ import {arrayWatch} from "observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
     PRIVATE,
+    DOM_DATA_BIND_PROP,
     hasAttribute,
     getAttribute,
     removeAttribute,
@@ -17,7 +18,8 @@ import {
     createValueGetter,
     isPureObject,
     createDocFragment,
-    arrayForEach    }   from "../utils"
+    arrayForEach, arraySlice
+} from "../utils"
 import {render} from "../render";
 
 //============================================
@@ -112,9 +114,9 @@ export class EachDirective extends Directive {
 
             // When handler is destroyed, remove data listeners
             handler.onDestroy(() => {
-                if (state.listChgEv) {
-                    state.listChgEv.off();
-                    state.listChgEv = null;
+                // FIXME: this need to use state.listIterator.stopWathingAll() instead
+                if (state.listIterator.stopWatchingAll) {
+                    state.listIterator.stopWatchingAll();
                 }
                 state.bindersByKey.clear();
                 this.destroyChildBinders(state.binders, handler);
@@ -144,7 +146,7 @@ export class EachDirective extends Directive {
             });
         }
         else {
-            arrayForEach(binders.splice(0), binder => binder.destroy());
+            arrayForEach(binders.splice(0), binder => binder._destroy());
         }
     }
 
@@ -234,7 +236,7 @@ export class EachDirective extends Directive {
                 if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
                     childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
                 }
-                childBinder.destroy(); // this is aysnc
+                childBinder._destroy();
             }
         });
 
@@ -279,9 +281,13 @@ export class EachDirective extends Directive {
             return [ itemBinder, newDomElements ];
         }
 
-        const frag = rowEleBinder = render(handler._n.data, rowData, handler._directives);
+        // Render a new Element from the template and store the nodes that are
+        // created by it (needed for later).
+        rowEleBinder = render(handler._n.data, rowData, handler._directives);
+        rowEleBinder._children = arraySlice(rowEleBinder.childNodes, 0);
+        rowEleBinder._destroy = destroyRowElement;
         rowEleBinder._loop  = { rowEle: rowEleBinder, rowKey, pos: -1 };
-        newDomElements.appendChild(frag);
+        newDomElements.appendChild(rowEleBinder);
 
 
 //// FIXME: Cleanup
@@ -348,6 +354,20 @@ export class EachDirective extends Directive {
 
         return handler;
     }
+}
+
+function destroyRowElement () {
+    // this === DocumentFragment from `render()`
+    for (let i = 0, t = this._children; i < t; i++) {
+        this._children[i].parentNode && this._children[i].parentNode.removeChild(this._children[i]);
+    }
+
+    // FIXME: handle removing the element mapping to "key" from state:
+        // if (rowKey) {
+        //         state.bindersByKey.delete(rowKey);
+        //     }
+
+    this[DOM_DATA_BIND_PROP].destroy();
 }
 
 function parseDirectiveValue(attrValue) {

@@ -3,6 +3,7 @@ import domFind from "common-micro-libs/src/domutils/domFind"
 import {
     PRIVATE,
     UUID,
+    DOM_DATA_BIND_PROP,
     bindCallTo,
     removeAttribute,
     getAttribute,
@@ -10,7 +11,8 @@ import {
     createComment,
     createDocFragment,
     createTextNode,
-    logError        }   from "./utils"
+    logError
+} from "./utils"
 import TextBinding      from "./bindings/text-binding"
 //=========================================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
@@ -51,35 +53,21 @@ export class Template {
      * @param {Object} [data]
      *
      * @return {DocumentFragment}
-     *  Document Fragment returned will have the following property available
-     *  on its instance:
-     *
-     *  -   `_domDataBindNodeHandlers` Array<NodeHandler>
-     *  -   `_destroyBindings` Function
+     *  Document Fragment returned will have a property named 'DomDataBind', which is
+     *  a TemplateInstance class instance
      */
     cloneWith(data = {}) {
         makeObservable(data);
         const response = document.importNode(this._template.content, true);
-        response._domDataBindNodeHandlers = applyBindingsToTemplateInstance(response, this._bindings, this._directives);
-        response._destroyBindings = destroyBindings;
-        response._domDataBindNodeHandlers.forEach(nodeHandler =>
-            nodeHandler.render(data)
+        response[DOM_DATA_BIND_PROP] = new TemplateInstance(
+            response,
+            applyBindingsToTemplateInstance(response, this._bindings, this._directives)
         );
+        response[DOM_DATA_BIND_PROP].setData(data);
         return response;
     }
 }
 export default Template;
-
-
-function destroyBindings() {
-    if (this._domDataBindNodeHandlers) {
-        for (let i = 0, t = this._domDataBindNodeHandlers.length; i < t; i++) {
-            this._domDataBindNodeHandlers[i].destroy();
-        }
-        this._domDataBindNodeHandlers.length = 0;
-    }
-}
-
 
 /**
  * Returns a Map() that includes the paths to nodes in the Dom template that
@@ -393,5 +381,28 @@ function findAllNodes(ele) {
         .concat(domFind(ele, "*"))
         .reduce(addTextNodes, [])
         .filter(onlyElementsWithAttributes);
+}
+
+
+class TemplateInstance {
+    constructor(docFrag, bindings) {
+        this._frag = docFrag;
+        this._bindings = bindings;
+    }
+
+    destroy() {
+        if (this._bindings) {
+            for (let i = 0, t = this._bindings.length; i < t; i++) {
+                this._bindings[i].destroy();
+            }
+            this._bindings.length = 0;
+        }
+    }
+
+    setData(data) {
+        for (let i = 0, t = this._bindings.length; i < t; i++) {
+            this._bindings[i].render(data);
+        }
+    }
 }
 
