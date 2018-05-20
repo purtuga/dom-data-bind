@@ -78,9 +78,8 @@ export class EachDirective extends Directive {
                 else if (state.value) {
                     state.value = null;
 
-                    if (state.listChgEv) {
-                        state.listChgEv();
-                        state.listChgEv = null;
+                    if (state.listIterator.stopWatchingAll) {
+                        state.listIterator.stopWatchingAll();
                     }
                 }
 
@@ -233,9 +232,6 @@ export class EachDirective extends Directive {
         // FIXME: this needs to be more efficient!!!!!!
         arrayForEach(state.binders.splice(0, state.binders.length, ...attachedEleBinder), childBinder => {
             if (attachedEleBinder.indexOf(childBinder) === -1) {
-                if (childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode) {
-                    childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
-                }
                 childBinder._destroy();
             }
         });
@@ -358,7 +354,7 @@ export class EachDirective extends Directive {
 
 function destroyRowElement () {
     // this === DocumentFragment from `render()`
-    for (let i = 0, t = this._children; i < t; i++) {
+    for (let i = 0, t = this._children.length; i < t; i++) {
         this._children[i].parentNode && this._children[i].parentNode.removeChild(this._children[i]);
     }
 

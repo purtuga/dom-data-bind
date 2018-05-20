@@ -13,7 +13,7 @@ import {
     createTextNode,
     logError
 } from "./utils"
-import TextBinding      from "./bindings/text-binding"
+import TextBinding from "./bindings/text-binding"
 //=========================================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
 const DROPS_NODES_ON_CLONE = (() => {
