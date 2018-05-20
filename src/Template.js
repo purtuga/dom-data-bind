@@ -38,6 +38,7 @@ export class Template {
     constructor(html, directives = []) {
         this._template = document.createElement("template");
         this._template.innerHTML = html;
+        this._directives = directives;
 
         // FIXME: Find directives and bindings
         this._bindings = getBindingFor(this._template.content, directives);
@@ -59,7 +60,7 @@ export class Template {
     cloneWith(data = {}) {
         makeObservable(data);
         const response = document.importNode(this._template.content, true);
-        response._domDataBindNodeHandlers = applyBindings(response, this._bindings);
+        response._domDataBindNodeHandlers = applyBindingsToTemplateInstance(response, this._bindings, this._directives);
         response._destroyBindings = destroyBindings;
         response._domDataBindNodeHandlers.forEach(nodeHandler =>
             nodeHandler.render(data)
@@ -250,7 +251,7 @@ export function getBindingFor(ele, directives) {
  * @return {Array<NodeHandler>}
  *  An array of Node directive handlers is returned.
  */
-export function applyBindings(frag, bindings) {
+export function applyBindingsToTemplateInstance(frag, bindings, directives) {
     const response = [];
 
     bindings.forEach((directives, path) => {
@@ -261,7 +262,7 @@ export function applyBindings(frag, bindings) {
         }
 
         for (let i=0, t=directives.length; i < t; i++) {
-            response.push(directives[i].getNodeHandler(node));
+            response.push(directives[i].getNodeHandler(node, directives));
         }
     });
 

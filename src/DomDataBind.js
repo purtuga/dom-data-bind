@@ -1,7 +1,7 @@
 import Compose from "common-micro-libs/src/jsutils/Compose"
 import {makeObservable} from "observables/src/objectWatchProp";
 import { PRIVATE, arrayForEach, isString } from "./utils"
-import { getBindingFor, applyBindings } from "./Template"
+import { getBindingFor, applyBindingsToTemplateInstance } from "./Template"
 import { render } from "./render";
 
 //======================================================================
@@ -46,7 +46,7 @@ export const DomDataBind = Compose.extend({
             state.bindings = this.$ele._domDataBindNodeHandlers;
         } else {
             this.$ele = html;
-            state.bindings = applyBindings(html, getBindingFor(html, state.directives));
+            state.bindings = applyBindingsToTemplateInstance(html, getBindingFor(html, state.directives), state.directives);
             if (data) {
                 this.setData(data);
             }

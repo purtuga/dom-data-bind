@@ -1,6 +1,6 @@
 import nextTick from "common-micro-libs/src/jsutils/nextTick"
 import Compose from "common-micro-libs/src/jsutils/Compose"
-import {logError, PRIVATE, removeAttribute, isString} from "../utils"
+import {logError, PRIVATE, removeAttribute} from "../utils"
 import {setDependencyTracker, unsetDependencyTracker} from "observables/src/objectWatchProp"
 
 //===================================================================================
@@ -117,11 +117,11 @@ export class Directive extends Compose {
      * Returns an object with a `render` function for the given node.
      *
      * @param {Node} node
-     * @param {DomDataBind} [binder]
+     * @param {Array<Directive>} [directives]
      *
      * @return {NodeHandler}
      */
-    getNodeHandler(node/*, binder*/) {
+    getNodeHandler(node/*, directives*/) {
         if (this._attr && node.nodeType !== 8 /* no comment nodes */) {
             removeAttribute(node, this._attr);
         }

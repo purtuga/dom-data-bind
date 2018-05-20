@@ -31,6 +31,7 @@ export class IfDirective extends Directive {
         if (!state.update) {
             state.renderedEle           = null;
             state.insertEle             = handler._placeholderEle;
+            state.directives            = handler._directives;
             state.destroyRenderedEle    = destroyRenderedEle;
             state.renderTemplate        = node.data;
             state.update                = renderUpdate;
@@ -38,9 +39,10 @@ export class IfDirective extends Directive {
         }
     }
 
-    getNodeHandler(node, binder) {
+    getNodeHandler(node, directives) {
         const handler = super.getNodeHandler(node);
         handler._placeholderEle = createComment("");
+        handler._directives = directives;
         insertBefore(node.parentNode, handler._placeholderEle, node);
         removeChild(node.parentNode, node);
         return handler;
