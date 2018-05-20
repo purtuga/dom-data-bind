@@ -18,6 +18,7 @@ import {
     isPureObject,
     createDocFragment,
     arrayForEach    }   from "../utils"
+import {render} from "../render";
 
 //============================================
 const DIRECTIVE     = "_each";
@@ -278,13 +279,19 @@ export class EachDirective extends Directive {
             return [ itemBinder, newDomElements ];
         }
 
-        const frag = createDocFragment();
-        const rowEle = handler._n.cloneNode(true);
-        frag.appendChild(rowEle);
-
-        rowEleBinder        = new handler._Factory(rowEle, rowData);
-        rowEleBinder._loop  = { rowEle, rowKey, pos: -1 };
+        const frag = rowEleBinder = render(handler._n.data, rowData, handler._directives);
+        rowEleBinder._loop  = { rowEle: rowEleBinder, rowKey, pos: -1 };
         newDomElements.appendChild(frag);
+
+
+//// FIXME: Cleanup
+        // const frag = createDocFragment();
+        // const rowEle = handler._n.cloneNode(true);
+        // frag.appendChild(rowEle);
+        //
+        // rowEleBinder        = new handler._Factory(rowEle, rowData);
+        // rowEleBinder._loop  = { rowEle, rowKey, pos: -1 };
+        // newDomElements.appendChild(frag);
 
         if (rowKey) {
             state.bindersByKey.set(rowKey, rowEleBinder);
@@ -292,12 +299,14 @@ export class EachDirective extends Directive {
 
         itemBinder = rowEleBinder;
 
-        rowEleBinder.onDestroy(() => {
-            rowEle.parentNode && removeChild(handler._placeholderEle.parentNode, rowEle);
-            if (rowKey) {
-                state.bindersByKey.delete(rowKey);
-            }
-        });
+///// FIXME: setup row destroy logic
+
+        // rowEleBinder.onDestroy(() => {
+        //     rowEle.parentNode && removeChild(handler._placeholderEle.parentNode, rowEle);
+        //     if (rowKey) {
+        //         state.bindersByKey.delete(rowKey);
+        //     }
+        // });
 
         return [ itemBinder, newDomElements ];
     }
@@ -324,16 +333,18 @@ export class EachDirective extends Directive {
         });
     }
 
-    getNodeHandler(node, binder) {
+    getNodeHandler(node, directives) {
         const handler           = super.getNodeHandler(node);
-        handler._Factory        = binder.getFactory();
+        handler._directives     = directives;
         handler._placeholderEle = createComment("");
-        handler.getKey          = hasAttribute(node, KEY_DIRECTIVE) ? createValueGetter(getAttribute(node, KEY_DIRECTIVE)) : NOOP;
+        handler.getKey          = NOOP;
+        // FIXME: need a way to get _key from template (comment)
+        // hasAttribute(node, KEY_DIRECTIVE) ? createValueGetter(getAttribute(node, KEY_DIRECTIVE)) : NOOP;
         handler._isSoleChild    = hasDedicatedParent(node);
 
         insertBefore(node.parentNode, handler._placeholderEle, node);
         removeChild(node.parentNode, node);
-        removeAttribute(node, KEY_DIRECTIVE);
+        // removeAttribute(node, KEY_DIRECTIVE);
 
         return handler;
     }

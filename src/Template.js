@@ -389,7 +389,8 @@ function fixEmptyTextNode(node) {
  * @return {Array<Node>}
  */
 function findAllNodes(ele) {
-    return domFind(ele, "*")
+    return [ele]
+        .concat(domFind(ele, "*"))
         .reduce(addTextNodes, [])
         .filter(onlyElementsWithAttributes);
 }
