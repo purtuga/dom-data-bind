@@ -45,12 +45,22 @@ export class Template {
 
     /**
      * Creates new DOM Element based on this template, initilizes directives
-     * and then applys the data to it.
+     * and then applies the data to it.
+     *
+     * @param {Object} [data]
+     *
+     * @return {DocumentFragment}
+     *  Document Fragment returned will have the following property available
+     *  on its instance:
+     *
+     *  -   `_domDataBindNodeHandlers` Array<NodeHandler>
+     *  -   `_destroyBindings` Function
      */
     cloneWith(data = {}) {
         makeObservable(data);
         const response = document.importNode(this._template.content, true);
         response._domDataBindNodeHandlers = applyBindings(response, this._bindings);
+        response._destroyBindings = destroyBindings;
         response._domDataBindNodeHandlers.forEach(nodeHandler =>
             nodeHandler.render(data)
         );
@@ -58,6 +68,16 @@ export class Template {
     }
 }
 export default Template;
+
+
+function destroyBindings() {
+    if (this._domDataBindNodeHandlers) {
+        for (let i = 0, t = this._domDataBindNodeHandlers.length; i < t; i++) {
+            this._domDataBindNodeHandlers[i].destroy();
+        }
+        this._domDataBindNodeHandlers.length = 0;
+    }
+}
 
 
 /**
@@ -93,17 +113,31 @@ export function getBindingFor(ele, directives) {
         let attrName;
         let attrValue;
         let managesNode;
+        let elePlaceholder = domEle;
 
         while (attrName = Directive.has(domEle)) {
             attrValue = getAttribute(domEle, attrName);
-            getArrayForNodeFromMap(eleToBindings, domEle).push(getDirectiveForAttribute(Directive, attrName, attrValue));
-            removeAttribute(domEle, attrName);
             managesNode = Directive.manages();
 
+            if (managesNode) {
+                elePlaceholder = createComment("");
+            }
 
-            // FIXME: Better if we remove the node from DOM and later, replace it with the placeholder
+            getArrayForNodeFromMap(eleToBindings, elePlaceholder)
+                .push(getDirectiveForAttribute(Directive, attrName, attrValue));
+
+            removeAttribute(domEle, attrName);
+
             if (managesNode) {
                 ignoredChildren.add(domEle);
+
+                // Replace this node with a Comment, and store the node's html
+                // as a prop on the comment for later use to the directive
+                // nodeHandler request
+                domEle.parentNode.insertBefore(elePlaceholder, domEle);
+                const fakeEle = document.createElement("div");
+                fakeEle.appendChild(domEle);
+                elePlaceholder.data = fakeEle.innerHTML;
             }
         }
         return managesNode;

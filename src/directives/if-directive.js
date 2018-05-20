@@ -1,12 +1,13 @@
 import Directive    from "./Directive"
 import {
     PRIVATE,
+    arraySlice,
     hasAttribute,
     createComment,
     insertBefore,
     removeChild,
-    createValueGetter,
-    createDocFragment   } from "../utils"
+    createValueGetter } from "../utils"
+import {render} from "../render"
 
 //============================================
 const DIRECTIVE = "_if";
@@ -18,7 +19,6 @@ export class IfDirective extends Directive {
 
     static manages() { return true; }
 
-
     init(attr, attrValue) {
         this._attr              = attr;
         this._tokenValueGetter  = createValueGetter((attrValue || ""));
@@ -29,48 +29,46 @@ export class IfDirective extends Directive {
         const state = PRIVATE.get(handler);
 
         if (!state.update) {
-            state.cloneBinder = null;
-            state.update = showElement => {
-                if (state.value === showElement) {
-                    return;
-                }
-
-                if (showElement && !state.cloneBinder) {
-                    const frag = createDocFragment();
-                    const clonedEle = node.cloneNode(true);
-
-                    frag.appendChild(clonedEle);
-                    state.cloneBinder = new handler._Factory(clonedEle, state.data);
-                    insertBefore(handler._placeholderEle.parentNode, frag, handler._placeholderEle);
-                    state.cloneBinder.onDestroy(() => {
-                        // We do this check because a directive could have
-                        // removed the element from its parent.
-                        if (clonedEle.parentNode) {
-                            removeChild(clonedEle.parentNode, clonedEle);
-                        }
-                    });
-                }
-                else if (!showElement && state.cloneBinder)  {
-                    state.cloneBinder.destroy();
-                    state.cloneBinder = null;
-                }
-            };
-            handler.onDestroy(() => {
-                if (state.cloneBinder) {
-                    state.cloneBinder.destroy();
-                    state.cloneBinder = null;
-                }
-            });
+            state.renderedEle           = null;
+            state.insertEle             = handler._placeholderEle;
+            state.destroyRenderedEle    = destroyRenderedEle;
+            state.renderTemplate        = node.data;
+            state.update                = renderUpdate;
+            handler.onDestroy(() => state.destroyRenderedEle());
         }
     }
 
     getNodeHandler(node, binder) {
-        const handler           = super.getNodeHandler(node);
-        handler._Factory        = binder.getFactory();
+        const handler = super.getNodeHandler(node);
         handler._placeholderEle = createComment("");
         insertBefore(node.parentNode, handler._placeholderEle, node);
         removeChild(node.parentNode, node);
         return handler;
+    }
+}
+
+function renderUpdate(showElement) {
+    // this === state object
+    if (this.value === showElement) {
+        return;
+    }
+
+    if (showElement && !this.renderedEle) {
+        this.renderedEle = render(this.renderTemplate, this.data);
+        this.renderedEle._children = arraySlice(this.renderedEle.childNodes, 0);
+        insertBefore(this.insertEle.parentNode, this.renderedEle, this.insertEle);
+    }
+    else if (!showElement && this.renderedEle)  {
+        this.destroyRenderedEle();
+    }
+}
+
+function destroyRenderedEle() {
+    // this === state object
+    if (this.renderedEle) {
+        this.renderedEle._children.forEach(e => e.parentNode && e.parentNode.removeChild(e));
+        this.renderedEle._destroyBindings();
+        this.renderedEle = null;
     }
 }
 

@@ -1,6 +1,6 @@
 import Compose from "common-micro-libs/src/jsutils/Compose"
 import {makeObservable} from "observables/src/objectWatchProp";
-import { PRIVATE, arrayForEach } from "./utils"
+import { PRIVATE, arrayForEach, isString } from "./utils"
 import { getBindingFor, applyBindings } from "./Template"
 import { render } from "./render";
 
@@ -41,7 +41,7 @@ export const DomDataBind = Compose.extend({
 
         PRIVATE.set(this, state);
 
-        if ("string" === typeof html) {
+        if (isString(html)) {
             this.$ele = render(html, data, state.directives);
             state.bindings = this.$ele._domDataBindNodeHandlers;
         } else {

@@ -1,6 +1,6 @@
 import nextTick from "common-micro-libs/src/jsutils/nextTick"
 import Compose from "common-micro-libs/src/jsutils/Compose"
-import {logError, PRIVATE, removeAttribute} from "../utils"
+import {logError, PRIVATE, removeAttribute, isString} from "../utils"
 import {setDependencyTracker, unsetDependencyTracker} from "observables/src/objectWatchProp"
 
 //===================================================================================
@@ -122,7 +122,7 @@ export class Directive extends Compose {
      * @return {NodeHandler}
      */
     getNodeHandler(node/*, binder*/) {
-        if (this._attr) {
+        if (this._attr && node.nodeType !== 8 /* no comment nodes */) {
             removeAttribute(node, this._attr);
         }
         return new NodeHandler(this, node);

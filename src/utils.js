@@ -14,7 +14,9 @@ export const UUID               = `D-${ Date.now() }-${ Math.random().toString(3
 export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
 export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";
+export const isString           = s => "string" === typeof s;
 export const arrayForEach       = bindCallTo(ARRAY_PROTOTYPE.forEach);
+export const arraySlice         = bindCallTo(ARRAY_PROTOTYPE.slice);
 export const hasAttribute       = bindCallTo(ELEMENT_PROTOTYPE.hasAttribute);
 export const getAttribute       = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
 export const setAttribute       = bindCallTo(ELEMENT_PROTOTYPE.setAttribute);
