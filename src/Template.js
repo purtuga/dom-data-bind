@@ -133,8 +133,8 @@ export function getBindingFor(ele, directives) {
                 ignoredChildren.add(domEle);
 
                 // Replace this node with a Comment, and store the node's html
-                // as a prop on the comment for later use to the directive
-                // nodeHandler request
+                // as the comment data, which is then used by the directive instance
+                // to `render()` it to DOM when applicable
                 domEle.parentNode.insertBefore(elePlaceholder, domEle);
                 const fakeEle = document.createElement("div");
                 fakeEle.appendChild(domEle);
@@ -168,19 +168,23 @@ export function getBindingFor(ele, directives) {
                     // FIXME: need to handle empty node when browser does not do clones correctly (IE for sure... Edge might be fixed now)
 
                     // Split again at the end of token, so that we have a dedicated text node for the token value.
-                    // Because we'll be using this as a template, well also need to replace this token value node
+                    // Because this will be used as a template, also need to replace this token value node
                     // with an HTML comment, which will be replaced later during directive initialization
-                    const remainingText = nodeSplitText(tokenTextNode, childTokenMatches[0].length);
+                    // The remainder of the Text value is assigned back to `child` so that we can continue
+                    // to check it for other text tokens.
+                    child = nodeSplitText(tokenTextNode, childTokenMatches[0].length);
                     const tokenPlaceholder = tokenTextNode.parentNode.insertBefore(createComment(UUID), tokenTextNode);
                     tokenTextNode.parentNode.removeChild(tokenTextNode);
 
                     getArrayForNodeFromMap(eleToBindings, tokenPlaceholder).push(getTextBindingForToken(TextBinding, childTokenMatches[1]));
 
-                    // Execute the regular expression again on the remaining text
-                    childTokenMatches = reTokenMatch.exec(getNodeValue(remainingText));
+                    // Reset the regular expression (since `child` was also "reset") and execute
+                    // the regular expression again on the remaining text
+                    reTokenMatch.lastIndex = 0;
+                    childTokenMatches = reTokenMatch.exec(getNodeValue(child));
 
                     if (!childTokenMatches && DROPS_NODES_ON_CLONE) {
-                        fixEmptyTextNode(remainingText);
+                        fixEmptyTextNode(child);
                     }
                 }
             }
@@ -247,22 +251,23 @@ export function getBindingFor(ele, directives) {
  *
  * @param {DocumentFragment} frag
  * @param {Map<Array<Number>, Array<Directive>>} bindings
+ * @param {Array<Directive>} Directives
  *
  * @return {Array<NodeHandler>}
  *  An array of Node directive handlers is returned.
  */
-export function applyBindingsToTemplateInstance(frag, bindings, directives) {
+export function applyBindingsToTemplateInstance(frag, bindings, Directives) {
     const response = [];
 
-    bindings.forEach((directives, path) => {
+    bindings.forEach((directivesInstances, path) => {
         const node = getNodeAt(frag, path);
         if (!node) {
             logError(new Error(`dom-data-bind#render(): Unable to find node!`));
             return;
         }
 
-        for (let i=0, t=directives.length; i < t; i++) {
-            response.push(directives[i].getNodeHandler(node, directives));
+        for (let i=0, t=directivesInstances.length; i < t; i++) {
+            response.push(directivesInstances[i].getNodeHandler(node, Directives));
         }
     });
 
