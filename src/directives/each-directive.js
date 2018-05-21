@@ -69,7 +69,6 @@ export class EachDirective extends Directive {
         if (!state.update) {
             state.binders = [];
             state.bindersByKey = new Map();
-            state.listChgEv = null;
             state.listIterator = () => this.iterateOverList(handler, state.value);
             state.update = newList => {
                 if (newList === state.value) {
@@ -95,12 +94,10 @@ export class EachDirective extends Directive {
                 makeObservable(newList);
 
                 if (Array.isArray(newList)) {
-                    // state.listChgEv = newList.on("change", state.listIterator);
-                    state.listChgEv = arrayWatch(newList, state.listIterator);
+                    arrayWatch(newList, state.listIterator);
                 }
                 else if (isPureObject(newList)) {
-                    // state.listChgEv = watchProp(newList, newList, state.listIterator);
-                    state.listChgEv = objectWatchProp(newList, null, state.listIterator);
+                    objectWatchProp(newList, null, state.listIterator);
                 }
 
                 if (isEmptyList(newList) && state.binders) {
@@ -113,7 +110,6 @@ export class EachDirective extends Directive {
 
             // When handler is destroyed, remove data listeners
             handler.onDestroy(() => {
-                // FIXME: this need to use state.listIterator.stopWathingAll() instead
                 if (state.listIterator.stopWatchingAll) {
                     state.listIterator.stopWatchingAll();
                 }
