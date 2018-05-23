@@ -216,10 +216,10 @@ export class EachDirective extends Directive {
                 this.getDataForIteration([ newData[ data[i] ], data[i], i ], rowData);
             }
 
-            const [ binder, newEle ] = this.getRowBinder(handler, rowData);
-            binder._loop.pos = attachedEleBinder.length;
+            const binder = this.getRowBinder(handler, rowData);
+            binder._loop.pos = i;
             attachedEleBinder.push(binder);
-            newDomElements.appendChild(newEle);
+            newDomElements.appendChild(binder);
         }
 
         if (newDomElements.hasChildNodes()) {
@@ -251,17 +251,15 @@ export class EachDirective extends Directive {
      * @param {NodeHandler} handler
      * @param {Object} rowData
      *
-     * @returns {Array<DomDataBind, HTMLFragment>}
+     * @returns {Template}
      *  returns an array wtih two values:
      *  -   the binder for the data item (could be an exising one)
      *  -   Document fragment containing any new Elements that should be inserted into dom
      */
     getRowBinder(handler, rowData) {
-        const state             = PRIVATE.get(handler);
-        let itemBinder          = null;
-        const newDomElements    = createDocFragment();
-
-        let rowKey = state.getKey(rowData);
+        const state     = PRIVATE.get(handler);
+        let itemBinder  = null;
+        let rowKey      = state.getKey(rowData);
         let rowEleBinder;
 
         if (rowKey) {
@@ -273,7 +271,7 @@ export class EachDirective extends Directive {
             delete rowData.$data;
             rowEleBinder[DOM_DATA_BIND_PROP].setData(rowData);
             itemBinder = rowEleBinder;
-            return [ itemBinder, newDomElements ];
+            return itemBinder;
         }
 
         // Render a new Element from the template and store the nodes that are
@@ -292,6 +290,7 @@ export class EachDirective extends Directive {
             ) {
                 state.usesKey = true;
                 state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE));
+                rowKey = state.getKey();
             }
         }
 
@@ -303,15 +302,13 @@ export class EachDirective extends Directive {
         rowEleBinder._destroy = destroyRowElement;
         rowEleBinder._state = state;
         rowEleBinder._loop  = { rowEle: rowEleBinder, rowKey, pos: -1 };
-        newDomElements.appendChild(rowEleBinder);
-
 
         if (rowKey) {
             state.bindersByKey.set(rowKey, rowEleBinder);
         }
 
         itemBinder = rowEleBinder;
-        return [ itemBinder, newDomElements ];
+        return itemBinder;
     }
 
     /**
