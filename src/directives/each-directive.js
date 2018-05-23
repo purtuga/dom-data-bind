@@ -70,6 +70,9 @@ export class EachDirective extends Directive {
             state.binders = [];
             state.bindersByKey = new Map();
             state.listIterator = () => this.iterateOverList(handler, state.value);
+            state.isFirstRender = true;
+            state.usesKey = false;
+            state.getKey = NOOP;
             state.update = newList => {
                 if (newList === state.value) {
                     return;
@@ -258,7 +261,7 @@ export class EachDirective extends Directive {
         let itemBinder          = null;
         const newDomElements    = createDocFragment();
 
-        const rowKey = handler.getKey(rowData);
+        let rowKey = state.getKey(rowData);
         let rowEleBinder;
 
         if (rowKey) {
@@ -268,7 +271,7 @@ export class EachDirective extends Directive {
         // If a binder already exists for this key, then just update its data
         if (rowEleBinder) {
             delete rowData.$data;
-            rowEleBinder.setData(rowData);
+            rowEleBinder[DOM_DATA_BIND_PROP].setData(rowData);
             itemBinder = rowEleBinder;
             return [ itemBinder, newDomElements ];
         }
@@ -276,36 +279,38 @@ export class EachDirective extends Directive {
         // Render a new Element from the template and store the nodes that are
         // created by it (needed for later).
         rowEleBinder = render(handler._n.data, rowData, handler._directives);
+
+        // Is it first render? if so, then we need to determine if the DOM element
+        // that was rendered has the _key attribute
+        if (state.isFirstRender) {
+            state.isFirstRender = false;
+
+            if (
+                rowEleBinder.childNodes.length === 1 &&
+                rowEleBinder.firstChild.nodeType === 1 &&
+                hasAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE)
+            ) {
+                state.usesKey = true;
+                state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE));
+            }
+        }
+
+        if (state.usesKey) {
+            removeAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE);
+        }
+
         rowEleBinder._children = arraySlice(rowEleBinder.childNodes, 0);
         rowEleBinder._destroy = destroyRowElement;
+        rowEleBinder._state = state;
         rowEleBinder._loop  = { rowEle: rowEleBinder, rowKey, pos: -1 };
         newDomElements.appendChild(rowEleBinder);
 
-
-//// FIXME: Cleanup
-        // const frag = createDocFragment();
-        // const rowEle = handler._n.cloneNode(true);
-        // frag.appendChild(rowEle);
-        //
-        // rowEleBinder        = new handler._Factory(rowEle, rowData);
-        // rowEleBinder._loop  = { rowEle, rowKey, pos: -1 };
-        // newDomElements.appendChild(frag);
 
         if (rowKey) {
             state.bindersByKey.set(rowKey, rowEleBinder);
         }
 
         itemBinder = rowEleBinder;
-
-///// FIXME: setup row destroy logic
-
-        // rowEleBinder.onDestroy(() => {
-        //     rowEle.parentNode && removeChild(handler._placeholderEle.parentNode, rowEle);
-        //     if (rowKey) {
-        //         state.bindersByKey.delete(rowKey);
-        //     }
-        // });
-
         return [ itemBinder, newDomElements ];
     }
 
@@ -350,15 +355,17 @@ export class EachDirective extends Directive {
 
 function destroyRowElement () {
     // this === DocumentFragment from `render()`
+
+    // remove all elements/nodes of this row from DOM
     for (let i = 0, t = this._children.length; i < t; i++) {
         this._children[i].parentNode && this._children[i].parentNode.removeChild(this._children[i]);
     }
 
-    // FIXME: handle removing the element mapping to "key" from state:
-        // if (rowKey) {
-        //         state.bindersByKey.delete(rowKey);
-        //     }
+    if (this._loop.rowKey) {
+        this._state.bindersByKey.delete(this._loop.rowKey);
+    }
 
+    this._state = null;
     this[DOM_DATA_BIND_PROP].destroy();
 }
 

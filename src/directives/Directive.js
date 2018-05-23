@@ -13,14 +13,10 @@ import {setDependencyTracker, unsetDependencyTracker} from "observables/src/obje
  * @class Directive
  * @extends Compose
  *
- * @param {HTMLElement} ele
- *  The HTML element that contains the directive
  * @param {String} directiveAttr
  *  The directive html element attribute as found in the element.
  * @param {String} attrValue
  *  The value of the attribute
- * @param {DomDataBind} binder
- *  The instance of DomDataBind that called the Directive
  */
 export class Directive extends Compose {
     /**

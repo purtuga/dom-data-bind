@@ -112,8 +112,9 @@ export function getBindingFor(ele, directives) {
                 elePlaceholder = createComment("");
             }
 
-            getArrayForNodeFromMap(eleToBindings, elePlaceholder)
-                .push(getDirectiveForAttribute(Directive, attrName, attrValue));
+            getArrayForNodeFromMap(eleToBindings, elePlaceholder).push(
+                getDirectiveForAttribute(Directive, attrName, attrValue)
+            );
 
             removeAttribute(domEle, attrName);
 
