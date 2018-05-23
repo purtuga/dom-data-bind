@@ -107,79 +107,95 @@
         /******/
         // Load entry module and return exports
         /******/
-        return __webpack_require__(__webpack_require__.s = 13);
+        return __webpack_require__(__webpack_require__.s = 14);
     }([ /* 0 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
-            return PRIVATE;
+            return DOM_DATA_BIND_PROP;
         });
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "b", function() {
-            return UUID;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "h", function() {
-            return escapeString;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "d", function() {
-            return bindCallTo;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "m", function() {
-            return isPureObject;
+            return PRIVATE;
         });
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "c", function() {
-            return arrayForEach;
+            return UUID;
         });
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "k", function() {
-            return hasAttribute;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "i", function() {
-            return getAttribute;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "q", function() {
-            return setAttribute;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "o", function() {
-            return removeAttribute;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "l", function() {
-            return insertBefore;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "p", function() {
-            return removeChild;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "e", function() {
-            return createComment;
+            return escapeString;
         });
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "f", function() {
-            return createDocFragment;
+            return bindCallTo;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "p", function() {
+            return isPureObject;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "q", function() {
+            return isString;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "d", function() {
+            return arrayForEach;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "e", function() {
+            return arraySlice;
         });
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "n", function() {
+            return hasAttribute;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "l", function() {
+            return getAttribute;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "u", function() {
+            return setAttribute;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "s", function() {
+            return removeAttribute;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "o", function() {
+            return insertBefore;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "t", function() {
+            return removeChild;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "g", function() {
+            return createComment;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "i", function() {
+            return createTextNode;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "h", function() {
+            return createDocFragment;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "r", function() {
             return logError;
         });
         /* harmony export (immutable) */
-        __webpack_exports__.g = createValueGetter;
+        __webpack_exports__.j = createValueGetter;
         /* harmony export (immutable) */
-        __webpack_exports__.j = getNodeAttrNames;
+        __webpack_exports__.m = getNodeAttrNames;
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(11);
         //=====================================================
         var DOCUMENT = document;
         var FUNCTION = Function;
@@ -187,6 +203,7 @@
         var ARRAY_PROTOTYPE = Array.prototype;
         var VALUE_GETTERS = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a();
         var _bind = FUNCTION.bind.call.bind(FUNCTION.bind);
+        var DOM_DATA_BIND_PROP = "DomDataBind";
         var PRIVATE = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_dataStore__.a.create();
         var UUID = "D-" + Date.now() + "-" + Math.random().toString(36).replace(/[^a-z0-9]+/g, "");
         var escapeString = function(str) {
@@ -196,7 +213,11 @@
         var isPureObject = function(o) {
             return "[object Object]" === Object.prototype.toString.call(o);
         };
+        var isString = function(s) {
+            return "string" === typeof s;
+        };
         var arrayForEach = bindCallTo(ARRAY_PROTOTYPE.forEach);
+        var arraySlice = bindCallTo(ARRAY_PROTOTYPE.slice);
         var hasAttribute = bindCallTo(ELEMENT_PROTOTYPE.hasAttribute);
         var getAttribute = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
         var setAttribute = bindCallTo(ELEMENT_PROTOTYPE.setAttribute);
@@ -204,6 +225,7 @@
         var insertBefore = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
         var removeChild = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
         var createComment = _bind(DOCUMENT.createComment, DOCUMENT);
+        var createTextNode = _bind(DOCUMENT.createTextNode, DOCUMENT);
         var createDocFragment = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
         var logError = _bind(console.error, console);
         // eslint-disable-line
@@ -226,13 +248,13 @@
         "use strict";
         /* unused harmony export Directive */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(11);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(10);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(5);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__ = __webpack_require__(2);
         var _get = function get(object, property, receiver) {
             null === object && (object = Function.prototype);
             var desc = Object.getOwnPropertyDescriptor(object, property);
@@ -289,14 +311,10 @@
  * @class Directive
  * @extends Compose
  *
- * @param {HTMLElement} ele
- *  The HTML element that contains the directive
  * @param {String} directiveAttr
  *  The directive html element attribute as found in the element.
  * @param {String} attrValue
  *  The value of the attribute
- * @param {DomDataBind} binder
- *  The instance of DomDataBind that called the Directive
  */
         var Directive = function(_Compose) {
             _inherits(Directive, _Compose);
@@ -315,7 +333,7 @@
          */
                 value: function(handler, node, data) {
                     var _this2 = this;
-                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(handler);
                     if (!state) {
                         state = {
                             data: null,
@@ -326,7 +344,7 @@
                                 return _this2.render(handler, node, state.data);
                             }
                         };
-                        __WEBPACK_IMPORTED_MODULE_2__utils__.a.set(handler, state);
+                        __WEBPACK_IMPORTED_MODULE_2__utils__.b.set(handler, state);
                     }
                     if (state.data !== data) {
                         state.tracker.stopWatchingAll && state.tracker.stopWatchingAll();
@@ -339,7 +357,7 @@
             }, {
                 key: "update",
                 value: function(handler) {
-                    var handlerState = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
+                    var handlerState = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(handler);
                     if (handlerState) {
                         var newValue = "";
                         Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.e)(handlerState.tracker);
@@ -348,7 +366,7 @@
                             // Update node
                             handler.update && handler.update(newValue);
                         } catch (e) {
-                            Object(__WEBPACK_IMPORTED_MODULE_2__utils__.n)(e);
+                            Object(__WEBPACK_IMPORTED_MODULE_2__utils__.r)(e);
                         }
                         Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.f)(handlerState.tracker);
                         handlerState.isQueued = false;
@@ -358,7 +376,7 @@
             }, {
                 key: "getNodeHandler",
                 value: function(node) {
-                    this._attr && Object(__WEBPACK_IMPORTED_MODULE_2__utils__.o)(node, this._attr);
+                    this._attr && 8 !== node.nodeType && Object(__WEBPACK_IMPORTED_MODULE_2__utils__.s)(node, this._attr);
                     return new NodeHandler(this, node);
                 }
             } ], [ {
@@ -405,13 +423,13 @@
             }, {
                 key: "destroy",
                 value: function() {
-                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(this);
+                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(this);
                     if (state) {
                         state.tracker && state.tracker.stopWatchingAll && state.tracker.stopWatchingAll();
                         state.data && (state.data = null);
                     }
                     _get(NodeHandler.prototype.__proto__ || Object.getPrototypeOf(NodeHandler.prototype), "destroy", this).call(this);
-                    __WEBPACK_IMPORTED_MODULE_2__utils__.a.delete(this);
+                    __WEBPACK_IMPORTED_MODULE_2__utils__.b.delete(this);
                 }
             }, {
                 key: "render",
@@ -421,70 +439,13 @@
             }, {
                 key: "update",
                 value: function(newValue) {
-                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(this);
+                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(this);
                     if (state && state.update) return state.update(newValue);
                 }
             } ]);
             return NodeHandler;
         }(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Compose__.a);
     }, /* 2 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* unused harmony export functionBind */
-        /* unused harmony export functionBindCall */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "f", function() {
-            return objectDefineProperty;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "e", function() {
-            return objectDefineProperties;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "g", function() {
-            return objectKeys;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "d", function() {
-            return isArray;
-        });
-        /* unused harmony export arrayForEach */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "b", function() {
-            return arrayIndexOf;
-        });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "c", function() {
-            return arraySplice;
-        });
-        /* unused harmony export consoleLog */
-        /* unused harmony export consoleError */
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return SymbolIterator;
-        });
-        // Function
-        // functionBind(fn, fnParent)
-        var functionBind = Function.bind.call.bind(Function.bind);
-        // usage: functionBindCall(Array.prototype.forEach) // generates a bound function to Array.prototype.forEach.call
-        var functionBindCall = functionBind(Function.call.bind, Function.call);
-        // Object
-        var objectDefineProperty = Object.defineProperty;
-        var objectDefineProperties = Object.defineProperties;
-        var objectKeys = Object.keys;
-        // Array
-        var arr = [];
-        var isArray = Array.isArray;
-        functionBindCall(arr.forEach);
-        var arrayIndexOf = functionBindCall(arr.indexOf);
-        var arraySplice = functionBindCall(arr.splice);
-        // Logging
-        var consoleLog = console.log;
-        console.error;
-        // Iterators
-        var SymbolIterator = "undefined" !== typeof Symbol && Symbol.iterator ? Symbol.iterator : "@@iterator";
-    }, /* 3 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -507,11 +468,11 @@
         /* harmony export (immutable) */
         __webpack_exports__.b = makeArrayWatchable;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(3);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(8);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(7);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(11);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(10);
         function _toConsumableArray(arr) {
             if (Array.isArray(arr)) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -874,18 +835,89 @@
             }
             arr.__proto__ = arrCurrentProto[ARRAY_WATCHABLE_PROTO];
         }
+    }, /* 3 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export functionBind */
+        /* unused harmony export functionBindCall */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "f", function() {
+            return objectDefineProperty;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "e", function() {
+            return objectDefineProperties;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "g", function() {
+            return objectKeys;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "d", function() {
+            return isArray;
+        });
+        /* unused harmony export arrayForEach */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return arrayIndexOf;
+        });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "c", function() {
+            return arraySplice;
+        });
+        /* unused harmony export consoleLog */
+        /* unused harmony export consoleError */
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return SymbolIterator;
+        });
+        // Function
+        // functionBind(fn, fnParent)
+        var functionBind = Function.bind.call.bind(Function.bind);
+        // usage: functionBindCall(Array.prototype.forEach) // generates a bound function to Array.prototype.forEach.call
+        var functionBindCall = functionBind(Function.call.bind, Function.call);
+        // Object
+        var objectDefineProperty = Object.defineProperty;
+        var objectDefineProperties = Object.defineProperties;
+        var objectKeys = Object.keys;
+        // Array
+        var arr = [];
+        var isArray = Array.isArray;
+        functionBindCall(arr.forEach);
+        var arrayIndexOf = functionBindCall(arr.indexOf);
+        var arraySplice = functionBindCall(arr.splice);
+        // Logging
+        var consoleLog = console.log;
+        console.error;
+        // Iterators
+        var SymbolIterator = "undefined" !== typeof Symbol && Symbol.iterator ? Symbol.iterator : "@@iterator";
     }, /* 4 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
+        /* harmony export (immutable) */
+        __webpack_exports__.b = render;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Map__ = __webpack_require__(18);
-        /* unused harmony reexport Map */
-        /* unused harmony reexport FakeMap */
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__Map__.a;
-        });
+        var __WEBPACK_IMPORTED_MODULE_0__Template__ = __webpack_require__(12);
+        //==========================================================================
+        var TEMPLATES = new Map();
+        /**
+ * Returns a DocumentFragment representation of the given `html` code provided on
+ * input bound to the given data.
+ *
+ * @param {String} html
+ * @param {Object} [data]
+ * @param {Array} [directives]
+ *
+ * @return {DocumentFragment}
+ */
+        function render(html, data, directives) {
+            TEMPLATES.has(html) || TEMPLATES.set(html, new __WEBPACK_IMPORTED_MODULE_0__Template__.b(html, directives));
+            return TEMPLATES.get(html).cloneWith(data);
+        }
+        /* harmony default export */
+        __webpack_exports__.a = render;
     }, /* 5 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -893,11 +925,11 @@
         /* unused harmony export getDestroyCallback */
         /* unused harmony export Compose */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(15);
+        var __WEBPACK_IMPORTED_MODULE_0__objectExtend__ = __webpack_require__(16);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__dataStore__ = __webpack_require__(6);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(16);
+        var __WEBPACK_IMPORTED_MODULE_2__queueCallback__ = __webpack_require__(17);
         function _classCallCheck(instance, Constructor) {
             if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
         }
@@ -1205,29 +1237,17 @@
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__Set__ = __webpack_require__(8);
-        /* unused harmony reexport Set */
-        /* unused harmony reexport FakeSet */
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return __WEBPACK_IMPORTED_MODULE_0__Set__.a;
-        });
-    }, /* 8 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return Set;
         });
         /* unused harmony export FakeSet */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(9);
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(8);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(10);
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(9);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(3);
         //============================================================
         var Set = __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set && __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set.prototype[__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a] ? __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Set : FakeSet;
         /* harmony default export */
@@ -1309,7 +1329,7 @@
                 return this.values();
             }
         }));
-    }, /* 9 */
+    }, /* 8 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1331,15 +1351,15 @@
                 if ("undefined" !== ("undefined" === typeof self ? "undefined" : _typeof(self))) return self;
                 return Function("return this;")();
             }();
-        }).call(__webpack_exports__, __webpack_require__(17));
-    }, /* 10 */
+        }).call(__webpack_exports__, __webpack_require__(19));
+    }, /* 9 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony export (immutable) */
         __webpack_exports__.a = FakeIterator;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__ = __webpack_require__(3);
         //-----------------------------------------------------------------------
         // Great reference: http://2ality.com/2015/02/es6-iteration.html
         function FakeIterator(keys, values) {
@@ -1379,7 +1399,7 @@
                 return this;
             }
         });
-    }, /* 11 */
+    }, /* 10 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1421,7 +1441,372 @@
         }();
         /* harmony default export */
         __webpack_exports__.a = nextTick;
+    }, /* 11 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__Map__ = __webpack_require__(20);
+        /* unused harmony reexport Map */
+        /* unused harmony reexport FakeMap */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__Map__.a;
+        });
     }, /* 12 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export Template */
+        /* harmony export (immutable) */
+        __webpack_exports__.c = getBindingFor;
+        /* harmony export (immutable) */
+        __webpack_exports__.a = applyBindingsToTemplateInstance;
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0_observables_src_objectWatchProp__ = __webpack_require__(2);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domFind__ = __webpack_require__(21);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_3__bindings_text_binding__ = __webpack_require__(22);
+        var _createClass = function() {
+            function defineProperties(target, props) {
+                for (var i = 0; i < props.length; i++) {
+                    var descriptor = props[i];
+                    descriptor.enumerable = descriptor.enumerable || false;
+                    descriptor.configurable = true;
+                    "value" in descriptor && (descriptor.writable = true);
+                    Object.defineProperty(target, descriptor.key, descriptor);
+                }
+            }
+            return function(Constructor, protoProps, staticProps) {
+                protoProps && defineProperties(Constructor.prototype, protoProps);
+                staticProps && defineProperties(Constructor, staticProps);
+                return Constructor;
+            };
+        }();
+        function _classCallCheck(instance, Constructor) {
+            if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
+        }
+        var DROPS_NODES_ON_CLONE = function() {
+            var frag = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.h)();
+            frag.appendChild(Object(__WEBPACK_IMPORTED_MODULE_2__utils__.i)("test"));
+            frag.appendChild(Object(__WEBPACK_IMPORTED_MODULE_2__utils__.i)(""));
+            return 1 === frag.cloneNode(true).childNodes.length;
+        }();
+        // Local aliases
+        var nodeSplitText = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.f)(Text.prototype.splitText);
+        // short helpers
+        var reHasDataToken = new RegExp("{{(.*?)}}");
+        var reTokenMatch = new RegExp("{{(.*?)}}", "g");
+        var getNodeValue = function(node) {
+            return node ? node.nodeValue : "";
+        };
+        var hasToken = function(node) {
+            return reHasDataToken.test(getNodeValue(node));
+        };
+        /**
+ * A Dom template along with its set of know directives (after parsing it)
+ */
+        var Template = function() {
+            function Template(html) {
+                var directives = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : [];
+                _classCallCheck(this, Template);
+                this._template = document.createElement("template");
+                this._template.innerHTML = html;
+                this._directives = directives;
+                this._bindings = getBindingFor(this._template.content, directives);
+            }
+            /**
+     * Creates new DOM Element based on this template, initilizes directives
+     * and then applies the data to it.
+     *
+     * @param {Object} [data]
+     *
+     * @return {DocumentFragment}
+     *  Document Fragment returned will have a property named 'DomDataBind', which is
+     *  a TemplateInstance class instance
+     */
+            _createClass(Template, [ {
+                key: "cloneWith",
+                value: function() {
+                    var data = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                    Object(__WEBPACK_IMPORTED_MODULE_0_observables_src_objectWatchProp__.c)(data);
+                    var response = document.importNode(this._template.content, true);
+                    response[__WEBPACK_IMPORTED_MODULE_2__utils__.a] = new TemplateInstance(response, applyBindingsToTemplateInstance(response, this._bindings, this._directives));
+                    response[__WEBPACK_IMPORTED_MODULE_2__utils__.a].setData(data);
+                    return response;
+                }
+            } ]);
+            return Template;
+        }();
+        /* harmony default export */
+        __webpack_exports__.b = Template;
+        /**
+ * Returns a Map() that includes the paths to nodes in the Dom template that
+ * are using Directives or have bindings.
+ * The map "key" is an array of `childNodes` paths from the root of the template
+ * all the way to the node.
+ * The map "value" is an array Directive instances for that node
+ *
+ * @return {Map}
+ */
+        function getBindingFor(ele, directives) {
+            // FIXME: refactor this entire function to be faster and more efficient
+            // template bindings Map() structure:
+            //
+            //      bindings = Map(
+            //          [path, via, childNodes, to, element]: [ directive instances ],
+            //          // example:
+            //          [0,1,3]: [ directiveInstance1, directiveInstance2 ]
+            //      )
+            //  }
+            //
+            // The goal is to be able to provide a path to each elements for which a group of directives will be applied.
+            var bindings = new Map();
+            var eleToBindings = new Map();
+            var ignoredChildren = new Set();
+            var domEle = void 0;
+            var directiveIterator = function(Directive) {
+                var attrName = void 0;
+                var attrValue = void 0;
+                var managesNode = void 0;
+                var elePlaceholder = domEle;
+                for (;attrName = Directive.has(domEle); ) {
+                    attrValue = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.l)(domEle, attrName);
+                    managesNode = Directive.manages();
+                    managesNode && (elePlaceholder = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.g)(""));
+                    getArrayForNodeFromMap(eleToBindings, elePlaceholder).push(getDirectiveForAttribute(Directive, attrName, attrValue));
+                    Object(__WEBPACK_IMPORTED_MODULE_2__utils__.s)(domEle, attrName);
+                    if (managesNode) {
+                        ignoredChildren.add(domEle);
+                        // Replace this node with a Comment, and store the node's html
+                        // as the comment data, which is then used by the directive instance
+                        // to `render()` it to DOM when applicable
+                        domEle.parentNode.insertBefore(elePlaceholder, domEle);
+                        var fakeEle = document.createElement("div");
+                        fakeEle.appendChild(domEle);
+                        elePlaceholder.data = fakeEle.innerHTML;
+                    }
+                }
+                return managesNode;
+            };
+            var processTextNode = function(child) {
+                if (hasToken(child)) {
+                    reTokenMatch.lastIndex = 0;
+                    var nodeValue = getNodeValue(child);
+                    var childTokenMatches = reTokenMatch.exec(nodeValue);
+                    for (;childTokenMatches; ) // If no need to split the text node, then just create a binding for it and exit
+                    if (nodeValue === "{{" + childTokenMatches[1] + "}}") {
+                        getArrayForNodeFromMap(eleToBindings, child).push(getTextBindingForToken(__WEBPACK_IMPORTED_MODULE_3__bindings_text_binding__.a, childTokenMatches[1]));
+                        childTokenMatches = null;
+                    } else {
+                        var tokenTextNode = nodeSplitText(child, childTokenMatches.index);
+                        // IF browser drops empty nodes, then fix the child node (which now is the left portion
+                        // of the split)
+                        DROPS_NODES_ON_CLONE && fixEmptyTextNode(child);
+                        // FIXME: need to handle empty node when browser does not do clones correctly (IE for sure... Edge might be fixed now)
+                        // Split again at the end of token, so that we have a dedicated text node for the token value.
+                        // Because this will be used as a template, also need to replace this token value node
+                        // with an HTML comment, which will be replaced later during directive initialization
+                        // The remainder of the Text value is assigned back to `child` so that we can continue
+                        // to check it for other text tokens.
+                        child = nodeSplitText(tokenTextNode, childTokenMatches[0].length);
+                        var tokenPlaceholder = tokenTextNode.parentNode.insertBefore(Object(__WEBPACK_IMPORTED_MODULE_2__utils__.g)(__WEBPACK_IMPORTED_MODULE_2__utils__.c), tokenTextNode);
+                        tokenTextNode.parentNode.removeChild(tokenTextNode);
+                        getArrayForNodeFromMap(eleToBindings, tokenPlaceholder).push(getTextBindingForToken(__WEBPACK_IMPORTED_MODULE_3__bindings_text_binding__.a, childTokenMatches[1]));
+                        // Reset the regular expression (since `child` was also "reset") and execute
+                        // the regular expression again on the remaining text
+                        reTokenMatch.lastIndex = 0;
+                        childTokenMatches = reTokenMatch.exec(getNodeValue(child));
+                        !childTokenMatches && DROPS_NODES_ON_CLONE && fixEmptyTextNode(child);
+                    }
+                }
+            };
+            findAllNodes(ele).forEach(function(node) {
+                var skip = false;
+                if (ignoredChildren.size) {
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = void 0;
+                    try {
+                        for (var _step, _iterator = ignoredChildren.values()[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var ignoredParent = _step.value;
+                            if (ignoredParent.contains(node)) {
+                                skip = true;
+                                break;
+                            }
+                        }
+                    } catch (err) {
+                        _didIteratorError = true;
+                        _iteratorError = err;
+                    } finally {
+                        try {
+                            !_iteratorNormalCompletion && _iterator.return && _iterator.return();
+                        } finally {
+                            if (_didIteratorError) throw _iteratorError;
+                        }
+                    }
+                }
+                domEle = node;
+                skip || (// Process Element level Directives
+                1 === node.nodeType ? directives.some(directiveIterator) : 3 === node.nodeType && processTextNode(node));
+            });
+            domEle = null;
+            // Create the list array of node indexes for each binding processed
+            eleToBindings.forEach(function(directiveBindings, bindingEle) {
+                if (ele === bindingEle) {
+                    bindings.set([], directiveBindings);
+                    return;
+                }
+                var path = [];
+                var walkEle = bindingEle;
+                var parent = walkEle.parentNode;
+                for (;walkEle !== ele; ) {
+                    path.unshift(path.indexOf.call(parent.childNodes, walkEle));
+                    walkEle = walkEle.parentNode;
+                    parent = walkEle.parentNode;
+                }
+                bindings.set(path, directiveBindings);
+            });
+            eleToBindings.clear();
+            ignoredChildren.clear();
+            return bindings;
+        }
+        /**
+ * Applies the bindings in the given Map to the DocumentFragment provided on input.
+ *
+ * @param {DocumentFragment} frag
+ * @param {Map<Array<Number>, Array<Directive>>} bindings
+ * @param {Array<Directive>} Directives
+ *
+ * @return {Array<NodeHandler>}
+ *  An array of Node directive handlers is returned.
+ */
+        function applyBindingsToTemplateInstance(frag, bindings, Directives) {
+            var response = [];
+            bindings.forEach(function(directivesInstances, path) {
+                var node = getNodeAt(frag, path);
+                if (!node) {
+                    Object(__WEBPACK_IMPORTED_MODULE_2__utils__.r)(new Error("dom-data-bind#render(): Unable to find node!"));
+                    return;
+                }
+                for (var i = 0, t = directivesInstances.length; i < t; i++) response.push(directivesInstances[i].getNodeHandler(node, Directives));
+            });
+            return response;
+        }
+        function getNodeAt(root, path) {
+            if (!path.length) return root;
+            Object(__WEBPACK_IMPORTED_MODULE_2__utils__.d)(path, function(index) {
+                return root = root.childNodes[index];
+            });
+            return root;
+        }
+        function getArrayForNodeFromMap(map, node) {
+            map.has(node) || map.set(node, []);
+            return map.get(node);
+        }
+        /**
+ * Returns a node handlers for the given directive
+ *
+ * @param {Directive} Directive
+ * @param {String} tokenText
+ *  The token text (no curly braces)
+ *
+ * @returns {Directive}
+ *  Returns a Directive instance. Call `.getNodeHandler` to get a handler for a given node
+ */
+        function getTextBindingForToken(Directive, tokenText) {
+            tokenText = tokenText.trim();
+            var directiveInstances = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(Directive);
+            if (!directiveInstances) {
+                directiveInstances = {};
+                __WEBPACK_IMPORTED_MODULE_2__utils__.b.set(Directive, directiveInstances);
+            }
+            directiveInstances[tokenText] || (directiveInstances[tokenText] = new Directive(tokenText));
+            return directiveInstances[tokenText];
+        }
+        function getDirectiveForAttribute(Directive, attrName, attrValue) {
+            attrValue = attrValue.trim();
+            var directiveSignature = attrName + "-" + __WEBPACK_IMPORTED_MODULE_2__utils__.c + "-" + attrValue;
+            var directiveInstances = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(Directive);
+            if (!directiveInstances) {
+                directiveInstances = {};
+                __WEBPACK_IMPORTED_MODULE_2__utils__.b.set(Directive, directiveInstances);
+            }
+            directiveInstances[directiveSignature] || (directiveInstances[directiveSignature] = new Directive(attrName, attrValue));
+            return directiveInstances[directiveSignature];
+        }
+        /**
+ *
+ * @private
+ * @param {HTMLElement} ele
+ * @returns {boolean}
+ */
+        function onlyElementsWithAttributes(ele) {
+            return 1 !== ele.nodeType || 1 === ele.nodeType && ele.attributes.length > 0;
+        }
+        /**
+ *
+ * @private
+ * @param {Array} resultArr
+ * @param {HTMLElement} ele
+ * @returns {Array}
+ */
+        function addTextNodes(resultArr, ele) {
+            resultArr.push(ele);
+            if (ele.hasChildNodes()) {
+                ele = ele.firstChild;
+                for (;ele; ) {
+                    var nextSibling = ele.nextSibling;
+                    // IF Text node and it has the token
+                    3 === ele.nodeType && !!ele.nodeValue && reHasDataToken.test(getNodeValue(ele)) && resultArr.push(ele);
+                    DROPS_NODES_ON_CLONE && fixEmptyTextNode(ele);
+                    ele = nextSibling;
+                }
+            }
+            return resultArr;
+        }
+        function fixEmptyTextNode(node) {
+            if (3 === node.nodeType && DROPS_NODES_ON_CLONE && !node.nodeValue) {
+                node.parentNode.insertBefore(Object(__WEBPACK_IMPORTED_MODULE_2__utils__.g)(""), node);
+                node.parentNode.removeChild(node);
+            }
+        }
+        /**
+ *
+ * @private
+ * @param {HTMLElement} ele
+ *
+ * @return {Array<Node>}
+ */
+        function findAllNodes(ele) {
+            return [ ele ].concat(Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domFind__.a)(ele, "*")).reduce(addTextNodes, []).filter(onlyElementsWithAttributes);
+        }
+        var TemplateInstance = function() {
+            function TemplateInstance(docFrag, bindings) {
+                _classCallCheck(this, TemplateInstance);
+                this._frag = docFrag;
+                this._bindings = bindings;
+            }
+            _createClass(TemplateInstance, [ {
+                key: "destroy",
+                value: function() {
+                    if (this._bindings) {
+                        for (var i = 0, t = this._bindings.length; i < t; i++) this._bindings[i].destroy();
+                        this._bindings.length = 0;
+                    }
+                }
+            }, {
+                key: "setData",
+                value: function(data) {
+                    for (var i = 0, t = this._bindings.length; i < t; i++) this._bindings[i].render(data);
+                }
+            } ]);
+            return TemplateInstance;
+        }();
+    }, /* 13 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1489,7 +1874,7 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(attrValue || "");
                     this._htmlAttr = new RegExp(this.constructor._matches).exec(attr)[1];
                 }
             }, {
@@ -1497,9 +1882,9 @@
                 value: function(handler, node, data) {
                     var _this2 = this;
                     _get(AttrDirective.prototype.__proto__ || Object.getPrototypeOf(AttrDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.b.get(handler);
                     state.update || (state.update = function(newValue) {
-                        _this2.constructor._isProp ? newValue !== state.value && (node[_this2._htmlAttr] = newValue) : newValue && state.value !== newValue ? Object(__WEBPACK_IMPORTED_MODULE_1__utils__.q)(node, _this2._htmlAttr, newValue) : state.value && !newValue && Object(__WEBPACK_IMPORTED_MODULE_1__utils__.o)(node, _this2._htmlAttr);
+                        _this2.constructor._isProp ? newValue !== state.value && (node[_this2._htmlAttr] = newValue) : newValue && state.value !== newValue ? Object(__WEBPACK_IMPORTED_MODULE_1__utils__.u)(node, _this2._htmlAttr, newValue) : state.value && !newValue && Object(__WEBPACK_IMPORTED_MODULE_1__utils__.s)(node, _this2._htmlAttr);
                     });
                 }
             } ], [ {
@@ -1507,7 +1892,7 @@
                 value: function(ele) {
                     var _this3 = this;
                     var directiveAttr = "";
-                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(ele).some(function(attr) {
+                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.m)(ele).some(function(attr) {
                         return _this3._matches.test(attr) && (directiveAttr = attr);
                     });
                     return directiveAttr;
@@ -1527,7 +1912,7 @@
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = AttrDirective;
-    }, /* 13 */
+    }, /* 14 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1539,76 +1924,82 @@
             return DomDataBindAll;
         });
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(14);
+        var __WEBPACK_IMPORTED_MODULE_0__DomDataBind__ = __webpack_require__(15);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__directives_Directive__ = __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_1__render__ = __webpack_require__(4);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__ = __webpack_require__(20);
+        var __WEBPACK_IMPORTED_MODULE_2__directives_Directive__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__ = __webpack_require__(24);
+        var __WEBPACK_IMPORTED_MODULE_3__directives_class_directive__ = __webpack_require__(23);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__ = __webpack_require__(25);
+        var __WEBPACK_IMPORTED_MODULE_4__directives_style_directive__ = __webpack_require__(27);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__ = __webpack_require__(26);
+        var __WEBPACK_IMPORTED_MODULE_5__directives_if_directive__ = __webpack_require__(28);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__ = __webpack_require__(12);
+        var __WEBPACK_IMPORTED_MODULE_6__directives_show_directive__ = __webpack_require__(29);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__ = __webpack_require__(27);
+        var __WEBPACK_IMPORTED_MODULE_7__directives_attr_directive__ = __webpack_require__(13);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__ = __webpack_require__(28);
+        var __WEBPACK_IMPORTED_MODULE_8__directives_prop_directive__ = __webpack_require__(30);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__ = __webpack_require__(30);
+        var __WEBPACK_IMPORTED_MODULE_9__directives_on_directive__ = __webpack_require__(31);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__ = __webpack_require__(32);
+        var __WEBPACK_IMPORTED_MODULE_10__directives_each_directive__ = __webpack_require__(33);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_11__directives_html_directive__ = __webpack_require__(35);
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "DomDataBind", function() {
             return __WEBPACK_IMPORTED_MODULE_0__DomDataBind__.a;
         });
         /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "render", function() {
+            return __WEBPACK_IMPORTED_MODULE_1__render__.a;
+        });
+        /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "Directive", function() {
-            return __WEBPACK_IMPORTED_MODULE_1__directives_Directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_2__directives_Directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "EachDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_10__directives_each_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "IfDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_5__directives_if_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "ClassDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_3__directives_class_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "StyleDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_4__directives_style_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "ShowDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_6__directives_show_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "AttrDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_7__directives_attr_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "PropDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_8__directives_prop_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "OnDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_9__directives_on_directive__.a;
         });
         /* harmony reexport (binding) */
         __webpack_require__.d(__webpack_exports__, "HtmlDirective", function() {
-            return __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__.a;
+            return __WEBPACK_IMPORTED_MODULE_11__directives_html_directive__.a;
         });
         var DomDataBindAll = __WEBPACK_IMPORTED_MODULE_0__DomDataBind__.a.extend();
-        DomDataBindAll.directives = [ __WEBPACK_IMPORTED_MODULE_9__directives_each_directive__.a, __WEBPACK_IMPORTED_MODULE_4__directives_if_directive__.a, __WEBPACK_IMPORTED_MODULE_2__directives_class_directive__.a, __WEBPACK_IMPORTED_MODULE_3__directives_style_directive__.a, __WEBPACK_IMPORTED_MODULE_5__directives_show_directive__.a, __WEBPACK_IMPORTED_MODULE_6__directives_attr_directive__.a, __WEBPACK_IMPORTED_MODULE_7__directives_prop_directive__.a, __WEBPACK_IMPORTED_MODULE_8__directives_on_directive__.a, __WEBPACK_IMPORTED_MODULE_10__directives_html_directive__.a ];
+        DomDataBindAll.directives = [ __WEBPACK_IMPORTED_MODULE_10__directives_each_directive__.a, __WEBPACK_IMPORTED_MODULE_5__directives_if_directive__.a, __WEBPACK_IMPORTED_MODULE_3__directives_class_directive__.a, __WEBPACK_IMPORTED_MODULE_4__directives_style_directive__.a, __WEBPACK_IMPORTED_MODULE_6__directives_show_directive__.a, __WEBPACK_IMPORTED_MODULE_7__directives_attr_directive__.a, __WEBPACK_IMPORTED_MODULE_8__directives_prop_directive__.a, __WEBPACK_IMPORTED_MODULE_9__directives_on_directive__.a, __WEBPACK_IMPORTED_MODULE_11__directives_html_directive__.a ];
         /* harmony default export */
         __webpack_exports__.default = DomDataBindAll;
-    }, /* 14 */
+    }, /* 15 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1616,35 +2007,14 @@
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__ = __webpack_require__(5);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__ = __webpack_require__(2);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_3__Template__ = __webpack_require__(12);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__ = __webpack_require__(19);
-        var TEMPLATES = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a();
-        // Local aliases
-        var _NodeFilter = NodeFilter;
-        var nodeSplitText = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(Text.prototype.splitText);
-        // short helpers
-        var reHasDataToken = new RegExp("{{(.*?)}}");
-        var reTokenMatch = new RegExp("{{(.*?)}}", "g");
-        var getNodeValue = function(node) {
-            return node ? node.nodeValue : "";
-        };
-        var hasToken = function(node) {
-            return reHasDataToken.test(getNodeValue(node));
-        };
-        var treeWalkerFilter = {
-            acceptNode: function(node) {
-                if (1 === node.nodeType && !node.attributes.length) return _NodeFilter.FILTER_SKIP;
-                if (3 === node.nodeType && (!node.nodeValue || -1 === node.nodeValue.indexOf("{{"))) return _NodeFilter.FILTER_SKIP;
-                return _NodeFilter.FILTER_ACCEPT;
-            }
-        };
+        var __WEBPACK_IMPORTED_MODULE_4__render__ = __webpack_require__(4);
+        //======================================================================
         /**
  * Bind data to a DOM element and automatically persist changes in that data to the UI.
  * By default, this constructor provides interpolation of Text tokens found in the DOM
@@ -1655,33 +2025,44 @@
  * @class DomDataBind
  * @extends Compose
  *
- * @param {HTMLElement} ele
+ * @param {String |HTMLElement} html
  *  The HTML element that will be parse and to which `data` will be bound.
  *
  * @param {Object} data
- *  An object whose data will be used to bind to `ele`.
+ *  An object whose data will be used to bind to `html` element (once crated) .
  *
  */
         var DomDataBind = __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_Compose__.a.extend({
-            init: function(ele) {
-                var data = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+            /**
+     * The Element whose data was bound to.
+     * When a string is used on input, this will be a DocumentFragment, which
+     * means that it could be empty if its content was inserted into DOM
+     */
+            $ele: null,
+            init: function(html, data) {
                 var Factory = this.getFactory();
                 var state = {
-                    ele: ele,
+                    html: html,
                     data: data,
                     directives: Factory.directives.slice(0)
                 };
-                __WEBPACK_IMPORTED_MODULE_4__utils__.a.set(this, state);
-                state.bindings = getBindingsFromDom(this, ele);
-                data && this.setData(data);
+                __WEBPACK_IMPORTED_MODULE_2__utils__.b.set(this, state);
+                if (Object(__WEBPACK_IMPORTED_MODULE_2__utils__.q)(html)) {
+                    this.$ele = Object(__WEBPACK_IMPORTED_MODULE_4__render__.b)(html, data, state.directives);
+                    state.bindings = this.$ele._domDataBindNodeHandlers;
+                } else {
+                    this.$ele = html;
+                    state.bindings = Object(__WEBPACK_IMPORTED_MODULE_3__Template__.a)(html, Object(__WEBPACK_IMPORTED_MODULE_3__Template__.c)(html, state.directives), state.directives);
+                    data && this.setData(data);
+                }
                 this.onDestroy(function() {
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(state.bindings, function(binding) {
+                    Object(__WEBPACK_IMPORTED_MODULE_2__utils__.d)(state.bindings, function(binding) {
                         return binding.destroy();
                     });
                     delete state.data;
                     delete state.directives;
                     delete state.bindings;
-                    Factory.getDestroyCallback(state, __WEBPACK_IMPORTED_MODULE_4__utils__.a)();
+                    Factory.getDestroyCallback(state, __WEBPACK_IMPORTED_MODULE_2__utils__.b)();
                 });
             },
             /**
@@ -1691,9 +2072,9 @@
      * reflected to dom.
      */
             setData: function(data) {
-                Object(__WEBPACK_IMPORTED_MODULE_3_observables_src_objectWatchProp__.c)(data);
-                var bindings = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(this).bindings;
-                Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(bindings, function(binding) {
+                Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.c)(data);
+                var bindings = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(this).bindings;
+                Object(__WEBPACK_IMPORTED_MODULE_2__utils__.d)(bindings, function(binding) {
                     return binding.render(data);
                 });
             }
@@ -1707,184 +2088,7 @@
  * @type {Array}
  */
         DomDataBind.directives = [];
-        function getBindingsFromDom(binder, ele) {
-            var eleTemplate = getTemplateForDomElement(ele, binder);
-            var response = [];
-            if (eleTemplate.ele.hasChildNodes()) {
-                ele.textContent = "";
-                Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(eleTemplate.ele.childNodes, function(node) {
-                    ele.appendChild(node.cloneNode(true));
-                });
-            }
-            eleTemplate.bindings.forEach(function(directives, path) {
-                var node = getNodeAt(ele, path);
-                if (!node) {
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.n)(new Error("Unable to find node!"));
-                    return;
-                }
-                Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(directives, function(Directive) {
-                    response.push(Directive.getNodeHandler(node, binder));
-                });
-            });
-            return response;
-        }
-        function getNodeAt(root, path) {
-            if (!path.length) return root;
-            Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(path, function(index) {
-                return root = root.childNodes[index];
-            });
-            return root;
-        }
-        /**
- * Returns the template representation for a given dom Element
- *
- * @param {HTMLElement} ele
- * @param {DomDataBind} binder
- *
- * @return {Object}
- */
-        function getTemplateForDomElement(ele, binder) {
-            var templateId = ele.outerHTML;
-            if (TEMPLATES.has(templateId)) return TEMPLATES.get(templateId);
-            // TEMPLATE:
-            //  {
-            //      bindings: Map(
-            //          [path via childNodes to element]: [ binding constructors ],
-            //          // example:
-            //          [0,1,3]: [ binding constructors ]
-            //      )
-            //  }
-            //
-            // The goal is to be able to provide a path to each elements for which a group of directives will be applied.
-            var template = {
-                bindings: new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a()
-            };
-            var eleToBindings = new __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_es6_Map__.a();
-            var _PRIVATE$get = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(binder), directives = _PRIVATE$get.directives;
-            var domWalker = document.createTreeWalker(ele, 5, treeWalkerFilter, false);
-            // 5 === NodeFilter.SHOW_ELEMENT | _NodeFilter.SHOW_TEXT
-            var domEle = domWalker.currentNode;
-            var ignoredChildren = new __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_es6_Set__.a();
-            var directiveIterator = function(Directive) {
-                var attrName = void 0;
-                var attrValue = void 0;
-                var managesNode = void 0;
-                for (;attrName = Directive.has(domEle); ) {
-                    attrValue = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(domEle, attrName);
-                    getArrayForNodeFromMap(eleToBindings, domEle).push(getDirectiveForAttribute(Directive, attrName, attrValue));
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(domEle, attrName);
-                    managesNode = Directive.manages();
-                    managesNode && ignoredChildren.add(domEle);
-                }
-                return managesNode;
-            };
-            for (;domEle; ) {
-                var skip = false;
-                if (ignoredChildren.size) {
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = void 0;
-                    try {
-                        for (var _step, _iterator = ignoredChildren.values()[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            var ignoredParent = _step.value;
-                            if (ignoredParent.contains(domEle)) {
-                                skip = true;
-                                break;
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
-                    } finally {
-                        try {
-                            !_iteratorNormalCompletion && _iterator.return && _iterator.return();
-                        } finally {
-                            if (_didIteratorError) throw _iteratorError;
-                        }
-                    }
-                }
-                skip || (// Process Element level Directives
-                1 === domEle.nodeType ? directives.some(directiveIterator) : 3 === domEle.nodeType && function(child) {
-                    if (hasToken(child)) {
-                        reTokenMatch.lastIndex = 0;
-                        var childTokenMatches = reTokenMatch.exec(getNodeValue(child));
-                        for (;childTokenMatches; ) // If no need to split the text node, then just create a binding for it and exit
-                        if (child.textContent === "{{" + childTokenMatches[1] + "}}") {
-                            getArrayForNodeFromMap(eleToBindings, child).push(getTextBindingForToken(__WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__.a, childTokenMatches[1]));
-                            childTokenMatches = null;
-                        } else {
-                            var tokenTextNode = nodeSplitText(child, childTokenMatches.index);
-                            // Split again at the end of token, so that we have a dedicated text node for the token value.
-                            // Because we'll be using this as a template, well also need to replace this token value node
-                            // with an HTML comment, which will be replaced later during directive initialization
-                            nodeSplitText(tokenTextNode, childTokenMatches[0].length);
-                            var tokenPlaceholder = tokenTextNode.parentNode.insertBefore(Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)(__WEBPACK_IMPORTED_MODULE_4__utils__.b), tokenTextNode);
-                            tokenTextNode.parentNode.removeChild(tokenTextNode);
-                            getArrayForNodeFromMap(eleToBindings, tokenPlaceholder).push(getTextBindingForToken(__WEBPACK_IMPORTED_MODULE_5__bindings_text_binding__.a, childTokenMatches[1]));
-                            childTokenMatches = reTokenMatch.exec(getNodeValue(child));
-                        }
-                    }
-                }(domEle));
-                domEle = domWalker.nextNode();
-            }
-            // Create the list array of node indexes for each binding processed
-            eleToBindings.forEach(function(bindings, bindingEle) {
-                if (ele === bindingEle) {
-                    template.bindings.set([], bindings);
-                    return;
-                }
-                var path = [];
-                var walkEle = bindingEle;
-                var parent = walkEle.parentNode;
-                for (;walkEle !== ele; ) {
-                    path.unshift(path.indexOf.call(parent.childNodes, walkEle));
-                    walkEle = walkEle.parentNode;
-                    parent = walkEle.parentNode;
-                }
-                template.bindings.set(path, bindings);
-            });
-            TEMPLATES.set(templateId, template);
-            eleToBindings.clear();
-            ignoredChildren.clear();
-            template.ele = ele.cloneNode(true);
-            return template;
-        }
-        function getArrayForNodeFromMap(map, node) {
-            map.has(node) || map.set(node, []);
-            return map.get(node);
-        }
-        /**
- * Returns a node handlers for the given directive
- *
- * @param {Directive} Directive
- * @param {String} tokenText
- *  The token text (no curly braces)
- *
- * @returns {Directive}
- *  Returns a Directive instance. Call `.getNodeHandler` to get a handler for a given node
- */
-        function getTextBindingForToken(Directive, tokenText) {
-            tokenText = tokenText.trim();
-            var directiveInstances = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(Directive);
-            if (!directiveInstances) {
-                directiveInstances = {};
-                __WEBPACK_IMPORTED_MODULE_4__utils__.a.set(Directive, directiveInstances);
-            }
-            directiveInstances[tokenText] || (directiveInstances[tokenText] = new Directive(tokenText));
-            return directiveInstances[tokenText];
-        }
-        function getDirectiveForAttribute(Directive, attrName, attrValue) {
-            attrValue = attrValue.trim();
-            var directiveSignature = attrName + "-" + __WEBPACK_IMPORTED_MODULE_4__utils__.b + "-" + attrValue;
-            var directiveInstances = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(Directive);
-            if (!directiveInstances) {
-                directiveInstances = {};
-                __WEBPACK_IMPORTED_MODULE_4__utils__.a.set(Directive, directiveInstances);
-            }
-            directiveInstances[directiveSignature] || (directiveInstances[directiveSignature] = new Directive(attrName, attrValue));
-            return directiveInstances[directiveSignature];
-        }
-    }, /* 15 */
+    }, /* 16 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1924,13 +2128,13 @@
         }
         /* harmony default export */
         __webpack_exports__.a = objectExtend;
-    }, /* 16 */
+    }, /* 17 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export queueCallback */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_0__es6_Set__ = __webpack_require__(18);
         function _toConsumableArray(arr) {
             if (Array.isArray(arr)) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -1967,7 +2171,19 @@
                 cb = null;
             }
         }
-    }, /* 17 */
+    }, /* 18 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__Set__ = __webpack_require__(7);
+        /* unused harmony reexport Set */
+        /* unused harmony reexport FakeSet */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return __WEBPACK_IMPORTED_MODULE_0__Set__.a;
+        });
+    }, /* 19 */
     /***/
     function(module, exports) {
         var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
@@ -1991,7 +2207,7 @@
         // We return undefined, instead of nothing here, so it's
         // easier to handle this case. if(!global) { ...}
         module.exports = g;
-    }, /* 18 */
+    }, /* 20 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2001,11 +2217,11 @@
         });
         /* unused harmony export FakeMap */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(9);
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(8);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(10);
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(9);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(3);
         //======================================================
         var Map = __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map && __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map.prototype[__WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a] ? __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Map : FakeMap;
         function FakeMap() {}
@@ -2102,7 +2318,28 @@
                 return this.entries();
             }
         }));
-    }, /* 19 */
+    }, /* 21 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export domFind */
+        /**
+ * Finds Elements within a given HTML Element using `querySelectorAll` and
+ * return an Array with those elements.
+ *
+ * @function domFind
+ *
+ * @param {HTMLElement} domEle
+ * @param {String} selector
+ *
+ * @returns {Array<HTMLElement>}
+ */
+        function domFind(domEle, selector) {
+            return Array.prototype.slice.call(domEle.querySelectorAll(selector));
+        }
+        /* harmony default export */
+        __webpack_exports__.a = domFind;
+    }, /* 22 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2169,13 +2406,13 @@
                 key: "init",
                 value: function(tokenText) {
                     this._tokenText = tokenText;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(tokenText);
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(tokenText);
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(TextBinding.prototype.__proto__ || Object.getPrototypeOf(TextBinding.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.b.get(handler);
                     state.update || (state.update = function(newValue) {
                         newValue !== node.nodeValue && (node.nodeValue = newValue);
                     });
@@ -2186,7 +2423,7 @@
                     // Text nodes are processed in a special way in `DomDataBind.getTemplateForDomElement`, where
                     // free-floating textnode are replaced with HTML comments in order to not lose their place when
                     // converted to text and then back to dom elements. We replace those here now..
-                    if (8 === node.nodeType && node.nodeValue === __WEBPACK_IMPORTED_MODULE_1__utils__.b) {
+                    if (8 === node.nodeType && node.nodeValue === __WEBPACK_IMPORTED_MODULE_1__utils__.c) {
                         var nodeToRemove = node;
                         // FIXME: below code should use node.ownerDocument???
                         node = node.parentNode.insertBefore(document.createTextNode(""), nodeToRemove);
@@ -2199,17 +2436,17 @@
         }(__WEBPACK_IMPORTED_MODULE_0__directives_Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = TextBinding;
-    }, /* 20 */
+    }, /* 23 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export ClassDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(21);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__ = __webpack_require__(24);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(22);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__ = __webpack_require__(25);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(23);
+        var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__ = __webpack_require__(26);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(1);
         /* harmony import */
@@ -2271,13 +2508,13 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(ClassDirective.prototype.__proto__ || Object.getPrototypeOf(ClassDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.b.get(handler);
                     state.update || (state.update = function(newValue) {
                         return applyCssClassesToNode(node, newValue, newValue !== state.value ? state.value : {});
                     });
@@ -2285,7 +2522,7 @@
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(ele, "_class") ? "_class" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.n)(ele, "_class") ? "_class" : "";
                 }
             } ]);
             return ClassDirective;
@@ -2299,7 +2536,7 @@
                 newClasses[className] && !Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) ? Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_domutils_domAddClass__.a)(node, className) : !newClasses[className] && Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domHasClass__.a)(node, className) && Object(__WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_domutils_domRemoveClass__.a)(node, className);
             });
         }
-    }, /* 21 */
+    }, /* 24 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2320,7 +2557,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domHasClass;
-    }, /* 22 */
+    }, /* 25 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2344,7 +2581,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddClass;
-    }, /* 23 */
+    }, /* 26 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2362,7 +2599,7 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domRemoveClass;
-    }, /* 24 */
+    }, /* 27 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2428,13 +2665,13 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_0__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_0__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(StyleDirective.prototype.__proto__ || Object.getPrototypeOf(StyleDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_0__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_0__utils__.b.get(handler);
                     if (!state.update) {
                         var eleStyleList = node.style;
                         state.update = function(newValue) {
@@ -2447,14 +2684,14 @@
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__.k)(ele, "_style") ? "_style" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_0__utils__.n)(ele, "_style") ? "_style" : "";
                 }
             } ]);
             return StyleDirective;
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = StyleDirective;
-    }, /* 25 */
+    }, /* 28 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2463,6 +2700,8 @@
         var __WEBPACK_IMPORTED_MODULE_0__Directive__ = __webpack_require__(1);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(0);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(4);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -2520,55 +2759,39 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(IfDirective.prototype.__proto__ || Object.getPrototypeOf(IfDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.b.get(handler);
                     if (!state.update) {
-                        state.cloneBinder = null;
-                        state.update = function(showElement) {
-                            if (state.value === showElement) return;
-                            if (showElement && !state.cloneBinder) {
-                                var frag = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.f)();
-                                var clonedEle = node.cloneNode(true);
-                                frag.appendChild(clonedEle);
-                                state.cloneBinder = new handler._Factory(clonedEle, state.data);
-                                Object(__WEBPACK_IMPORTED_MODULE_1__utils__.l)(handler._placeholderEle.parentNode, frag, handler._placeholderEle);
-                                state.cloneBinder.onDestroy(function() {
-                                    // We do this check because a directive could have
-                                    // removed the element from its parent.
-                                    clonedEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_1__utils__.p)(clonedEle.parentNode, clonedEle);
-                                });
-                            } else if (!showElement && state.cloneBinder) {
-                                state.cloneBinder.destroy();
-                                state.cloneBinder = null;
-                            }
-                        };
+                        state.renderedEle = null;
+                        state.insertEle = handler._placeholderEle;
+                        state.directives = handler._directives;
+                        state.destroyRenderedEle = destroyRenderedEle;
+                        state.renderTemplate = handler._n.data;
+                        state.update = renderUpdate;
                         handler.onDestroy(function() {
-                            if (state.cloneBinder) {
-                                state.cloneBinder.destroy();
-                                state.cloneBinder = null;
-                            }
+                            return state.destroyRenderedEle();
                         });
                     }
                 }
             }, {
                 key: "getNodeHandler",
-                value: function(node, binder) {
+                value: function(node, directives) {
                     var handler = _get(IfDirective.prototype.__proto__ || Object.getPrototypeOf(IfDirective.prototype), "getNodeHandler", this).call(this, node);
-                    handler._Factory = binder.getFactory();
-                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.e)("");
-                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.l)(node.parentNode, handler._placeholderEle, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.p)(node.parentNode, node);
+                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)("");
+                    handler._directives = directives;
+                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.o)(node.parentNode, handler._placeholderEle, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_1__utils__.t)(node.parentNode, node);
                     return handler;
                 }
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.k)(ele, "_if") ? "_if" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.n)(ele, "_if") ? "_if" : "";
                 }
             }, {
                 key: "manages",
@@ -2578,9 +2801,28 @@
             } ]);
             return IfDirective;
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
+        function renderUpdate(showElement) {
+            // this === state object
+            if (this.value === showElement) return;
+            if (showElement && !this.renderedEle) {
+                this.renderedEle = Object(__WEBPACK_IMPORTED_MODULE_2__render__.b)(this.renderTemplate, this.data, this.directives);
+                this.renderedEle._children = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.e)(this.renderedEle.childNodes, 0);
+                Object(__WEBPACK_IMPORTED_MODULE_1__utils__.o)(this.insertEle.parentNode, this.renderedEle, this.insertEle);
+            } else !showElement && this.renderedEle && this.destroyRenderedEle();
+        }
+        function destroyRenderedEle() {
+            // this === state object
+            if (this.renderedEle) {
+                this.renderedEle._children.forEach(function(e) {
+                    return e.parentNode && e.parentNode.removeChild(e);
+                });
+                this.renderedEle[__WEBPACK_IMPORTED_MODULE_1__utils__.a].destroy();
+                this.renderedEle = null;
+            }
+        }
         /* harmony default export */
         __webpack_exports__.a = IfDirective;
-    }, /* 26 */
+    }, /* 29 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2646,13 +2888,13 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(ShowDirective.prototype.__proto__ || Object.getPrototypeOf(ShowDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.b.get(handler);
                     if (!state.update) {
                         var eleStyleList = node.style;
                         var eleDisplayStyle = node.display || "";
@@ -2664,20 +2906,20 @@
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.k)(ele, "_show") ? "_show" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.n)(ele, "_show") ? "_show" : "";
                 }
             } ]);
             return ShowDirective;
         }(__WEBPACK_IMPORTED_MODULE_0__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = ShowDirective;
-    }, /* 27 */
+    }, /* 30 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export PropDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(12);
+        var __WEBPACK_IMPORTED_MODULE_0__attr_directive__ = __webpack_require__(13);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -2735,13 +2977,13 @@
         }(__WEBPACK_IMPORTED_MODULE_0__attr_directive__.a);
         /* harmony default export */
         __webpack_exports__.a = PropDirective;
-    }, /* 28 */
+    }, /* 31 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export OnDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(29);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(32);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__Directive__ = __webpack_require__(1);
         /* harmony import */
@@ -2793,7 +3035,7 @@
             });
             superClass && (Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass);
         }
-        var matchesDirective = new RegExp("^" + Object(__WEBPACK_IMPORTED_MODULE_2__utils__.h)("_on.") + "(.*)");
+        var matchesDirective = new RegExp("^" + Object(__WEBPACK_IMPORTED_MODULE_2__utils__.k)("_on.") + "(.*)");
         var OnDirective = function(_Directive) {
             _inherits(OnDirective, _Directive);
             function OnDirective() {
@@ -2805,18 +3047,18 @@
                 value: function(directiveAttr, attrValue) {
                     this._attr = directiveAttr;
                     this._eventName = new RegExp(matchesDirective).exec(directiveAttr)[1];
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "handleEvent",
                 value: function(handler, domEv) {
-                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(handler);
                     var tokenValue = void 0;
                     state.data.$ev = domEv;
                     try {
                         tokenValue = this._tokenValueGetter(state.data);
                     } catch (e) {
-                        Object(__WEBPACK_IMPORTED_MODULE_2__utils__.n)(e);
+                        Object(__WEBPACK_IMPORTED_MODULE_2__utils__.r)(e);
                         return;
                     }
                     delete state.data.$ev;
@@ -2826,7 +3068,7 @@
                 key: "render",
                 value: function(handler, node, data) {
                     var _this2 = this;
-                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_2__utils__.b.get(handler);
                     if (!state) {
                         state = {
                             data: {
@@ -2836,7 +3078,7 @@
                                 return _this2.render(handler, node, state.data);
                             }
                         };
-                        __WEBPACK_IMPORTED_MODULE_2__utils__.a.set(handler, state);
+                        __WEBPACK_IMPORTED_MODULE_2__utils__.b.set(handler, state);
                     }
                     data && (data.$data ? state.data = data : state.data.$data = data);
                 }
@@ -2854,7 +3096,7 @@
                 key: "has",
                 value: function(ele) {
                     var directiveAttr = "";
-                    Object(__WEBPACK_IMPORTED_MODULE_2__utils__.j)(ele).some(function(attr) {
+                    Object(__WEBPACK_IMPORTED_MODULE_2__utils__.m)(ele).some(function(attr) {
                         return matchesDirective.test(attr) && (directiveAttr = attr);
                     });
                     return directiveAttr;
@@ -2864,7 +3106,7 @@
         }(__WEBPACK_IMPORTED_MODULE_1__Directive__.a);
         /* harmony default export */
         __webpack_exports__.a = OnDirective;
-    }, /* 29 */
+    }, /* 32 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2922,21 +3164,23 @@
         }
         /* harmony default export */
         __webpack_exports__.a = domAddEventListener;
-    }, /* 30 */
+    }, /* 33 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export EachDirective */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__ = __webpack_require__(11);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__ = __webpack_require__(2);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__ = __webpack_require__(31);
+        var __WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__ = __webpack_require__(34);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_3__Directive__ = __webpack_require__(1);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_5__render__ = __webpack_require__(4);
         var _slicedToArray = function() {
             function sliceIterator(arr, i) {
                 var _arr = [];
@@ -3015,7 +3259,7 @@
         }
         var NOOP = function() {};
         var isEmptyList = function(list) {
-            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(list) && !Object.keys(list).length;
+            return Array.isArray(list) && !list.length || Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(list) && !Object.keys(list).length;
         };
         /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -3046,29 +3290,28 @@
                     var _parseDirectiveValue = parseDirectiveValue((attrValue || "").trim()), _parseDirectiveValue2 = _slicedToArray(_parseDirectiveValue, 2), iteratorArgs = _parseDirectiveValue2[0], listVar = _parseDirectiveValue2[1];
                     this._attr = attr;
                     this._iteratorArgs = iteratorArgs;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(listVar || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(listVar || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     var _this2 = this;
                     _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.b.get(handler);
                     if (!state.update) {
                         state.binders = [];
                         state.bindersByKey = new __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_es6_Map__.a();
-                        state.listChgEv = null;
                         state.listIterator = function() {
                             return _this2.iterateOverList(handler, state.value);
                         };
+                        state.isFirstRender = true;
+                        state.usesKey = false;
+                        state.getKey = NOOP;
                         state.update = function(newList) {
                             if (newList === state.value) return;
                             if (state.value) {
                                 state.value = null;
-                                if (state.listChgEv) {
-                                    state.listChgEv();
-                                    state.listChgEv = null;
-                                }
+                                state.listIterator.stopWatchingAll && state.listIterator.stopWatchingAll();
                             }
                             if (!newList) {
                                 _this2.destroyChildBinders(state.binders, handler);
@@ -3079,17 +3322,12 @@
                             state.value = newList;
                             // Make sure data is observable and setup event listners on it.
                             Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.c)(newList);
-                            Array.isArray(newList) ? // state.listChgEv = newList.on("change", state.listIterator);
-                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__.a)(newList, state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newList) && (// state.listChgEv = watchProp(newList, newList, state.listIterator);
-                            state.listChgEv = Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.d)(newList, null, state.listIterator));
+                            Array.isArray(newList) ? Object(__WEBPACK_IMPORTED_MODULE_2_observables_src_arrayWatch__.a)(newList, state.listIterator) : Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(newList) && Object(__WEBPACK_IMPORTED_MODULE_1_observables_src_objectWatchProp__.d)(newList, null, state.listIterator);
                             isEmptyList(newList) && state.binders ? _this2.destroyChildBinders(state.binders, handler) : _this2.iterateOverList(handler, newList);
                         };
                         // When handler is destroyed, remove data listeners
                         handler.onDestroy(function() {
-                            if (state.listChgEv) {
-                                state.listChgEv.off();
-                                state.listChgEv = null;
-                            }
+                            state.listIterator.stopWatchingAll && state.listIterator.stopWatchingAll();
                             state.bindersByKey.clear();
                             _this2.destroyChildBinders(state.binders, handler);
                         });
@@ -3105,12 +3343,12 @@
                         parentEle.textContent = "";
                         parentEle.appendChild(handler._placeholderEle);
                         setTimeout(function() {
-                            Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
+                            Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(binders.splice(0), function(binder) {
                                 return binder.destroy();
                             });
                         });
-                    } else Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(binders.splice(0), function(binder) {
-                        return binder.destroy();
+                    } else Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(binders.splice(0), function(binder) {
+                        return binder._destroy();
                     });
                 }
             }, {
@@ -3125,16 +3363,16 @@
                 key: "iterateOverList",
                 value: function(handler, newData) {
                     var _state$binders;
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.b.get(handler);
                     var attachedEleBinder = [];
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
+                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.h)();
                     var isArray = Array.isArray(newData);
                     var data = void 0;
                     if (isArray) {
                         isArray = true;
                         data = newData;
                     } else {
-                        if (!Object(__WEBPACK_IMPORTED_MODULE_4__utils__.m)(newData)) return;
+                        if (!Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(newData)) return;
                         data = Object.keys(newData);
                     }
                     for (var i = 0, t = data.length; i < t; i++) {
@@ -3142,84 +3380,86 @@
                             $data: state.data.$data || state.data
                         };
                         isArray ? this.getDataForIteration([ data[i], i ], rowData) : this.getDataForIteration([ newData[data[i]], data[i], i ], rowData);
-                        var _getRowBinder = this.getRowBinder(handler, rowData), _getRowBinder2 = _slicedToArray(_getRowBinder, 2), binder = _getRowBinder2[0], newEle = _getRowBinder2[1];
-                        binder._loop.pos = attachedEleBinder.length;
+                        var binder = this.getRowBinder(handler, rowData);
+                        binder._loop.pos = i;
                         attachedEleBinder.push(binder);
-                        newDomElements.appendChild(newEle);
+                        newDomElements.appendChild(binder);
                     }
-                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
+                    newDomElements.hasChildNodes() && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
                     // store the new attached set of elements in their new positions, and
                     // clean up old Binders that are no longer being used/displayed
                     // FIXME: this needs to be more efficient!!!!!!
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
-                        if (-1 === attachedEleBinder.indexOf(childBinder)) {
-                            childBinder._loop.rowEle && childBinder._loop.rowEle.parentNode && childBinder._loop.rowEle.parentNode.removeChild(childBinder._loop.rowEle);
-                            childBinder.destroy();
-                        }
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)((_state$binders = state.binders).splice.apply(_state$binders, [ 0, state.binders.length ].concat(attachedEleBinder)), function(childBinder) {
+                        -1 === attachedEleBinder.indexOf(childBinder) && childBinder._destroy();
                     });
                     state.binders.length && this.positionChildren(handler._placeholderEle.parentNode, handler._placeholderEle, state.binders);
                 }
             }, {
                 key: "getRowBinder",
                 value: function(handler, rowData) {
-                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_4__utils__.b.get(handler);
                     var itemBinder = null;
-                    var newDomElements = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
-                    var rowKey = handler.getKey(rowData);
+                    var rowKey = state.getKey(rowData);
                     var rowEleBinder = void 0;
                     rowKey && (rowEleBinder = state.bindersByKey.get(rowKey));
                     // If a binder already exists for this key, then just update its data
                     if (rowEleBinder) {
                         delete rowData.$data;
-                        rowEleBinder.setData(rowData);
+                        rowEleBinder[__WEBPACK_IMPORTED_MODULE_4__utils__.a].setData(rowData);
                         itemBinder = rowEleBinder;
-                        return [ itemBinder, newDomElements ];
+                        return itemBinder;
                     }
-                    var frag = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)();
-                    var rowEle = handler._n.cloneNode(true);
-                    frag.appendChild(rowEle);
-                    rowEleBinder = new handler._Factory(rowEle, rowData);
+                    // Render a new Element from the template and store the nodes that are
+                    // created by it (needed for later).
+                    rowEleBinder = Object(__WEBPACK_IMPORTED_MODULE_5__render__.b)(handler._n.data, rowData, handler._directives);
+                    // Is it first render? if so, then we need to determine if the DOM element
+                    // that was rendered has the _key attribute
+                    if (state.isFirstRender) {
+                        state.isFirstRender = false;
+                        if (1 === rowEleBinder.childNodes.length && 1 === rowEleBinder.firstChild.nodeType && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.n)(rowEleBinder.firstChild, "_key")) {
+                            state.usesKey = true;
+                            state.getKey = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(rowEleBinder.firstChild, "_key"));
+                            rowKey = state.getKey();
+                        }
+                    }
+                    state.usesKey && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.s)(rowEleBinder.firstChild, "_key");
+                    rowEleBinder._children = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)(rowEleBinder.childNodes, 0);
+                    rowEleBinder._destroy = destroyRowElement;
+                    rowEleBinder._state = state;
                     rowEleBinder._loop = {
-                        rowEle: rowEle,
+                        rowEle: rowEleBinder,
                         rowKey: rowKey,
                         pos: -1
                     };
-                    newDomElements.appendChild(frag);
                     rowKey && state.bindersByKey.set(rowKey, rowEleBinder);
                     itemBinder = rowEleBinder;
-                    rowEleBinder.onDestroy(function() {
-                        rowEle.parentNode && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(handler._placeholderEle.parentNode, rowEle);
-                        rowKey && state.bindersByKey.delete(rowKey);
-                    });
-                    return [ itemBinder, newDomElements ];
+                    return itemBinder;
                 }
             }, {
                 key: "positionChildren",
                 value: function(eleParentNode, placeholderEle, childEleBinders) {
                     // FIXME: speed improvement = convert to while() looop
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(childEleBinders, function(childBinder, index) {
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(childEleBinders, function(childBinder, index) {
                         if (childBinder._loop.pos === index) return;
-                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
+                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(eleParentNode, childBinder._loop.rowEle, childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle);
                         childBinder._loop.pos = index;
                     });
                 }
             }, {
                 key: "getNodeHandler",
-                value: function(node, binder) {
+                value: function(node, directives) {
                     var handler = _get(EachDirective.prototype.__proto__ || Object.getPrototypeOf(EachDirective.prototype), "getNodeHandler", this).call(this, node);
-                    handler._Factory = binder.getFactory();
-                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)("");
-                    handler.getKey = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(node, "_key") ? Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(node, "_key")) : NOOP;
+                    handler._directives = directives;
+                    handler._placeholderEle = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)("");
                     handler._isSoleChild = hasDedicatedParent(node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.l)(node.parentNode, handler._placeholderEle, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.p)(node.parentNode, node);
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(node, "_key");
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.o)(node.parentNode, handler._placeholderEle, node);
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.t)(node.parentNode, node);
                     return handler;
                 }
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.k)(ele, "_each") ? "_each" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.n)(ele, "_each") ? "_each" : "";
                 }
             }, {
                 key: "manages",
@@ -3229,6 +3469,14 @@
             } ]);
             return EachDirective;
         }(__WEBPACK_IMPORTED_MODULE_3__Directive__.a);
+        function destroyRowElement() {
+            // this === DocumentFragment from `render()`
+            // remove all elements/nodes of this row from DOM
+            for (var i = 0, t = this._children.length; i < t; i++) this._children[i].parentNode && this._children[i].parentNode.removeChild(this._children[i]);
+            this._loop.rowKey && this._state.bindersByKey.delete(this._loop.rowKey);
+            this._state = null;
+            this[__WEBPACK_IMPORTED_MODULE_4__utils__.a].destroy();
+        }
         function parseDirectiveValue(attrValue) {
             var matches = /\(?(.+?)\)?\W?(?:of|in)\W(.*)/.exec(attrValue);
             if (matches) {
@@ -3247,14 +3495,14 @@
         }
         /* harmony default export */
         __webpack_exports__.a = EachDirective;
-    }, /* 31 */
+    }, /* 34 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony export (immutable) */
         __webpack_exports__.a = arrayWatch;
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_0__objectWatchProp__ = __webpack_require__(2);
         //========================================================================
         /**
  * Watch an array for changes.  Utiltiy will override the array's mutating methods
@@ -3273,7 +3521,7 @@
             unWatch.destroy = unWatch;
             return unWatch;
         }
-    }, /* 32 */
+    }, /* 35 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -3339,13 +3587,13 @@
                 key: "init",
                 value: function(attr, attrValue) {
                     this._attr = attr;
-                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(attrValue || "");
+                    this._tokenValueGetter = Object(__WEBPACK_IMPORTED_MODULE_1__utils__.j)(attrValue || "");
                 }
             }, {
                 key: "render",
                 value: function(handler, node, data) {
                     _get(HtmlDirective.prototype.__proto__ || Object.getPrototypeOf(HtmlDirective.prototype), "render", this).call(this, handler, node, data);
-                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.a.get(handler);
+                    var state = __WEBPACK_IMPORTED_MODULE_1__utils__.b.get(handler);
                     state.update || (state.update = function(newValue) {
                         if (newValue === state.value) return;
                         node.innerHTML = newValue;
@@ -3354,7 +3602,7 @@
             } ], [ {
                 key: "has",
                 value: function(ele) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.k)(ele, "_html") ? "_html" : "";
+                    return Object(__WEBPACK_IMPORTED_MODULE_1__utils__.n)(ele, "_html") ? "_html" : "";
                 }
             } ]);
             return HtmlDirective;
