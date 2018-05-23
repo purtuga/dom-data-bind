@@ -41,8 +41,6 @@ export class Template {
         this._template = document.createElement("template");
         this._template.innerHTML = html;
         this._directives = directives;
-
-        // FIXME: Find directives and bindings
         this._bindings = getBindingFor(this._template.content, directives);
     }
 

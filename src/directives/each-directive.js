@@ -337,15 +337,10 @@ export class EachDirective extends Directive {
         const handler           = super.getNodeHandler(node);
         handler._directives     = directives;
         handler._placeholderEle = createComment("");
-        handler.getKey          = NOOP;
-        // FIXME: need a way to get _key from template (comment)
-        // hasAttribute(node, KEY_DIRECTIVE) ? createValueGetter(getAttribute(node, KEY_DIRECTIVE)) : NOOP;
         handler._isSoleChild    = hasDedicatedParent(node);
 
         insertBefore(node.parentNode, handler._placeholderEle, node);
         removeChild(node.parentNode, node);
-        // removeAttribute(node, KEY_DIRECTIVE);
-
         return handler;
     }
 }
