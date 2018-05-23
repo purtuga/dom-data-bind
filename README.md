@@ -13,21 +13,21 @@ $ npm install purtuga/dom-data-bind --save-dev
 ## Usage
 
 ```javascript
-import DomDataBind from "dom-data-bind"
+import {render} from "dom-data-bind"
 
 const data = {
     firstName: "Paul"
 };
 const div = document.createElement("div");
-div.innerHtml = `<div>{{ firstName }}</div>`;
-
-const divBinder = DomDataBind.create(div, data);
+const divBinder = render(`<div>{{ firstName }}</div>`, data);
 
 // Later....
 data.firstName = "Tom"; // DOM updated automatically
 
-// When widget is no longer needed
-divBinder.destroy();
+// rendered DOM is no longer needed, stop its data watchers
+// This is important in case your data is persisted beyond the life
+// of the rendered element
+divBinder.DomDataBind.destroy();
 
 ```
 
@@ -36,7 +36,7 @@ divBinder.destroy();
 ```html
 <script type="text/javascript" src="dom-data-bind/dist/DomDataBind"></script>
 <script>
-    var binder = DomDataBind.default.create(document.getElementById("bind"), myData);
+    var binder = DomDataBind.render(`<div>hello world!</div>`, myData);
 </script>
 ```
 
