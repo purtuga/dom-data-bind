@@ -2,7 +2,7 @@
 
 Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables (using [Observables](https://github.com/purtuga/observables)) so that as it changes, DOM is updated automatically. Updates are always applied async (`nextTick`) in order to minimize DOM interactions.
 
-[See Todo app demo](http://output.jsbin.com/mazinor)
+[See Todo app demo](http://jsbin.com/qisojaveme/2)
 
 ## Install
 
