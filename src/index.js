@@ -11,8 +11,8 @@ import OnDirective      from "./directives/on-directive"
 import EachDirective    from "./directives/each-directive"
 import HtmlDirective    from "./directives/html-directive"
 
-const DomDataBindAll = DomDataBind.extend();
-DomDataBindAll.directives = [
+
+const allDirectives = [
     EachDirective,
     IfDirective,
     ClassDirective,
@@ -24,11 +24,15 @@ DomDataBindAll.directives = [
     HtmlDirective
 ];
 
+const DomDataBindAll = DomDataBind.extend();
+DomDataBindAll.directives = allDirectives;
+
 export default DomDataBindAll;
 export {
     DomDataBindAll,
     DomDataBind,
     render,
+    allDirectives,
     Directive,
     EachDirective,
     IfDirective,
