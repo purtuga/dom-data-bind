@@ -50,8 +50,10 @@ export class OnDirective extends Directive {
         if ("function" === typeof tokenValue) {
             return tokenValue.call(handle._n, domEv);
         }
-
-        // FIXME: need to support EventHandler interface
+        // DOM EventHandler interface: object having a `handleEvent` method
+        else if (tokenValue && "handleEvent" in tokenValue && "function" === tokenValue.handleEvent) {
+            tokenValue.handleEvent.call(tokenValue, domEv);
+        }
     }
 
     // takes care of only storing the data on the node, for when the event is triggered
