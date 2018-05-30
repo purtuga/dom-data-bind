@@ -48,8 +48,10 @@ export class OnDirective extends Directive {
         delete state.data.$ev;
 
         if ("function" === typeof tokenValue) {
-            return tokenValue(domEv);
+            return tokenValue.call(handle._n, domEv);
         }
+
+        // FIXME: need to support EventHandler interface
     }
 
     // takes care of only storing the data on the node, for when the event is triggered

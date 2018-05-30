@@ -13,13 +13,13 @@ $ npm install purtuga/dom-data-bind --save-dev
 ## Usage
 
 ```javascript
-import {render} from "dom-data-bind"
+import {render, allDirectives} from "dom-data-bind"
 
 const data = {
     firstName: "Paul"
 };
 const div = document.createElement("div");
-const divBinder = render(`<div>{{ firstName }}</div>`, data);
+const divBinder = render(`<div>{{ firstName }}</div>`, data, allDirectives);
 
 // Later....
 data.firstName = "Tom"; // DOM updated automatically
