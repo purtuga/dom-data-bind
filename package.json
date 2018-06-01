@@ -30,5 +30,8 @@
         "project-base": "github:purtuga/project-base",
         "common-micro-libs": "github:purtuga/common-micro-libs#master",
         "observables": "github:purtuga/observables"
+    },
+    "peerDependencies": {
+        "component-element": "github:purtuga/ComponentElement"
     }
 }
