@@ -29,6 +29,7 @@ export const createTextNode     = _bind(DOCUMENT.createTextNode, DOCUMENT);
 export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
 export const logError           = _bind(console.error, console); // eslint-disable-line
 
+
 export function createValueGetter(evalCode) {
     evalCode = evalCode.trim();
 

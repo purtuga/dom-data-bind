@@ -16,12 +16,19 @@ import {
 import TextBinding from "./bindings/text-binding"
 //=========================================================================================
 const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
-const DROPS_NODES_ON_CLONE = (() => {
+const DROPS_NODES_ON_CLONE = (() => {   // FUCK YOU IE!
     const frag = createDocFragment();
     frag.appendChild(createTextNode("test"));
     frag.appendChild(createTextNode(""));
     return frag.cloneNode(true).childNodes.length === 1;
 })();
+const NODE_CONTAINS_MISSES_TEXT_NODES = (() => {    // FUCK YOU IE!
+    const div = document.createElement("div");
+    const text = createTextNode("test");
+    div.appendChild(text);
+    return !div.contains(text);
+})();
+
 
 // Local aliases
 const nodeSplitText         = bindCallTo(Text.prototype.splitText);
@@ -183,8 +190,16 @@ export function getBindingFor(ele, directives) {
 
         if (ignoredChildren.size) {
             for (let ignoredParent of ignoredChildren.values()) {
-                if (ignoredParent.contains(node)) {
+                if (NODE_CONTAINS_MISSES_TEXT_NODES && node.nodeType === 3) {
+                    if (!!(ignoredParent.compareDocumentPosition(node) & 16)) {
+                        skip = true;
+                    }
+                }
+                else if (ignoredParent.contains(node)) {
                     skip = true;
+                }
+
+                if (skip) {
                     break;
                 }
             }
