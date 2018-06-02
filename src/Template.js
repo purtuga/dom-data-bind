@@ -98,7 +98,7 @@ export function getBindingFor(ele, directives) {
     //
 
     // The goal is to be able to provide a path to each elements for which a group of directives will be applied.
-    const bindings          = new Map();
+    const bindings          = new Map(); // FIXME: these can be global and reusable - since we only ever have one call in flight to this function
     const eleToBindings     = new Map();
     const ignoredChildren   = new Set();
     let domEle;

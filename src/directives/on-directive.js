@@ -48,10 +48,10 @@ export class OnDirective extends Directive {
         delete state.data.$ev;
 
         if ("function" === typeof tokenValue) {
-            return tokenValue.call(handle._n, domEv);
+            return tokenValue.call(handler._n, domEv);
         }
         // DOM EventHandler interface: object having a `handleEvent` method
-        else if (tokenValue && "handleEvent" in tokenValue && "function" === tokenValue.handleEvent) {
+        else if (tokenValue && "function" === tokenValue.handleEvent) {
             tokenValue.handleEvent.call(tokenValue, domEv);
         }
     }
