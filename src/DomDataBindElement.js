@@ -9,6 +9,12 @@ import {ComponentElement, getComponentTemplate} from "component-element"
 import {render} from "./render"
 import {allDirectives} from "./index";
 
+
+//==============================================================================
+
+export * from "component-element"
+export * from "./index"
+
 /**
  * Base class around ComponentElement that allows for `template` to
  * take advantage of DomDataBind as its templating engine.
