@@ -4,9 +4,9 @@
     "description": "DOM Data Bind utility. Bind data to DOM",
     "main": "./src/index.js",
     "scripts": {
-        "serve": "webpack-dev-server --config node_modules/project-base/configs/webpack.dev.js --progress --hot --color --entry ./dev/index.js",
+        "serve": "webpack-dev-server --config node_modules/project-base/configs/webpack.dev.js --progress --hot --color --entry ./my.dev/index.js",
         "build": "webpack --config node_modules/project-base/configs/webpack.dev.js",
-        "build:ie": "webpack --config node_modules/project-base/configs/webpack.prod.js --entry ./dev/index.js --output-path ./dev",
+        "build:ie": "webpack --config node_modules/project-base/configs/webpack.prod.js --entry ./my.dev/index.js --output-path ./my.dev",
         "build:prod": "webpack --config node_modules/project-base/configs/webpack.prod.js",
         "build:prod:min": "webpack --config node_modules/project-base/configs/webpack.prod.uglify.js",
         "build:apiDocs": "jsdoc -c node_modules/project-base/configs/jsdoc.conf.json",
@@ -27,7 +27,9 @@
     "license": "ISC",
     "homepage": "https://github.com/purtuga/dom-data-bind/blob/master/README.md",
     "devDependencies": {
-        "project-base": "github:purtuga/project-base",
+        "project-base": "github:purtuga/project-base"
+    },
+    "dependencies": {
         "common-micro-libs": "github:purtuga/common-micro-libs#master",
         "observables": "github:purtuga/observables"
     },
