@@ -81,6 +81,13 @@ export class Directive extends Compose {
      * @param {NodeHandler} handler
      */
     update(handler) {
+        // destruction happens 1ms after .destroy() (Componse#destroy()) is called,
+        // so its possible that a handler might come in here having its `.isDestroyed`
+        // flag set.
+        if (handler.isDestroyed) {
+            return;
+        }
+
         const handlerState = PRIVATE.get(handler);
 
         if (handlerState) {
