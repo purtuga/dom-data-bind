@@ -290,7 +290,7 @@ export class EachDirective extends Directive {
             ) {
                 state.usesKey = true;
                 state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE));
-                rowKey = state.getKey();
+                rowKey = state.getKey(rowData);
             }
         }
 
@@ -365,7 +365,7 @@ function parseDirectiveValue(attrValue) {
     let matches = /\(?(.+?)\)?\W?(?:of|in)\W(.*)/.exec(attrValue);
     if (matches) {
         matches = matches.slice(1);
-        matches[0] = matches[0].split(/\,/).map(argName => String(argName).trim());
+        matches[0] = matches[0].split(/,/).map(argName => String(argName).trim());
         return matches;
     }
     return [];

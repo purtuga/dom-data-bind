@@ -12,7 +12,7 @@ const _bind                 = FUNCTION.bind.call.bind(FUNCTION.bind);
 export const DOM_DATA_BIND_PROP = "DomDataBind";
 export const PRIVATE            = dataStore.create();
 export const UUID               = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
-export const escapeString       = str => String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+export const escapeString       = str => String(str).replace(/[\-\[\]\/{}()*+?.\\^$|]/g, "\\$&");
 export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
 export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";
 export const isString           = s => "string" === typeof s;

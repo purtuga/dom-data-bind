@@ -30,7 +30,7 @@
         "project-base": "github:purtuga/project-base"
     },
     "dependencies": {
-        "common-micro-libs": "github:purtuga/common-micro-libs#master",
+        "common-micro-libs": "github:purtuga/common-micro-libs",
         "observables": "github:purtuga/observables"
     },
     "peerDependencies": {

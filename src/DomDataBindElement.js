@@ -6,8 +6,10 @@
 //
 //------------------------------------------------------------------------
 import {ComponentElement, getComponentTemplate} from "component-element"
+import {objectExtend} from "common-micro-libs/src/jsutils/objectExtend"
 import {render} from "./render"
 import {allDirectives} from "./index";
+import {makeObservable} from "observables"
 
 
 //==============================================================================
@@ -15,49 +17,36 @@ import {allDirectives} from "./index";
 export * from "component-element"
 export * from "./index"
 
+
+const STATE_OBSERVABLE = "__$STATE$";
+
 /**
  * Base class around ComponentElement that allows for `template` to
  * take advantage of DomDataBind as its templating engine.
- * Subclasses of this base class should define the `_state` instance
- * property to return an object, which is then used in the template.
+ * Subclasses of this base class should define the `state` instance
+ * property to an object during the `init` lifecycle hook.
  *
  * When the template is bound it will passed an object with two properties:
  *
  * -    `props`: the `element.props`
  * -    `state`: the `element._state`
+ *
+ * @extends ComponentElement
  */
 export class DomDataBindElement extends ComponentElement {
 
-    static renderTemplate(ele) {
+    static renderTemplate(eleInstance) {
         const template = render(
             getComponentTemplate(this).innerHTML,
             {
-                props: this.props,
-                state: ele._state || {}
+                props: eleInstance.props,
+                state: eleInstance.state
             },
             allDirectives
         );
-        ele.onDestroy(() => template.DomDataBind.destroy());
+        eleInstance.onDestroy(() => template.DomDataBind.destroy());
         return template;
     }
-
-    // called when a new instance of the template is needed
-    // static renderTemplate(ele) {}
-
-    // Called from constructor
-    // init() {}
-
-    // Called when all required `props` have been provided
-    // ready() {}
-
-    // Called if required fields are removed
-    // unready() {}
-
-    // called when element is attached to dom
-    // mounted() {}
-
-    // called when element is removed from dom
-    // unmounted() {}
 
     //-------------------------------------------------------------
     //
@@ -66,11 +55,52 @@ export class DomDataBindElement extends ComponentElement {
     //-------------------------------------------------------------
 
     /**
-     * Element's private state.
-     * @property DomDataBindElement#_state
+     * Element's private state. Object is an observable structure.
+     *
+     * @property DomDataBindElement#state
      * @type {Object}
      */
+    get state() {
+        throwIfPrototype(this);
+        return setupState(this)
+    }
+    set state(data) {
+        throwIfPrototype(this);
+        return setupState(this, data);
+    }
+}
 
+function throwIfPrototype(instance) {
+    if (instance.constructor.prototype === instance) {
+        throw new Error("Use on prototype not allowed");
+    }
+}
+
+function setupState(instance, data = {}) {
+    if (instance._isSettingUp) {
+        return;
+    }
+    instance._isSettingUp = true;
+    Object.defineProperty(instance, STATE_OBSERVABLE, {
+        value: makeObservable(data)
+    });
+    Object.defineProperty(instance, "state", {
+        configurable: true,
+        get: stateGetter,
+        set: stateSetter
+    });
+    delete instance._isSettingUp;
+    return data;
+}
+
+function stateGetter() {
+    return this[STATE_OBSERVABLE];
+}
+
+function stateSetter(data) {
+    objectExtend(true, this[STATE_OBSERVABLE], data);
+    makeObservable(this[STATE_OBSERVABLE], true, true);
+    return this[STATE_OBSERVABLE];
 }
 
 export default DomDataBindElement;

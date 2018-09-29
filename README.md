@@ -142,11 +142,12 @@ Usage:
 
 
 <!-- Objects -->
-<div _each="value in itemsObject">{{ value }}</div>
+<div _each="value in itemsObject" _key="value.id">{{ value.name }}</div>
 <div _each="(value, key) in itemsObject">...</div>
 ```
 
 Loop through a list using the HTML element as the template for each item.
+For efficiency, each template item should have a unique id that can be used with the `_key` directive.  
 
 >   Note: in order to hide these types of conditional elements on initial page rendering, the following CSS rule should be added to you page stylesheet:
 >
@@ -163,6 +164,30 @@ Usage:
 ```
 
 Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting markup directly into the page can be dangerous and lead to XSS attacks. 
+
+
+## Custom Element Constructor (`DomDataBindElement`)
+
+A Custom Element constructor (base class) is also provided which uses ComponentElement. To use it, ComponentElement must first be installed - installation of his library will not install it automatically.
+
+The `DomDataBindElement` will contain an instance member called `state` which is an `Observable`. The Element's template, when rendered, will be provided with an object containing two properties: `props` and `state`.
+
+Example:
+
+```javascript
+import {DomDataBindElement} from "dom-data-bind/src/DomDataBindElement"
+
+class MyEle extends DomDataBindElement {
+    static get template() {
+        return `<div>{{state.msg}}</div>`;
+    }
+    
+    ready() {
+        this.state.msg = "hello world!";
+    }
+}
+```
+
 
 # License
 

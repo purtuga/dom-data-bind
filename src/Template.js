@@ -15,7 +15,7 @@ import {
 } from "./utils"
 import TextBinding from "./bindings/text-binding"
 //=========================================================================================
-const DATA_TOKEN_REG_EXP_STR    = "\{\{(.*?)\}\}";
+const DATA_TOKEN_REG_EXP_STR    = "{{(.*?)}}";
 const DROPS_NODES_ON_CLONE = (() => {   // FUCK YOU IE!
     const frag = createDocFragment();
     frag.appendChild(createTextNode("test"));
@@ -109,7 +109,7 @@ export function getBindingFor(ele, directives) {
         let managesNode;
         let elePlaceholder = domEle;
 
-        while (attrName = Directive.has(domEle)) {
+        while ((attrName = Directive.has(domEle))) {
             attrValue = getAttribute(domEle, attrName);
             managesNode = Directive.manages();
 
