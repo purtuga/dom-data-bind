@@ -1,24 +1,21 @@
 import Map from "common-micro-libs/src/jsutils/es6-Map"
-import {
-    makeObservable,
-    unsetDependencyTracker,
-    objectWatchProp
-} from "observables/src/objectWatchProp"
+import {makeObservable, objectWatchProp, unsetDependencyTracker} from "observables/src/objectWatchProp"
 import {arrayWatch} from "observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
-    PRIVATE,
-    DOM_DATA_BIND_PROP,
-    hasAttribute,
-    getAttribute,
-    removeAttribute,
+    arrayForEach,
+    arraySlice,
     createComment,
-    insertBefore,
-    removeChild,
-    createValueGetter,
-    isPureObject,
     createDocFragment,
-    arrayForEach, arraySlice
+    createValueGetter,
+    DOM_DATA_BIND_PROP,
+    getAttribute,
+    hasAttribute,
+    insertBefore,
+    isPureObject,
+    PRIVATE,
+    removeAttribute,
+    removeChild
 } from "../utils"
 import {render} from "../render";
 
@@ -140,11 +137,11 @@ export class EachDirective extends Directive {
             parentEle.textContent = "";
             parentEle.appendChild(handler._placeholderEle);
             setTimeout(() => {
-                arrayForEach(binders.splice(0), binder => binder.destroy())
+                arrayForEach(binders, binder => binder._destroy());
             });
         }
         else {
-            arrayForEach(binders.splice(0), binder => binder._destroy());
+            arrayForEach(binders, binder => binder._destroy());
         }
     }
 
