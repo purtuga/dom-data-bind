@@ -7,7 +7,7 @@ Tiny and supper simple way to bind data to DOM elements. Transforms data to Obse
 ## Install
 
 ```bash
-$ npm install purtuga/dom-data-bind --save-dev
+$ npm install @purtuga/dom-data-bind --save
 ```
 
 ## Usage
@@ -34,9 +34,10 @@ divBinder.DomDataBind.destroy();
 ### As a HTML drop-in
 
 ```html
-<script type="text/javascript" src="dom-data-bind/dist/DomDataBind"></script>
-<script>
-    var binder = DomDataBind.render(`<div>hello world!</div>`, myData);
+<script type="module">
+import {render} from "//unpkg.com/@purtuga/dom-data-bind?module";
+var binder = render(`<div>hello {{name}}!</div>`, { name: "paul" });
+document.body.appendChild(binder);
 </script>
 ```
 
