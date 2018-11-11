@@ -6,10 +6,10 @@
 //
 //------------------------------------------------------------------------
 import {ComponentElement, getComponentTemplate} from "component-element"
-import {objectExtend} from "common-micro-libs/src/jsutils/objectExtend"
+import {objectExtend} from "@purtuga/common/src/jsutils/objectExtend"
 import {render} from "./render"
 import {allDirectives} from "./index";
-import {makeObservable} from "observables"
+import {makeObservable} from "@purtuga/observables"
 
 
 //==============================================================================

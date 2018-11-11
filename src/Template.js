@@ -1,5 +1,5 @@
-import {makeObservable} from "observables/src/objectWatchProp";
-import domFind from "common-micro-libs/src/domutils/domFind"
+import {makeObservable} from "@purtuga/observables/src/objectWatchProp";
+import domFind from "@purtuga/common/src/domutils/domFind"
 import {
     PRIVATE,
     UUID,
@@ -191,7 +191,7 @@ export function getBindingFor(ele, directives) {
         if (ignoredChildren.size) {
             for (let ignoredParent of ignoredChildren.values()) {
                 if (NODE_CONTAINS_MISSES_TEXT_NODES && node.nodeType === 3) {
-                    if (!!(ignoredParent.compareDocumentPosition(node) & 16)) {
+                    if (ignoredParent.compareDocumentPosition(node) & 16) {
                         skip = true;
                     }
                 }

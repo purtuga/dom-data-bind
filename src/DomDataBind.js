@@ -1,5 +1,5 @@
-import Compose from "common-micro-libs/src/jsutils/Compose"
-import {makeObservable} from "observables/src/objectWatchProp";
+import Compose from "@purtuga/common/src/jsutils/Compose"
+import {makeObservable} from "@purtuga/observables/src/objectWatchProp";
 import { PRIVATE, arrayForEach, isString } from "./utils"
 import { getBindingFor, applyBindingsToTemplateInstance } from "./Template"
 import { render } from "./render";

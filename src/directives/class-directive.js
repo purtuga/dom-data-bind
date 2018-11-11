@@ -1,6 +1,6 @@
-import domHasClass      from "common-micro-libs/src/domutils/domHasClass"
-import domAddClass      from "common-micro-libs/src/domutils/domAddClass"
-import domRemoveClass   from "common-micro-libs/src/domutils/domRemoveClass"
+import domHasClass      from "@purtuga/common/src/domutils/domHasClass"
+import domAddClass      from "@purtuga/common/src/domutils/domAddClass"
+import domRemoveClass   from "@purtuga/common/src/domutils/domRemoveClass"
 import Directive        from "./Directive"
 import {
     PRIVATE,

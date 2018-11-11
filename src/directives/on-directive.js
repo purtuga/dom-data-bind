@@ -1,4 +1,4 @@
-import domAddEventListener  from "common-micro-libs/src/domutils/domAddEventListener"
+import domAddEventListener  from "@purtuga/common/src/domutils/domAddEventListener"
 import Directive            from "./Directive"
 import {
     PRIVATE,

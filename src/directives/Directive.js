@@ -1,7 +1,7 @@
-import nextTick from "common-micro-libs/src/jsutils/nextTick"
-import Compose from "common-micro-libs/src/jsutils/Compose"
+import nextTick from "@purtuga/common/src/jsutils/nextTick"
+import Compose from "@purtuga/common/src/jsutils/Compose"
 import {logError, PRIVATE, removeAttribute} from "../utils"
-import {setDependencyTracker, unsetDependencyTracker} from "observables/src/objectWatchProp"
+import {setDependencyTracker, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
 
 //===================================================================================
 

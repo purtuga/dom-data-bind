@@ -1,6 +1,6 @@
-import Map from "common-micro-libs/src/jsutils/es6-Map"
-import {makeObservable, objectWatchProp, unsetDependencyTracker} from "observables/src/objectWatchProp"
-import {arrayWatch} from "observables/src/arrayWatch"
+import Map from "@purtuga/common/src/jsutils/es6-Map"
+import {makeObservable, objectWatchProp, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
+import {arrayWatch} from "@purtuga/observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
     arrayForEach,
