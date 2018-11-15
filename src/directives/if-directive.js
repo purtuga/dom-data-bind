@@ -22,7 +22,7 @@ export class IfDirective extends Directive {
 
     init(attr, attrValue) {
         this._attr              = attr;
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "if");
     }
 
     render(handler, node, data) {

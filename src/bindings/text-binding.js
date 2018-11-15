@@ -9,7 +9,7 @@ import {
 export class TextBinding extends Directive {
     init(tokenText) {
         this._tokenText = tokenText;
-        this._tokenValueGetter = createValueGetter(tokenText);
+        this._tokenValueGetter = createValueGetter(tokenText, "text");
     }
 
     render(handler, node, data) {

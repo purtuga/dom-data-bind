@@ -18,7 +18,7 @@ export class ClassDirective extends Directive {
 
     init(attr, attrValue) {
         this._attr              = attr;
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "class");
     }
 
     render(handler, node, data) {

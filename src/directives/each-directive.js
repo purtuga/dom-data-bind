@@ -56,7 +56,7 @@ export class EachDirective extends Directive {
         const [ iteratorArgs, listVar ] = parseDirectiveValue((attrValue || "").trim());
         this._attr              = attr;
         this._iteratorArgs      = iteratorArgs;
-        this._tokenValueGetter  = createValueGetter((listVar || ""));
+        this._tokenValueGetter  = createValueGetter((listVar || ""), "each");
     }
 
     render(handler, node, data) {
@@ -286,7 +286,7 @@ export class EachDirective extends Directive {
                 hasAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE)
             ) {
                 state.usesKey = true;
-                state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE));
+                state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE), "each.key");
                 rowKey = state.getKey(rowData);
             }
         }

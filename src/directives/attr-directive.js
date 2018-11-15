@@ -24,7 +24,7 @@ export class AttrDirective extends Directive {
 
     init(attr, attrValue) {
         this._attr              = attr;
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "attr");
         this._htmlAttr          = (new RegExp(this.constructor._matches)).exec(attr)[1];
     }
 

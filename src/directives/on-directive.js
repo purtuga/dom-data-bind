@@ -22,7 +22,7 @@ export class OnDirective extends Directive {
     init(directiveAttr, attrValue) {
         this._attr              = directiveAttr;
         this._eventName         = (new RegExp(matchesDirective)).exec(directiveAttr)[1];
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "on");
     }
 
     /**

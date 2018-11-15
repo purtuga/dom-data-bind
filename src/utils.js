@@ -31,18 +31,16 @@ export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMEN
 export const isTemplate         = e => Object.prototype.toString.call(e) === "[object HTMLTemplateElement]"; // FIXME: replace with common-micro-libs runtime-aliases
 // FIXME: replace with common-micro-libs runtime-aliases
 export const logError           = _bind(console.error, console); // eslint-disable-line
+let counter = 1;
 
 
 
-export function createValueGetter(evalCode) {
+export function createValueGetter(evalCode, name = "runtime") {
     evalCode = evalCode.trim();
 
     if (VALUE_GETTERS.has(evalCode)) {
         return VALUE_GETTERS.get(evalCode);
     }
-
-    // FIXME: should we add a sourceURL to the code below so it shows up on the sources panel?
-    //                      # sourceURL=runtime.1.js
 
     const fn = new FUNCTION("$data", `
 with ($data) {
@@ -55,7 +53,8 @@ with ($data) {
         return ${ evalCode };
     }
 }
-`);
+//# sourceURL=valueGetter:${name}.${counter++}.js`);
+
     VALUE_GETTERS.set(evalCode, fn);
     return fn;
 }

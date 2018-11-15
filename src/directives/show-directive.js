@@ -15,7 +15,7 @@ export class ShowDirective extends Directive {
 
     init(attr, attrValue) {
         this._attr              = attr;
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "show");
     }
 
     render(handler, node, data) {

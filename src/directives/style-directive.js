@@ -15,7 +15,7 @@ export class StyleDirective extends Directive {
 
     init(attr, attrValue) {
         this._attr              = attr;
-        this._tokenValueGetter  = createValueGetter((attrValue || ""));
+        this._tokenValueGetter  = createValueGetter((attrValue || ""), "style");
     }
 
     render(handler, node, data) {
