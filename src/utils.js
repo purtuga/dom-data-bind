@@ -13,21 +13,25 @@ export const DOM_DATA_BIND_PROP = "DomDataBind";
 export const PRIVATE            = dataStore.create();
 export const UUID               = `D-${ Date.now() }-${ Math.random().toString(36).replace(/[^a-z0-9]+/g, '') }`;
 export const escapeString       = str => String(str).replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
-export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call);
-export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";
-export const isString           = s => "string" === typeof s;
-export const arrayForEach       = bindCallTo(ARRAY_PROTOTYPE.forEach);
-export const arraySlice         = bindCallTo(ARRAY_PROTOTYPE.slice);
-export const hasAttribute       = bindCallTo(ELEMENT_PROTOTYPE.hasAttribute);
-export const getAttribute       = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);
-export const setAttribute       = bindCallTo(ELEMENT_PROTOTYPE.setAttribute);
-export const removeAttribute    = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);
-export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);
-export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);
-export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);
-export const createTextNode     = _bind(DOCUMENT.createTextNode, DOCUMENT);
-export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);
+export const bindCallTo         = _bind(FUNCTION.call.bind, FUNCTION.call); // FIXME: replace with common-micro-libs runtime-aliases
+export const isPureObject       = o => Object.prototype.toString.call(o) === "[object Object]";  // FIXME: replace with common-micro-libs runtime-aliases
+export const isString           = s => "string" === typeof s;// FIXME: replace with common-micro-libs runtime-aliases
+export const arrayForEach       = bindCallTo(ARRAY_PROTOTYPE.forEach);// FIXME: replace with common-micro-libs runtime-aliases
+export const arraySlice         = bindCallTo(ARRAY_PROTOTYPE.slice);// FIXME: replace with common-micro-libs runtime-aliases
+export const hasAttribute       = bindCallTo(ELEMENT_PROTOTYPE.hasAttribute);// FIXME: replace with common-micro-libs runtime-aliases
+export const getAttribute       = bindCallTo(ELEMENT_PROTOTYPE.getAttribute);// FIXME: replace with common-micro-libs runtime-aliases
+export const setAttribute       = bindCallTo(ELEMENT_PROTOTYPE.setAttribute);// FIXME: replace with common-micro-libs runtime-aliases
+export const removeAttribute    = bindCallTo(ELEMENT_PROTOTYPE.removeAttribute);// FIXME: replace with common-micro-libs runtime-aliases
+export const insertBefore       = bindCallTo(ELEMENT_PROTOTYPE.insertBefore);// FIXME: replace with common-micro-libs runtime-aliases
+export const removeChild        = bindCallTo(ELEMENT_PROTOTYPE.removeChild);// FIXME: replace with common-micro-libs runtime-aliases
+export const createComment      = _bind(DOCUMENT.createComment, DOCUMENT);// FIXME: replace with common-micro-libs runtime-aliases
+export const createElement      = _bind(DOCUMENT.createElement, DOCUMENT);// FIXME: replace with common-micro-libs runtime-aliases
+export const createTextNode     = _bind(DOCUMENT.createTextNode, DOCUMENT);// FIXME: replace with common-micro-libs runtime-aliases
+export const createDocFragment  = _bind(DOCUMENT.createDocumentFragment, DOCUMENT);// FIXME: replace with common-micro-libs runtime-aliases
+export const isTemplate         = e => Object.prototype.toString.call(e) === "[object HTMLTemplateElement]"; // FIXME: replace with common-micro-libs runtime-aliases
+// FIXME: replace with common-micro-libs runtime-aliases
 export const logError           = _bind(console.error, console); // eslint-disable-line
+
 
 
 export function createValueGetter(evalCode) {
@@ -36,6 +40,9 @@ export function createValueGetter(evalCode) {
     if (VALUE_GETTERS.has(evalCode)) {
         return VALUE_GETTERS.get(evalCode);
     }
+
+    // FIXME: should we add a sourceURL to the code below so it shows up on the sources panel?
+    //                      # sourceURL=runtime.1.js
 
     const fn = new FUNCTION("$data", `
 with ($data) {

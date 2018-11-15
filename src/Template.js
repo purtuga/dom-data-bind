@@ -1,9 +1,8 @@
-import {makeObservable} from "@purtuga/observables/src/objectWatchProp";
-import domFind from "@purtuga/common/src/domutils/domFind"
+import domFind from "@purtuga/common/src/domutils/domFind.js"
+import {uuid} from "@purtuga/common/src/jsutils/uuid.js"
 import {
     PRIVATE,
     UUID,
-    DOM_DATA_BIND_PROP,
     bindCallTo,
     removeAttribute,
     getAttribute,
@@ -11,9 +10,13 @@ import {
     createComment,
     createDocFragment,
     createTextNode,
-    logError
+    logError,
+    createElement,
+    isTemplate
 } from "./utils"
-import TextBinding from "./bindings/text-binding"
+import TextBinding from "./bindings/text-binding.js"
+
+
 //=========================================================================================
 const DATA_TOKEN_REG_EXP_STR    = "{{(.*?)}}";
 const DROPS_NODES_ON_CLONE = (() => {   // FUCK YOU IE!
@@ -23,7 +26,7 @@ const DROPS_NODES_ON_CLONE = (() => {   // FUCK YOU IE!
     return frag.cloneNode(true).childNodes.length === 1;
 })();
 const NODE_CONTAINS_MISSES_TEXT_NODES = (() => {    // FUCK YOU IE!
-    const div = document.createElement("div");
+    const div = createElement("div");
     const text = createTextNode("test");
     div.appendChild(text);
     return !div.contains(text);
@@ -45,32 +48,30 @@ const hasToken              = node => reHasDataToken.test(getNodeValue(node));
  */
 export class Template {
     constructor(html, directives = []) {
-        this._template = document.createElement("template");
-        this._template.innerHTML = html;
+        this.id = uuid.generate();
+
+        if (!isTemplate(html)) {
+            this.ele = createElement("template");
+            this.ele.innerHTML = html;
+        } else {
+            this.ele = html;
+        }
+
         this._directives = directives;
-        this._bindings = getBindingFor(this._template.content, directives);
+        this._bindings = getBindingFor(this.ele.content, directives);
     }
 
     /**
-     * Creates new DOM Element based on this template, initilizes directives
-     * and then applies the data to it.
-     *
-     * @param {Object} [data]
-     *
-     * @return {DocumentFragment}
-     *  Document Fragment returned will have a property named 'DomDataBind', which is
-     *  a TemplateInstance class instance
+     * The template unique id
+     * @name Template#id
+     * @type {String}
      */
-    cloneWith(data = {}) {
-        makeObservable(data);
-        const response = document.importNode(this._template.content, true);
-        response[DOM_DATA_BIND_PROP] = new TemplateInstance(
-            response,
-            applyBindingsToTemplateInstance(response, this._bindings, this._directives)
-        );
-        response[DOM_DATA_BIND_PROP].setData(data);
-        return response;
-    }
+
+    /**
+     * The HTMLTemplateElement
+     * @name Template#ele
+     * @type {HTMLTemplateElement}
+     */
 }
 export default Template;
 
@@ -130,7 +131,7 @@ export function getBindingFor(ele, directives) {
                 // as the comment data, which is then used by the directive instance
                 // to `render()` it to DOM when applicable
                 domEle.parentNode.insertBefore(elePlaceholder, domEle);
-                const fakeEle = document.createElement("div");
+                const fakeEle = createElement("div");
                 fakeEle.appendChild(domEle);
                 elePlaceholder.data = fakeEle.innerHTML;
             }
@@ -397,26 +398,4 @@ function findAllNodes(ele) {
         .filter(onlyElementsWithAttributes);
 }
 
-
-class TemplateInstance {
-    constructor(docFrag, bindings) {
-        this._frag = docFrag;
-        this._bindings = bindings;
-    }
-
-    destroy() {
-        if (this._bindings) {
-            for (let i = 0, t = this._bindings.length; i < t; i++) {
-                this._bindings[i].destroy();
-            }
-            this._bindings.length = 0;
-        }
-    }
-
-    setData(data) {
-        for (let i = 0, t = this._bindings.length; i < t; i++) {
-            this._bindings[i].render(data);
-        }
-    }
-}
 

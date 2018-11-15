@@ -80,7 +80,12 @@ export class OnDirective extends Directive {
 
     getNodeHandler(node) {
         const handler = super.getNodeHandler(node);
+
+        // FIXME: this is not good - needs re-writing to ensure only one handle is attached.
+
         const evListener = domAddEventListener(node, this._eventName, this.handleEvent.bind(this, handler));
+
+
         handler.onDestroy(() => evListener.remove());
         return handler;
     }

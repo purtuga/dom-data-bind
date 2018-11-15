@@ -1,22 +1,36 @@
-import Template from "./Template"
+import {view} from "./view.js";
+import {makeObservable} from "@purtuga/observables/src/objectWatchProp.js";
+import {DOM_DATA_BIND_PROP} from "./utils.js";
+import {TemplateInstance} from "./TemplateInstance.js";
+import {applyBindingsToTemplateInstance, Template} from "./Template.js";
+
 
 //==========================================================================
-const TEMPLATES = new Map();
 
 /**
  * Returns a DocumentFragment representation of the given `html` code provided on
  * input bound to the given data.
  *
- * @param {String} html
+ * @param {String|HTMLTemplateElement|Template} html
  * @param {Object} [data]
- * @param {Array} [directives]
+ * @param {Array<Directive>} [directives]
  *
  * @return {DocumentFragment}
+ *  Document Fragment returned will have a property named 'DomDataBind', which is
+ *  a TemplateInstance class instance
  */
 export function render(html, data, directives) {
-    if (!TEMPLATES.has(html)) {
-        TEMPLATES.set(html, new Template(html, directives));
-    }
-    return TEMPLATES.get(html).cloneWith(data);
+    const viewTemplate = html instanceof Template ? html : view(html, directives);
+    const response = document.importNode(viewTemplate.ele.content, true);
+
+    makeObservable(data);
+    response[DOM_DATA_BIND_PROP] = new TemplateInstance(
+        response,
+        applyBindingsToTemplateInstance(response, viewTemplate._bindings, viewTemplate._directives),
+        viewTemplate.id
+    );
+    response[DOM_DATA_BIND_PROP].setData(data);
+    return response;
 }
+
 export default render;

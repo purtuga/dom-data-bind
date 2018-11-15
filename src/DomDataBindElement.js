@@ -5,20 +5,27 @@
 //          AND THEN IMPORT THIS DIRECTLY FROM SOURCE
 //
 //------------------------------------------------------------------------
-import {ComponentElement, getComponentTemplate} from "component-element"
-import {objectExtend} from "@purtuga/common/src/jsutils/objectExtend"
-import {render} from "./render"
-import {allDirectives} from "./index";
-import {makeObservable} from "@purtuga/observables"
+import {ComponentElement} from "@purtuga/component-element/src/ComponentElement.js"
+import {
+    prepareRenderedContent,
+    supportsNativeShadowDom
+} from "@purtuga/component-element/src/polyfill-support.js"
+import {objectExtend} from "@purtuga/common/src/jsutils/objectExtend.js"
+import {throwIfThisIsPrototype} from "@purtuga/common/src/jsutils/throwIfThisIsPrototype.js"
+import {view} from "./view.js"
+import {render} from "./render.js"
+import {allDirectives} from "./index.js";
+import {makeObservable} from "@purtuga/observables/src/objectWatchProp.js"
+import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime-aliases.js";
 
 
 //==============================================================================
-
-export * from "component-element"
+export * from "@purtuga/component-element"
 export * from "./index"
 
-
+const BINDING = Symbol("dom-data-bind");
 const STATE_OBSERVABLE = "__$STATE$";
+const SHADOW_DOM_SUPPORTED = supportsNativeShadowDom();
 
 /**
  * Base class around ComponentElement that allows for `template` to
@@ -32,27 +39,79 @@ const STATE_OBSERVABLE = "__$STATE$";
  * -    `state`: the `element._state`
  *
  * @extends ComponentElement
+ *
+ * @example
+ *
+ * import {DomDataBindElement} from "@purtuga/dom-data-bind/src/DomDataBindElement.js"
+ *
+ * export class TestComponent extends DomDataBindElement {
+ *      static tagName = "test-component";
+ *
+ *      didInit() {
+ *          this.state = {
+ *              title: "test"
+ *          };
+ *      }
+ *
+ *      willRender() {
+ *          return this._templateDone;
+ *      }
+ *
+ *      render() {
+ *          this._templateDone = true; // will cancel future .render()'s
+ *         return `<h1>{{state.title}}</h1>`;
+ *      }
+ * }
+ *
  */
 export class DomDataBindElement extends ComponentElement {
-
-    static renderTemplate(eleInstance) {
-        const template = render(
-            getComponentTemplate(this).innerHTML,
-            {
-                props: eleInstance.props,
-                state: eleInstance.state
-            },
-            allDirectives
-        );
-        eleInstance.onDestroy(() => template.DomDataBind.destroy());
-        return template;
-    }
 
     //-------------------------------------------------------------
     //
     //                                            INSTANCE MEMBERS
     //
     //-------------------------------------------------------------
+
+    _setView(renderOutput) {
+        // FIXME: needs to handle DOMElements + DocumentFragments?
+
+        const binding = getDomDataBindMeta(this);
+
+        if (!SHADOW_DOM_SUPPORTED) {
+            // renderOutput, before being recreated as a View Template, MUST
+            // be processed by ShadyCSS - so that the resulting string has scoped DOM.
+            // This is needed because DomDataBind will manipulate the html for the
+            // template and may actually remove nodes (ex. if, each directives) that
+            // are inserted/added dynamically later.
+            const scopeTemplate = createElement("template");
+            scopeTemplate.innerHTML = renderOutput;
+            prepareRenderedContent(scopeTemplate, this);
+            renderOutput = scopeTemplate.innerHTML;
+        }
+
+        let viewTemplate = view(renderOutput, allDirectives);
+
+        // If it is the same as the template currently displayed - exit; Nothing to do.
+        if (binding.current && binding.current.DomDataBind.fromTemplateId === viewTemplate.id) {
+            return;
+        }
+
+        // Create a new instance of this template
+        viewTemplate = render(viewTemplate, this._data, allDirectives);
+
+        if (!SHADOW_DOM_SUPPORTED) {
+            prepareRenderedContent(viewTemplate, this);
+        }
+
+        this.$ui.textContent = "";
+        this.$ui.appendChild(viewTemplate);
+
+        if (binding.current) {
+            binding.current.DomDataBind.destroy();
+        }
+
+        binding.current = viewTemplate;
+    }
 
     /**
      * Element's private state. Object is an observable structure.
@@ -61,19 +120,40 @@ export class DomDataBindElement extends ComponentElement {
      * @type {Object}
      */
     get state() {
-        throwIfPrototype(this);
+        throwIfThisIsPrototype(this);
         return setupState(this)
     }
     set state(data) {
-        throwIfPrototype(this);
+        throwIfThisIsPrototype(this);
         return setupState(this, data);
+    }
+
+    get _data() {
+        throwIfThisIsPrototype(this);
+        if (this._data$$) {
+            return undefined;
+        }
+
+        this._data$$ = true;
+
+        const data = {
+            props: this.props,
+            state: this.state
+        };
+
+        defineProperty(this, "_data", data);
+        delete this._data$$;
+        return data;
     }
 }
 
-function throwIfPrototype(instance) {
-    if (instance.constructor.prototype === instance) {
-        throw new Error("Use on prototype not allowed");
+function getDomDataBindMeta(instance) {
+    if (!instance[BINDING]) {
+        instance[BINDING] = {
+            current: null
+        };
     }
+    return instance[BINDING];
 }
 
 function setupState(instance, data = {}) {
@@ -81,14 +161,8 @@ function setupState(instance, data = {}) {
         return;
     }
     instance._isSettingUp = true;
-    Object.defineProperty(instance, STATE_OBSERVABLE, {
-        value: makeObservable(data)
-    });
-    Object.defineProperty(instance, "state", {
-        configurable: true,
-        get: stateGetter,
-        set: stateSetter
-    });
+    defineProperty(instance, STATE_OBSERVABLE, makeObservable(data));
+    defineProperty(instance, "state", undefined, stateGetter, stateSetter);
     delete instance._isSettingUp;
     return data;
 }

@@ -17,7 +17,7 @@ import { render } from "./render";
  * @extends Compose
  *
  * @param {String |HTMLElement} html
- *  The HTML element that will be parse and to which `data` will be bound.
+ *  The HTML element that will be view and to which `data` will be bound.
  *
  * @param {Object} data
  *  An object whose data will be used to bind to `html` element (once crated) .
@@ -43,7 +43,7 @@ export const DomDataBind = Compose.extend({
 
         if (isString(html)) {
             this.$ele = render(html, data, state.directives);
-            state.bindings = this.$ele._domDataBindNodeHandlers;
+            state.bindings = this.$ele._bindings;
         } else {
             this.$ele = html;
             state.bindings = applyBindingsToTemplateInstance(html, getBindingFor(html, state.directives), state.directives);
