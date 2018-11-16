@@ -44,7 +44,7 @@
     "license": "MIT",
     "homepage": "https://github.com/purtuga/dom-data-bind",
     "devDependencies": {
-        "@purtuga/project-base": "^2.0.1"
+        "@purtuga/project-base": "^2.0.2"
     },
     "dependencies": {
         "@purtuga/common": "^3.0.0",

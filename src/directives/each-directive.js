@@ -1,5 +1,9 @@
 import Map from "@purtuga/common/src/jsutils/es6-Map"
-import {makeObservable, objectWatchProp, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
+import {
+    makeObservable,
+    objectWatchProp,
+    unsetDependencyTracker
+} from "@purtuga/observables/src/objectWatchProp"
 import {arrayWatch} from "@purtuga/observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
@@ -70,6 +74,8 @@ export class EachDirective extends Directive {
             state.isFirstRender = true;
             state.usesKey = false;
             state.getKey = NOOP;
+            // Update is called only if data changes.
+            // If the array or object is mutated - state.listIterator is called instead
             state.update = newList => {
                 if (newList === state.value) {
                     return;
