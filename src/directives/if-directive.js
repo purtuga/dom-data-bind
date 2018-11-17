@@ -51,8 +51,11 @@ export class IfDirective extends Directive {
 }
 
 function renderUpdate(showElement) {
-    // this === state object
+    // If there is no change in Element visibility, then only update its data.
     if (this.value === showElement) {
+        if (this.renderedEle) {
+            this.renderedEle[DOM_DATA_BIND_PROP].setData(this.data);
+        }
         return;
     }
 

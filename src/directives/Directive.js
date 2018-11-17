@@ -1,7 +1,7 @@
 import nextTick from "@purtuga/common/src/jsutils/nextTick"
 import Compose from "@purtuga/common/src/jsutils/Compose"
 import {logError, PRIVATE, removeAttribute} from "../utils"
-import {setDependencyTracker, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
+// import {setDependencyTracker, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
 
 //===================================================================================
 
@@ -72,6 +72,8 @@ export class Directive extends Compose {
         }
 
         if (state.data !== data) {
+            // With use of observables, the tracker function get a `stopWatchingAll()` method
+            // which removes this tracker from all property dependency lists.
             if (state.tracker.stopWatchingAll) {
                 state.tracker.stopWatchingAll();
             }
@@ -105,7 +107,7 @@ export class Directive extends Compose {
         if (handlerState) {
             let newValue = "";
 
-            setDependencyTracker(handlerState.tracker);
+            // setDependencyTracker(handlerState.tracker); // FIXME: cleanup
 
             try {
                 newValue = this._tokenValueGetter(handlerState.data || {});
@@ -119,7 +121,7 @@ export class Directive extends Compose {
                 logError(e);
             }
 
-            unsetDependencyTracker(handlerState.tracker);
+            // unsetDependencyTracker(handlerState.tracker); // FIXME: cleanup
 
             handlerState.isQueued = false;
             if (handlerState.value !== newValue) {

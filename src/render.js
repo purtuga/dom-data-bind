@@ -1,5 +1,4 @@
 import {view} from "./view.js";
-import {makeObservable} from "@purtuga/observables/src/objectWatchProp.js";
 import {DOM_DATA_BIND_PROP} from "./utils.js";
 import {TemplateInstance} from "./TemplateInstance.js";
 import {applyBindingsToTemplateInstance, Template} from "./Template.js";
@@ -23,7 +22,6 @@ export function render(html, data, directives) {
     const viewTemplate = html instanceof Template ? html : view(html, directives);
     const response = document.importNode(viewTemplate.ele.content, true);
 
-    makeObservable(data);
     response[DOM_DATA_BIND_PROP] = new TemplateInstance(
         response,
         applyBindingsToTemplateInstance(response, viewTemplate._bindings, viewTemplate._directives),

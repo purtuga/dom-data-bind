@@ -1,12 +1,16 @@
 import Map from "@purtuga/common/src/jsutils/es6-Map"
 import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
-import {arraySplice} from "@purtuga/common/src/jsutils/runtime-aliases.js"
 import {
-    makeObservable,
-    objectWatchProp,
-    unsetDependencyTracker
-} from "@purtuga/observables/src/objectWatchProp"
-import {arrayWatch} from "@purtuga/observables/src/arrayWatch"
+    arraySplice,
+    isArray,
+    objectKeys
+} from "@purtuga/common/src/jsutils/runtime-aliases.js"
+// import {
+//     makeObservable,
+//     objectWatchProp,
+//     unsetDependencyTracker
+// } from "@purtuga/observables/src/objectWatchProp"
+// import {arrayWatch} from "@purtuga/observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
     arrayForEach,
@@ -31,9 +35,7 @@ const DIRECTIVE     = "_each";
 const KEY_DIRECTIVE = "_key";
 const destroyBinder = binder => binder._destroy();
 const defaultRowKey = data => data;
-const isEmptyList   = list => {
-    return (Array.isArray(list) && !list.length) || (isPureObject(list) && !Object.keys(list).length);
-};
+const isEmptyList   = list => (isArray(list) && !list.length) || (isPureObject(list) && !objectKeys(list).length);
 
 /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -82,10 +84,7 @@ export class EachDirective extends Directive {
             // Update is called only if data changes.
             // If the array or object is mutated - state.listIterator is called instead
             state.update = newList => {
-                if (newList === state.value) {
-                    return;
-                }
-                else if (state.value) {
+                if (newList !== state.value) {
                     state.value = null;
 
                     if (state.listIterator.stopWatchingAll) {
@@ -98,18 +97,20 @@ export class EachDirective extends Directive {
                     return;
                 }
 
-                unsetDependencyTracker(state.tracker); // We don't need to be notified of changes for individual items.
+                // unsetDependencyTracker(state.tracker); // FIXME: cleanup
                 state.value = newList;
 
                 // Make sure data is observable and setup event listners on it.
-                makeObservable(newList);
+                // makeObservable(newList); // FIXME: cleanup
 
-                if (Array.isArray(newList)) {
-                    arrayWatch(newList, state.listIterator);
-                }
-                else if (isPureObject(newList)) {
-                    objectWatchProp(newList, null, state.listIterator);
-                }
+                // FIXME: cleanup
+
+                // if (isArray(newList)) {
+                //     arrayWatch(newList, state.listIterator);
+                // }
+                // else if (isPureObject(newList)) {
+                //     objectWatchProp(newList, null, state.listIterator);
+                // }
 
                 if (isEmptyList(newList) && state.binders) {
                     this.destroyChildBinders(state.binders, handler);
@@ -143,7 +144,7 @@ export class EachDirective extends Directive {
 
         binders = binders.splice(0);
 
-        if (handler._isSoleChild) {
+        if (handler._isSoleChild) { // Supper fast way to just clear the UI
             const parentEle = handler._placeholderEle.parentNode;
             parentEle.textContent = "";
             parentEle.appendChild(handler._placeholderEle);
@@ -194,7 +195,7 @@ export class EachDirective extends Directive {
     //     const state             = PRIVATE.get(handler);
     //     const attachedEleBinder = [];
     //     const newDomElements    = createDocFragment();
-    //     let isArray             = Array.isArray(newData);
+    //     let isArray             = isArray(newData);
     //     let data;
     //
     //     if (isArray) {
@@ -202,7 +203,7 @@ export class EachDirective extends Directive {
     //         data = newData;
     //     }
     //     else if (isPureObject(newData)) {
-    //         data = Object.keys(newData);
+    //         data = objectKeys(newData);
     //     } else {
     //         return;
     //     }
@@ -259,20 +260,19 @@ export class EachDirective extends Directive {
         const state             = PRIVATE.get(handler);
         // const attachedEleBinder = [];
         // const newDomElements    = createDocFragment();
-        let isArray             = Array.isArray(newData);
+        let isDataArray             = isArray(newData);
         let iterationDataList;
 
 
-        if (isArray) {
-            isArray = true;
+        if (isDataArray) {
+            isDataArray = true;
             iterationDataList = newData;
         }
         else if (isPureObject(newData)) {
-            iterationDataList = Object.keys(newData);
+            iterationDataList = objectKeys(newData);
         } else {
             return;
         }
-
 
         const currentBinders        = state.binders;
         const binderToBeDestroyed   = new Map();    // Will be recycled
@@ -290,7 +290,7 @@ export class EachDirective extends Directive {
 
             // Adjust the rowData to have the `key` and/or `value` and `index` as top level items
             // These are added to the rowData object just created above.
-            if (isArray) {
+            if (isDataArray) {
                 this.getDataForIteration([ iterationDataList[i], i ], rowData);
             }
             else {
@@ -300,7 +300,7 @@ export class EachDirective extends Directive {
             const rowKey = getKey(
                 usesKey
                     ? rowData                               // => Use rowData created above - getKey() will run a value getter on it.
-                    : isArray
+                    : isDataArray
                         ? iterationDataList[i]              // => Use the object from the newData
                         : newData[ iterationDataList[i] ]   // => Use the Object key
             );
@@ -308,12 +308,11 @@ export class EachDirective extends Directive {
             // If a binder currently exists, then see if it is the one previously
             // created for this row's data
             if (currentBinders[i] && currentBinders[i]._loop.rowKey === rowKey) {
-                // delete rowData.$data; // FIXME: do we really need this?
                 currentBinders[i][DOM_DATA_BIND_PROP].setData(rowData);
                 continue;
             }
 
-            // If there is a binder at the curerent position, then its not the one need.
+            // If there is a binder at the current position, then its not the one need.
             // move it to the `to be destroyed` list.
             if (currentBinders[i]) {
                 currentBinders[i][DOM_DATA_BIND_PROP].recover();
@@ -329,17 +328,19 @@ export class EachDirective extends Directive {
             // Old position in the existing array is set to null (avoids mutating array)
             let binder = state.bindersByKey.get(rowKey);
 
-            if (!binder) {
+            if (binder) {
+                if (binder._loop.pos !== null && currentBinders[binder._loop.pos] === binder) {
+                    currentBinders[binder._loop.pos] = null;
+                }
+            } else {
                 binder = binderToBeDestroyed.get(rowKey);
+
                 if (binder) {
                     binderToBeDestroyed.delete(rowKey);
                 }
             }
 
             if (binder) {
-                if (binder._loop.pos !== i) {
-                    currentBinders[binder._loop.pos] = null;
-                }
                 currentBinders[i] = binder;
                 binder._loop.pos = i;
                 currentBinders[i][DOM_DATA_BIND_PROP].recover();

@@ -1,5 +1,4 @@
 import Compose from "@purtuga/common/src/jsutils/Compose"
-import {makeObservable} from "@purtuga/observables/src/objectWatchProp";
 import { PRIVATE, arrayForEach, isString } from "./utils"
 import { getBindingFor, applyBindingsToTemplateInstance } from "./Template"
 import { render } from "./render";
@@ -70,7 +69,6 @@ export const DomDataBind = Compose.extend({
      * reflected to dom.
      */
     setData(data) {
-        makeObservable(data);
         const bindings = PRIVATE.get(this).bindings;
         arrayForEach(bindings, binding => binding.render(data));
     }

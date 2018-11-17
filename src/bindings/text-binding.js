@@ -2,8 +2,9 @@ import Directive from "../directives/Directive"
 import {
     PRIVATE,
     UUID,
+    createTextNode,
     createValueGetter   } from "../utils"
-
+import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
 //===========================================================
 
 export class TextBinding extends Directive {
@@ -37,8 +38,7 @@ export class TextBinding extends Directive {
         // converted to text and then back to dom elements. We replace those here now..
         if (node.nodeType === 8 && node.nodeValue === UUID) {
             const nodeToRemove = node;
-            // FIXME: below code should use node.ownerDocument???
-            node = node.parentNode.insertBefore(document.createTextNode(""), nodeToRemove);
+            node = domInsertBefore(createTextNode(""), nodeToRemove);
             nodeToRemove.parentNode.removeChild(nodeToRemove);
         }
 
