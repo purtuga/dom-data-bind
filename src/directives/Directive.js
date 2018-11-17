@@ -47,6 +47,18 @@ export class Directive extends Compose {
         let state = PRIVATE.get(handler);
 
         if (!state) {
+            /**
+             * Directive Node Handler state
+             *
+             * @typedef {Object} NodeHandlerState
+             *
+             * @property {*} data
+             * @property {*} value
+             * @property {Boolean} isQueued
+             * @property {Function} deferUpd
+             * @property {Function} tracker
+             * @property {Function} update
+             */
             state = {
                 data:       null,
                 value:      "",
@@ -125,7 +137,7 @@ export class Directive extends Compose {
      * @return {NodeHandler}
      */
     getNodeHandler(node/*, directives*/) {
-        if (this._attr && node.nodeType !== 8 /* no comment nodes */) {
+        if (this._attr && node.nodeType !== 8 /* don't process comment nodes */) {
             removeAttribute(node, this._attr);
         }
         return new NodeHandler(this, node);

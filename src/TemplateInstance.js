@@ -1,3 +1,5 @@
+import {arraySlice} from "./utils.js";
+
 /**
  * Interface for a template instance.
  */
@@ -11,7 +13,16 @@ export class TemplateInstance {
     constructor(docFrag, bindings, templateId = "") {
         this._frag = docFrag;
         this._bindings = bindings;
+        this._childNodes = arraySlice(docFrag.childNodes, 0);
         this.fromTemplateId = templateId;
+    }
+
+    /**
+     * Recovers the original nodes rendered from the template into
+     * the DocumentFragment
+     */
+    recover() {
+        this._childNodes.forEach(nodeEle => this._frag.appendChild(nodeEle));
     }
 
     /**

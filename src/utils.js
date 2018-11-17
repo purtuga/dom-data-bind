@@ -62,16 +62,14 @@ export function createValueGetter(evalCode, name = "runtime") {
         return VALUE_GETTERS.get(evalCode);
     }
 
-    const fn = new FUNCTION("$data", `
-with ($data) {
-    if ($data) {
-        with ($data) {
-            return ${ evalCode };
+    const fn = new FUNCTION("$$DATA$$", `
+with ($$DATA$$) {
+    if ($$DATA$$.$data) {
+        with ($$DATA$$.$data) {
+            return (${ evalCode });
         }
     } 
-    else {
-        return ${ evalCode };
-    }
+    return (${ evalCode });
 }
 //# sourceURL=valueGetter:${name}.${counter++}.js`);
 
