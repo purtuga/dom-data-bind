@@ -316,6 +316,7 @@ export class EachDirective extends Directive {
             // If there is a binder at the curerent position, then its not the one need.
             // move it to the `to be destroyed` list.
             if (currentBinders[i]) {
+                currentBinders[i][DOM_DATA_BIND_PROP].recover();
                 binderToBeDestroyed.set(
                     currentBinders[i]._loop.rowKey,
                     currentBinders[i]
@@ -348,9 +349,18 @@ export class EachDirective extends Directive {
             }
 
             // Create new binder
-            binder = render(handler._viewTemplate, rowData, handler._directives);
-            binder._destroy = destroyRowElement;
-            binder._state = state; // FIXME: remove the need for this prop to be set
+            // First check if we can recycle one that is tagged to be destroyed.
+            // if not, then create a new one.
+            if (binderToBeDestroyed.size) {
+                const [recycleBinderKey, recycleBinder] = binderToBeDestroyed.entries().next().value;
+                binder = recycleBinder;
+                binder[DOM_DATA_BIND_PROP].setData(rowData);
+                binderToBeDestroyed.delete(recycleBinderKey);
+            } else {
+                binder = render(handler._viewTemplate, rowData, handler._directives);
+                binder._destroy = destroyRowElement;
+                binder._state = state; // FIXME: remove the need for this prop to be set
+            }
             binder._loop  = {
                 rowKey,
                 pos: i
