@@ -1,13 +1,13 @@
 # dom-data-bind
 
-Tiny and supper simple way to bind data to DOM elements. Transforms data to Observables (using [Observables](https://github.com/purtuga/observables)) so that as it changes, DOM is updated automatically. Updates are always applied async (`nextTick`) in order to minimize DOM interactions.
+Tiny and supper simple way to bind data to DOM elements. Inspired by VueJS's templating system, which when combined with the [Observables](https://github.com/purtuga/observables) library, provide similar "auto-update-view-as-data-changes" functionality.
 
 [See Todo app demo](http://jsbin.com/qisojaveme/2)
 
 ## Install
 
 ```bash
-$ npm install @purtuga/dom-data-bind --save
+$ npm install --save @purtuga/dom-data-bind
 ```
 
 ## Usage
@@ -22,7 +22,8 @@ const div = document.createElement("div");
 const divBinder = render(`<div>{{ firstName }}</div>`, data, allDirectives);
 
 // Later....
-data.firstName = "Tom"; // DOM updated automatically
+data.firstName = "Tom";
+divBinder.DomDataBind.setData(data);
 
 // rendered DOM is no longer needed, stop its data watchers
 // This is important in case your data is persisted beyond the life
@@ -40,8 +41,6 @@ var binder = render(`<div>hello {{name}}!</div>`, { name: "paul" });
 document.body.appendChild(binder);
 </script>
 ```
-
-__NOTE:__ DomDataBind exports several modules. The default one includes all Directives by default and is likely the one you would use.
 
 
 ## Template Token Interpolation
@@ -148,7 +147,7 @@ Usage:
 ```
 
 Loop through a list using the HTML element as the template for each item.
-For efficiency, each template item should have a unique id that can be used with the `_key` directive.  
+For efficiency, each template item should have a unique id that can be used with the `_key` directive.  Expressions inside of an `each` template can access parent context using `$parent` or the `$root` to access the root data. 
 
 >   Note: in order to hide these types of conditional elements on initial page rendering, the following CSS rule should be added to you page stylesheet:
 >
