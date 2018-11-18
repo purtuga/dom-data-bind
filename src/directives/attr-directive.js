@@ -5,15 +5,36 @@ import {
     setAttribute,
     createValueGetter,
     getNodeAttrNames } from "../utils"
+import {NodeHandler} from "./NodeHandler.js";
 
 //============================================
 const attrRegExp = /^_attr\.(.*)/;
 
 export class AttrDirective extends Directive {
+    static NodeHandlerConstructor = class extends NodeHandler {
+        update(newValue) {
+            const state = PRIVATE.get(this);
+            const _htmlAttr = this._directive._htmlAttr;
 
-    static get _matches() { return attrRegExp; }
+            if (this._directive.constructor._isProp) {
+                if (newValue !== state.value) {
+                    this._node[_htmlAttr] = newValue;
+                }
+            }
+            else {
+                if (newValue && state.value !== newValue) {
+                    setAttribute(this._node, _htmlAttr, newValue);
+                }
+                else if (state.value && !newValue) {
+                    removeAttribute(this._node, _htmlAttr);
+                }
+            }
+        }
+    };
 
-    static get _isProp() { return false; }
+    static _matches = attrRegExp;
+
+    static _isProp = false;
 
     static has(ele) {
         let directiveAttr = "";
@@ -21,33 +42,10 @@ export class AttrDirective extends Directive {
         return directiveAttr;
     }
 
-
     init(attr, attrValue) {
         this._attr              = attr;
         this._tokenValueGetter  = createValueGetter((attrValue || ""), "attr");
         this._htmlAttr          = (new RegExp(this.constructor._matches)).exec(attr)[1];
-    }
-
-    render(handler, node, data) {
-        super.render(handler, node, data);
-        let state = PRIVATE.get(handler);
-        if (!state.update) {
-            state.update = newValue => {
-                if (this.constructor._isProp) {
-                    if (newValue !== state.value) {
-                        node[this._htmlAttr] = newValue;
-                    }
-                }
-                else {
-                    if (newValue && state.value !== newValue) {
-                        setAttribute(node, this._htmlAttr, newValue);
-                    }
-                    else if (state.value && !newValue) {
-                        removeAttribute(node, this._htmlAttr);
-                    }
-                }
-            };
-        }
     }
 }
 

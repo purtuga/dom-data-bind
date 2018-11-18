@@ -1,14 +1,31 @@
 import Directive        from "./Directive"
 import {
-    PRIVATE,
     createValueGetter,
     hasAttribute    }   from "../utils"
+import {NodeHandler} from "./NodeHandler.js";
 
 //============================================
 const DIRECTIVE             = "_show";
 const HIDDEN                = "none";
 
 export class ShowDirective extends Directive {
+    static NodeHandlerConstructor = class extends NodeHandler {
+        init(...args) {
+            super.init(...args);
+            this._origDisplayStyle = this._node.style.display || "";
+        }
+        update(newValue) {
+            const eleStyleList = this._node.style;
+
+            if (newValue) {
+                eleStyleList.display = this._origDisplayStyle;
+            }
+            else if (eleStyleList.display !== HIDDEN)  {
+                eleStyleList.display = HIDDEN;
+            }
+        }
+    };
+
     static has(ele) {
         return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
     }
@@ -16,23 +33,6 @@ export class ShowDirective extends Directive {
     init(attr, attrValue) {
         this._attr              = attr;
         this._tokenValueGetter  = createValueGetter((attrValue || ""), "show");
-    }
-
-    render(handler, node, data) {
-        super.render(handler, node, data);
-        const state = PRIVATE.get(handler);
-        if (!state.update) {
-            const eleStyleList      = node.style;
-            const eleDisplayStyle   = node.display || "";
-            state.update            = newValue => {
-                if (newValue) {
-                    eleStyleList.display = eleDisplayStyle;
-                }
-                else if (eleStyleList.display !== HIDDEN)  {
-                    eleStyleList.display = HIDDEN;
-                }
-            };
-        }
     }
 }
 

@@ -15,7 +15,11 @@ import {throwIfThisIsPrototype} from "@purtuga/common/src/jsutils/throwIfThisIsP
 import {view} from "./view.js"
 import {render} from "./render.js"
 import {allDirectives} from "./index.js";
-import {makeObservable} from "@purtuga/observables/src/objectWatchProp.js"
+import {
+    makeObservable,
+    setDependencyTracker,
+    unsetDependencyTracker
+} from "@purtuga/observables/src/objectWatchProp.js"
 import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime-aliases.js";
 
 
@@ -91,13 +95,29 @@ export class DomDataBindElement extends ComponentElement {
 
         let viewTemplate = view(renderOutput, allDirectives);
 
+        setDependencyTracker(this._queueUpdate);
+
         // If it is the same as the template currently displayed - exit; Nothing to do.
         if (binding.current && binding.current.DomDataBind.fromTemplateId === viewTemplate.id) {
+            try {
+                binding.current.DomDataBind.setData(this._data);
+            } catch (e) {
+                unsetDependencyTracker(this._queueUpdate);
+                throw e;
+            }
+            unsetDependencyTracker(this._queueUpdate);
             return;
         }
 
         // Create a new instance of this template
-        viewTemplate = render(viewTemplate, this._data, allDirectives);
+        try {
+            viewTemplate = render(viewTemplate, this._data, allDirectives);
+        } catch (e) {
+            unsetDependencyTracker(this._queueUpdate);
+            throw e;
+        }
+
+        unsetDependencyTracker(this._queueUpdate);
 
         if (!SHADOW_DOM_SUPPORTED) {
             prepareRenderedContent(viewTemplate, this);

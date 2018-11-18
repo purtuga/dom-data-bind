@@ -1,7 +1,6 @@
-import nextTick from "@purtuga/common/src/jsutils/nextTick"
 import Compose from "@purtuga/common/src/jsutils/Compose"
 import {logError, PRIVATE, removeAttribute} from "../utils"
-// import {setDependencyTracker, unsetDependencyTracker} from "@purtuga/observables/src/objectWatchProp"
+import {NodeHandler} from "./NodeHandler.js";
 
 //===================================================================================
 
@@ -37,6 +36,14 @@ export class Directive extends Compose {
     static manages() { return false; }
 
     /**
+     * The Class that will be used to initialize a new node handler for the directive
+     *
+     * @type NodeHandler
+     * @constructor
+     */
+    static NodeHandlerConstructor = NodeHandler;
+
+    /**
      * Render the Directive with given data
      *
      * @param {NodeHandler} handler
@@ -55,7 +62,6 @@ export class Directive extends Compose {
              * @property {*} data
              * @property {*} value
              * @property {Boolean} isQueued
-             * @property {Function} deferUpd
              * @property {Function} tracker
              * @property {Function} update
              */
@@ -63,7 +69,6 @@ export class Directive extends Compose {
                 data:       null,
                 value:      "",
                 isQueued:   false,
-                deferUpd:   this.update.bind(this, handler),
                 tracker:    () => this.render(handler, node, state.data)
                 //update: () => {} --- should be defined by Directive subclass
             };
@@ -80,12 +85,7 @@ export class Directive extends Compose {
             state.data = data;
         }
 
-        if (state.isQueued) {
-            return;
-        }
-
-        state.isQueued = true;
-        nextTick(state.deferUpd);
+        this.update(handler);
     }
 
     /**
@@ -119,7 +119,6 @@ export class Directive extends Compose {
                 logError(e);
             }
 
-            handlerState.isQueued = false;
             if (handlerState.value !== newValue) {
                 handlerState.value = newValue;
             }
@@ -127,69 +126,29 @@ export class Directive extends Compose {
     }
 
     /**
-     * Returns an object with a `render` function for the given node.
+     * Cleans the node by removing Directive specific attribute. By default, the `_attr`
+     * that was given to this constructor will be removed from the node.
+     *
+     * @param {Node} node
+     */
+    cleanNode(node) {
+        if (this._attr && node.nodeType !== 8 /* don't process comment nodes */) {
+            removeAttribute(node, this._attr);
+        }
+    }
+
+    /**
+     * Returns a node handler for this Directive on the provided Node
      *
      * @param {Node} node
      * @param {Array<Directive>} [directives]
      *
      * @return {NodeHandler}
      */
-    getNodeHandler(node/*, directives*/) {
-        if (this._attr && node.nodeType !== 8 /* don't process comment nodes */) {
-            removeAttribute(node, this._attr);
-        }
-        return new NodeHandler(this, node);
+    getNodeHandler(node, directives) {
+        this.cleanNode(node);
+        return new this.constructor.NodeHandlerConstructor(this, node, directives);
     }
 }
 export default Directive;
-
-/**
- * A node directive handler.
- *
- * @extends Compose
- */
-class NodeHandler extends Compose {
-    init(directive, node) {
-        this._d = directive;
-        this._n = node;
-    }
-
-    // Override destroy (which is by default "async" and ensure that notifications
-    // are turned off immediately for this Node
-    destroy() {
-        const state = PRIVATE.get(this);
-        if (state){
-            if (state.tracker && state.tracker.stopWatchingAll) {
-                state.tracker.stopWatchingAll();
-            }
-            if (state.data) {
-                state.data = null;
-            }
-        }
-        super.destroy();
-        PRIVATE.delete(this);
-    }
-
-    /**
-     * Renders the data given on input to the Node
-     *
-     * @param data
-     */
-    render(data) {
-        this._d.render(this, this._n, data);
-    }
-
-    /**
-     * Applies a new value to the Node. This method will check if the handler instance state data has
-     * a method named `update` and if so, delegate to that method as to how the node should be updated.
-     *
-     * @param newValue
-     */
-    update(newValue) {
-        const state = PRIVATE.get(this);
-        if (state && state.update) {
-            return state.update(newValue);
-        }
-    }
-}
 

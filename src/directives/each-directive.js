@@ -5,12 +5,6 @@ import {
     isArray,
     objectKeys
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
-// import {
-//     makeObservable,
-//     objectWatchProp,
-//     unsetDependencyTracker
-// } from "@purtuga/observables/src/objectWatchProp"
-// import {arrayWatch} from "@purtuga/observables/src/arrayWatch"
 import Directive from "./Directive"
 import {
     arrayForEach,
@@ -19,7 +13,6 @@ import {
     DOM_DATA_BIND_PROP,
     getAttribute,
     hasAttribute,
-    insertBefore,
     isPureObject,
     PRIVATE,
     removeAttribute,
@@ -28,6 +21,7 @@ import {
 
 import {render} from "../render";
 import {view} from "../view.js";
+import {NodeHandler} from "./NodeHandler.js";
 
 //============================================
 const EACH = Symbol("directive.each.setup");
@@ -36,6 +30,68 @@ const KEY_DIRECTIVE = "_key";
 const destroyBinder = binder => binder._destroy();
 const defaultRowKey = data => data;
 const isEmptyList   = list => (isArray(list) && !list.length) || (isPureObject(list) && !objectKeys(list).length);
+
+class EachDirectiveNodeHandler extends NodeHandler {
+
+    binders = [];
+
+    bindersByKey = new Map();
+
+    listIterator = () => this._directive.iterateOverList(this, PRIVATE.get(this).value);
+
+    init(directive, node, directives) {
+        super.init(directive, node, directives);
+        this._placeholderEle = createComment("directive.each");
+        this._isSoleChild = hasDedicatedParent(this._node);
+
+        // create the template for the row content, which is stored in the Comment node data
+        this._viewTemplate = view(node.data, directives);
+        if (!this._viewTemplate[EACH]) {
+            setupViewTemplate(this._viewTemplate);
+        }
+
+        domInsertBefore(this._placeholderEle, node);
+        removeChild(node.parentNode, node);
+    }
+
+
+    update(newList) {
+        const state = PRIVATE.get(this);
+
+        if (newList !== state.value) {
+            state.value = null;
+
+            if (this.listIterator.stopWatchingAll) {
+                this.listIterator.stopWatchingAll();
+            }
+        }
+
+        if (!newList) {
+            this._directive.destroyChildBinders(this.binders, this);
+            return;
+        }
+
+        state.value = newList;
+
+        if (isEmptyList(newList) && this.binders) {
+            this._directive.destroyChildBinders(this.binders, this);
+        }
+        else {
+            this.listIterator();
+        }
+    }
+
+    destroy() {
+        // Support for Observables
+        if (this.listIterator.stopWatchingAll) {
+            this.listIterator.stopWatchingAll();
+        }
+        this.bindersByKey.clear();
+        this._directive.destroyChildBinders(this.binders, this);
+        super.destroy();
+    }
+}
+
 
 /**
  * Directive to loop through an array or object. In addition, it also support an
@@ -55,64 +111,19 @@ const isEmptyList   = list => (isArray(list) && !list.length) || (isPureObject(l
  * _each="(value, key) of objectList"
  */
 export class EachDirective extends Directive {
+    static NodeHandlerConstructor = EachDirectiveNodeHandler;
+
     static has(ele) {
         return hasAttribute(ele, DIRECTIVE) ? DIRECTIVE : "";
     }
 
     static manages() { return true; }
 
-
     init(attr, attrValue) {
         const [ iteratorArgs, listVar ] = parseDirectiveValue((attrValue || "").trim());
         this._attr              = attr;
         this._iteratorArgs      = iteratorArgs;
         this._tokenValueGetter  = createValueGetter((listVar || ""), "each");
-    }
-
-    render(handler, node, data) {
-        super.render(handler, node, data);
-        /** @type NodeHandlerState */
-        const state = PRIVATE.get(handler);
-
-        if (!state.update) {
-            state.binders = [];
-            state.bindersByKey = new Map();
-            state.listIterator = () => this.iterateOverList(handler, state.value);
-            state.update = newList => {
-                // Update is called only if data changes.
-                // If the array or object is mutated - state.listIterator is called instead
-                if (newList !== state.value) {
-                    state.value = null;
-
-                    if (state.listIterator.stopWatchingAll) {
-                        state.listIterator.stopWatchingAll();
-                    }
-                }
-
-                if (!newList) {
-                    this.destroyChildBinders(state.binders, handler);
-                    return;
-                }
-
-                state.value = newList;
-
-                if (isEmptyList(newList) && state.binders) {
-                    this.destroyChildBinders(state.binders, handler);
-                }
-                else {
-                    this.iterateOverList(handler, newList);
-                }
-            };
-
-            // When handler is destroyed, remove data listeners
-            handler.onDestroy(() => {
-                if (state.listIterator.stopWatchingAll) {
-                    state.listIterator.stopWatchingAll();
-                }
-                state.bindersByKey.clear();
-                this.destroyChildBinders(state.binders, handler);
-            });
-        }
     }
 
     /**
@@ -184,9 +195,7 @@ export class EachDirective extends Directive {
      */
     iterateOverList(handler, newData) {
         /** @type NodeHandlerState */
-        const state             = PRIVATE.get(handler);
-        // const attachedEleBinder = [];
-        // const newDomElements    = createDocFragment();
+        const state = PRIVATE.get(handler);
         let isDataArray             = isArray(newData);
         let iterationDataList;
 
@@ -201,7 +210,7 @@ export class EachDirective extends Directive {
             return;
         }
 
-        const currentBinders        = state.binders;
+        const currentBinders        = handler.binders;
         const binderToBeDestroyed   = new Map();    // Will be recycled
         const totalItems            = iterationDataList.length;
         const { usesKey, getKey }   = handler._viewTemplate[EACH];
@@ -253,7 +262,7 @@ export class EachDirective extends Directive {
             // Do we have a rowBinder for this data item in the existing list,
             // but perhaps at a different location? Get it and move it to the new position.
             // Old position in the existing array is set to null (avoids mutating array)
-            let binder = state.bindersByKey.get(rowKey);
+            let binder = handler.bindersByKey.get(rowKey);
 
             if (binder) {
                 if (binder._loop.pos !== null && currentBinders[binder._loop.pos] === binder) {
@@ -284,17 +293,17 @@ export class EachDirective extends Directive {
                 binder = recycleBinder;
                 binder[DOM_DATA_BIND_PROP].setData(rowData);
                 binderToBeDestroyed.delete(recycleBinderKey);
+                binder._loop.rowKey = rowKey;
+                binder._loop.pos = i;
             } else {
                 binder = render(handler._viewTemplate, rowData, handler._directives);
                 binder._destroy = destroyRowElement;
-                binder._state = state;
+                binder._handler = handler; // needed by destroyRowElement()
+                binder._loop  = { rowKey, pos: i };
             }
-            binder._loop  = {
-                rowKey,
-                pos: i
-            };
+
             currentBinders[i] = binder;
-            state.bindersByKey.set(rowKey, binder);
+            handler.bindersByKey.set(rowKey, binder);
             positionRowInDom(currentBinders, i, handler._placeholderEle);
         }
 
@@ -308,23 +317,6 @@ export class EachDirective extends Directive {
         if (totalItems < currentBinders.length) {
             arrayForEach(arraySplice(currentBinders, totalItems), destroyBinder);
         }
-    }
-
-    getNodeHandler(node, directives) {
-        const handler           = super.getNodeHandler(node);
-        handler._directives     = directives;
-        handler._placeholderEle = createComment("directive:each");
-        handler._isSoleChild    = hasDedicatedParent(node);
-        // create the template for the row content, which is stored in the Comment node data
-        handler._viewTemplate   = view(node.data, directives);
-
-        if (!handler._viewTemplate[EACH]) {
-            setupViewTemplate(handler._viewTemplate);
-        }
-
-        insertBefore(node.parentNode, handler._placeholderEle, node);
-        removeChild(node.parentNode, node);
-        return handler;
     }
 }
 
@@ -369,10 +361,9 @@ function destroyRowElement () {
     this[DOM_DATA_BIND_PROP].recover();
 
     if (this._loop.rowKey) {
-        this._state.bindersByKey.delete(this._loop.rowKey);
+        this._handler.bindersByKey.delete(this._loop.rowKey);
     }
 
-    this._state = null;
     this[DOM_DATA_BIND_PROP].destroy();
 }
 
