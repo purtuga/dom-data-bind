@@ -1,6 +1,6 @@
 {
     "name": "@purtuga/dom-data-bind",
-    "version": "4.0.0",
+    "version": "3.0.0",
     "description": "DOM Data Bind utility. Bind data to DOM",
     "main": "src/index.js",
     "module": "dist/dom-data-bind.esm.min.js",
