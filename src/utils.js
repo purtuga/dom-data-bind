@@ -3,9 +3,12 @@ import Map          from "@purtuga/common/src/jsutils/es6-Map"
 import {
     functionBindCall,
     isObject,
+    isString,
     arrayForEach,
+    arraySlice,
     hasAttribute,
     setAttribute,
+    getAttribute,
     removeAttribute,
     insertBefore,
     createElement,
@@ -14,24 +17,26 @@ import {
     consoleError,
     functionBind
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
-
+import {isTemplateElement} from "@purtuga/common/src/domutils/isTemplateElement.js"
 //=====================================================
 const DOCUMENT              = document;
 const FUNCTION              = Function;
 const ELEMENT_PROTOTYPE     = Element.prototype;
-const ARRAY_PROTOTYPE       = Array.prototype;
 const VALUE_GETTERS         = new Map();
 let counter = 1;
 
 export {
     arrayForEach,
+    arraySlice,
     hasAttribute,
     setAttribute,
+    getAttribute,
     removeAttribute,
     insertBefore,
     createElement,
     createTextNode,
-    createDocFragment
+    createDocFragment,
+    isString
 };
 
 export const DOM_DATA_BIND_PROP = "DomDataBind";
@@ -40,12 +45,9 @@ export const UUID               = `D-${ Date.now() }-${ Math.random().toString(3
 export const escapeString       = str => String(str).replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
 export const bindCallTo         = functionBindCall;
 export const isPureObject       = isObject;
-export const isString           = s => "string" === typeof s;// FIXME: replace with common-micro-libs runtime-aliases
-export const arraySlice         = functionBindCall(ARRAY_PROTOTYPE.slice);// FIXME: replace with common-micro-libs runtime-aliases
-export const getAttribute       = functionBindCall(ELEMENT_PROTOTYPE.getAttribute);// FIXME: replace with common-micro-libs runtime-aliases
-export const removeChild        = functionBindCall(ELEMENT_PROTOTYPE.removeChild);// FIXME: replace with common-micro-libs runtime-aliases
-export const createComment      = functionBind(DOCUMENT.createComment, DOCUMENT);// FIXME: replace with common-micro-libs runtime-aliases
-export const isTemplate         = e => Object.prototype.toString.call(e) === "[object HTMLTemplateElement]"; // FIXME: replace with common-micro-libs runtime-aliases
+export const removeChild        = functionBindCall(ELEMENT_PROTOTYPE.removeChild);
+export const createComment      = functionBind(DOCUMENT.createComment, DOCUMENT);
+export const isTemplate         = isTemplateElement;
 export const logError           = consoleError;
 
 

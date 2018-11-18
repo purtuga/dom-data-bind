@@ -78,12 +78,9 @@ export class EachDirective extends Directive {
             state.binders = [];
             state.bindersByKey = new Map();
             state.listIterator = () => this.iterateOverList(handler, state.value);
-            state.isFirstRender = true; // FIXME: no longer needed?
-            state.usesKey = false; // FIXME: no longer needed?
-            state.getKey = defaultRowKey;   // FIXME: No longer needed... Delete it.
-            // Update is called only if data changes.
-            // If the array or object is mutated - state.listIterator is called instead
             state.update = newList => {
+                // Update is called only if data changes.
+                // If the array or object is mutated - state.listIterator is called instead
                 if (newList !== state.value) {
                     state.value = null;
 
@@ -97,20 +94,7 @@ export class EachDirective extends Directive {
                     return;
                 }
 
-                // unsetDependencyTracker(state.tracker); // FIXME: cleanup
                 state.value = newList;
-
-                // Make sure data is observable and setup event listners on it.
-                // makeObservable(newList); // FIXME: cleanup
-
-                // FIXME: cleanup
-
-                // if (isArray(newList)) {
-                //     arrayWatch(newList, state.listIterator);
-                // }
-                // else if (isPureObject(newList)) {
-                //     objectWatchProp(newList, null, state.listIterator);
-                // }
 
                 if (isEmptyList(newList) && state.binders) {
                     this.destroyChildBinders(state.binders, handler);
@@ -190,63 +174,6 @@ export class EachDirective extends Directive {
             dataObj || {}
         );
     }
-
-    // __ORIG___iterateOverList(handler, newData) {
-    //     const state             = PRIVATE.get(handler);
-    //     const attachedEleBinder = [];
-    //     const newDomElements    = createDocFragment();
-    //     let isArray             = isArray(newData);
-    //     let data;
-    //
-    //     if (isArray) {
-    //         isArray = true;
-    //         data = newData;
-    //     }
-    //     else if (isPureObject(newData)) {
-    //         data = objectKeys(newData);
-    //     } else {
-    //         return;
-    //     }
-    //
-    //     for (let i = 0, t = data.length; i < t; i++) {
-    //         let rowData = { $data: state.data.$data || state.data };
-    //
-    //         if (isArray) {
-    //             this.getDataForIteration([ data[i], i ], rowData);
-    //         }
-    //         else {
-    //             this.getDataForIteration([ newData[ data[i] ], data[i], i ], rowData);
-    //         }
-    //
-    //         const binder = this.getRowBinder(handler, rowData);
-    //         binder._loop.pos = i;
-    //         attachedEleBinder.push(binder);
-    //         newDomElements.appendChild(binder);
-    //     }
-    //
-    //     if (newDomElements.hasChildNodes()) {
-    //         insertBefore(handler._placeholderEle.parentNode, newDomElements, handler._placeholderEle);
-    //     }
-    //
-    //     // store the new attached set of elements in their new positions, and
-    //     // clean up old Binders that are no longer being used/displayed
-    //     // FIXME: this needs to be more efficient!!!!!!
-    //     arrayForEach(state.binders.splice(0, state.binders.length, ...attachedEleBinder), childBinder => {
-    //         if (attachedEleBinder.indexOf(childBinder) === -1) {
-    //             childBinder._destroy();
-    //         }
-    //     });
-    //
-    //     if (state.binders.length) {
-    //         this.positionChildren(
-    //             handler._placeholderEle.parentNode,
-    //             handler._placeholderEle,
-    //             state.binders
-    //         );
-    //     }
-    // }
-
-
 
     /**
      * Iterates over a new set (list) and eitehr updates or builds out new elements for each item
@@ -360,7 +287,7 @@ export class EachDirective extends Directive {
             } else {
                 binder = render(handler._viewTemplate, rowData, handler._directives);
                 binder._destroy = destroyRowElement;
-                binder._state = state; // FIXME: remove the need for this prop to be set
+                binder._state = state;
             }
             binder._loop  = {
                 rowKey,
@@ -369,13 +296,6 @@ export class EachDirective extends Directive {
             currentBinders[i] = binder;
             state.bindersByKey.set(rowKey, binder);
             positionRowInDom(currentBinders, i, handler._placeholderEle);
-
-
-            // const binder = this.getRowBinder(handler, rowData);
-            //
-            // binder._loop.pos = i;
-            // attachedEleBinder.push(binder);
-            // newDomElements.appendChild(binder);
         }
 
         // Destroy binders that were not used
@@ -389,95 +309,6 @@ export class EachDirective extends Directive {
             arrayForEach(arraySplice(currentBinders, totalItems), destroyBinder);
         }
     }
-
-    /**
-     * Handles processing a single data item by either updating and existing binder or creating
-     * a new binder.
-     *
-     * @param {NodeHandler} handler
-     * @param {Object} rowData
-     *
-     * @returns {Template}
-     *  returns an array wtih two values:
-     *  -   the binder for the data item (could be an exising one)
-     *  -   Document fragment containing any new Elements that should be inserted into dom
-     */
-    // getRowBinder(handler, rowData) {
-    //     const state     = PRIVATE.get(handler);
-    //     let itemBinder  = null;
-    //     let rowKey      = state.getKey(rowData);
-    //     let rowEleBinder;
-    //
-    //     if (rowKey) {
-    //         rowEleBinder = state.bindersByKey.get(rowKey);
-    //     }
-    //
-    //     // If a binder already exists for this key, then just update its data
-    //     if (rowEleBinder) {
-    //         delete rowData.$data;
-    //         rowEleBinder[DOM_DATA_BIND_PROP].setData(rowData);
-    //         itemBinder = rowEleBinder;
-    //         return itemBinder;
-    //     }
-    //
-    //     // Render a new Element from the template and store the nodes that are
-    //     // created by it (needed for later).
-    //     rowEleBinder = render(handler._n.data, rowData, handler._directives);
-    //
-    //     // Is it first render? if so, then we need to determine if the DOM element
-    //     // that was rendered has the _key attribute
-    //     if (state.isFirstRender) {
-    //         state.isFirstRender = false;
-    //
-    //         if (
-    //             rowEleBinder.childNodes.length === 1 &&
-    //             rowEleBinder.firstChild.nodeType === 1 &&
-    //             hasAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE)
-    //         ) {
-    //             state.usesKey = true;
-    //             state.getKey = createValueGetter(getAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE), "each.key");
-    //             rowKey = state.getKey(rowData);
-    //         }
-    //     }
-    //
-    //     if (state.usesKey) {
-    //         removeAttribute(rowEleBinder.firstChild, KEY_DIRECTIVE);
-    //     }
-    //
-    //     rowEleBinder._children = arraySlice(rowEleBinder.childNodes, 0);
-    //     rowEleBinder._destroy = destroyRowElement;
-    //     rowEleBinder._state = state;
-    //     rowEleBinder._loop  = { rowEle: rowEleBinder, rowKey, pos: -1 };
-    //
-    //     if (rowKey) {
-    //         state.bindersByKey.set(rowKey, rowEleBinder);
-    //     }
-    //
-    //     itemBinder = rowEleBinder;
-    //     return itemBinder;
-    // }
-
-    /**
-     *
-     * @param {HTMLElement} eleParentNode
-     * @param {HTMLElement} placeholderEle
-     * @param {Array} childEleBinders
-     */
-    // positionChildren(eleParentNode, placeholderEle, childEleBinders) {
-    //     // FIXME: speed improvement = convert to while() looop
-    //     arrayForEach(childEleBinders, (childBinder, index) => {
-    //         if (childBinder._loop.pos === index) {
-    //             return;
-    //         }
-    //
-    //         insertBefore(
-    //             eleParentNode,
-    //             childBinder._loop.rowEle,
-    //             childEleBinders[index + 1] ? childEleBinders[index + 1]._loop.rowEle : placeholderEle
-    //         );
-    //         childBinder._loop.pos = index;
-    //     });
-    // }
 
     getNodeHandler(node, directives) {
         const handler           = super.getNodeHandler(node);
@@ -534,8 +365,6 @@ function positionRowInDom(currentBinders, binderIndex, defaultInsertMarkerElemen
 }
 
 function destroyRowElement () {
-    // this === DocumentFragment from `render()`
-
     // remove all elements/nodes of this row from DOM
     this[DOM_DATA_BIND_PROP].recover();
 

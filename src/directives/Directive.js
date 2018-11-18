@@ -107,8 +107,6 @@ export class Directive extends Compose {
         if (handlerState) {
             let newValue = "";
 
-            // setDependencyTracker(handlerState.tracker); // FIXME: cleanup
-
             try {
                 newValue = this._tokenValueGetter(handlerState.data || {});
 
@@ -120,8 +118,6 @@ export class Directive extends Compose {
             catch(e) {
                 logError(e);
             }
-
-            // unsetDependencyTracker(handlerState.tracker); // FIXME: cleanup
 
             handlerState.isQueued = false;
             if (handlerState.value !== newValue) {
