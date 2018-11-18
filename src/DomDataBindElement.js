@@ -6,21 +6,14 @@
 //
 //------------------------------------------------------------------------
 import {ComponentElement} from "@purtuga/component-element/src/ComponentElement.js"
-import {
-    prepareRenderedContent,
-    supportsNativeShadowDom
-} from "@purtuga/component-element/src/polyfill-support.js"
+import {prepareRenderedContent, supportsNativeShadowDom} from "@purtuga/component-element/src/polyfill-support.js"
 import {objectExtend} from "@purtuga/common/src/jsutils/objectExtend.js"
 import {throwIfThisIsPrototype} from "@purtuga/common/src/jsutils/throwIfThisIsPrototype.js"
+import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime-aliases.js";
+import {generatePropGetterSetter} from "@purtuga/common/src/jsutils/generatePropGetterSetter.js";
 import {view} from "./view.js"
 import {render} from "./render.js"
 import {allDirectives} from "./index.js";
-import {
-    makeObservable,
-    setDependencyTracker,
-    unsetDependencyTracker
-} from "@purtuga/observables/src/objectWatchProp.js"
-import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime-aliases.js";
 
 
 //==============================================================================
@@ -95,29 +88,14 @@ export class DomDataBindElement extends ComponentElement {
 
         let viewTemplate = view(renderOutput, allDirectives);
 
-        setDependencyTracker(this._queueUpdate);
-
         // If it is the same as the template currently displayed - exit; Nothing to do.
         if (binding.current && binding.current.DomDataBind.fromTemplateId === viewTemplate.id) {
-            try {
-                binding.current.DomDataBind.setData(this._data);
-            } catch (e) {
-                unsetDependencyTracker(this._queueUpdate);
-                throw e;
-            }
-            unsetDependencyTracker(this._queueUpdate);
+            binding.current.DomDataBind.setData(this._data);
             return;
         }
 
         // Create a new instance of this template
-        try {
-            viewTemplate = render(viewTemplate, this._data, allDirectives);
-        } catch (e) {
-            unsetDependencyTracker(this._queueUpdate);
-            throw e;
-        }
-
-        unsetDependencyTracker(this._queueUpdate);
+        viewTemplate = render(viewTemplate, this._data, allDirectives);
 
         if (!SHADOW_DOM_SUPPORTED) {
             prepareRenderedContent(viewTemplate, this);
@@ -131,6 +109,16 @@ export class DomDataBindElement extends ComponentElement {
         }
 
         binding.current = viewTemplate;
+    }
+
+    /**
+     * Adds the members of a given object ot the state object. Use this when wanting to
+     * add additional props to state after it has already been initialized
+     *
+     * @param {Object} obj
+     */
+    addToState(obj) {
+        return stateSetter.call(this, obj);
     }
 
     /**
@@ -181,8 +169,9 @@ function setupState(instance, data = {}) {
         return;
     }
     instance._isSettingUp = true;
-    defineProperty(instance, STATE_OBSERVABLE, makeObservable(data));
+    defineProperty(instance, STATE_OBSERVABLE, data);
     defineProperty(instance, "state", undefined, stateGetter, stateSetter);
+    addReactivityToState(instance);
     delete instance._isSettingUp;
     return data;
 }
@@ -193,8 +182,26 @@ function stateGetter() {
 
 function stateSetter(data) {
     objectExtend(true, this[STATE_OBSERVABLE], data);
-    makeObservable(this[STATE_OBSERVABLE], true, true);
+    addReactivityToState(this);
     return this[STATE_OBSERVABLE];
+}
+
+function addReactivityToState(instance) {
+    // this === DomDataBindElement!!!!
+    Object
+        .entries(Object.getOwnPropertyDescriptors(instance[STATE_OBSERVABLE]))
+        .forEach(([key, descriptor]) => {
+            if (!descriptor.get || !descriptor.get.isGetterSetter) {
+                const getterSetter = generatePropGetterSetter(
+                    key,
+                    undefined,
+                    instance[STATE_OBSERVABLE][key],
+                    instance._queueUpdate,
+                    instance
+                );
+                defineProperty(instance[STATE_OBSERVABLE], key, undefined, getterSetter, getterSetter, true, true);
+            }
+        });
 }
 
 export default DomDataBindElement;
