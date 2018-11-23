@@ -42,6 +42,8 @@ const reTokenMatch          = new RegExp(DATA_TOKEN_REG_EXP_STR, "g");
 const getNodeValue          = node => node ? node.nodeValue : "";
 const hasToken              = node => reHasDataToken.test(getNodeValue(node));
 
+// FIXME: use insertBefore() alias in several places below
+
 
 /**
  * A Dom template along with its set of know directives (after parsing it)
@@ -58,6 +60,30 @@ export class Template {
         }
 
         this._directives = directives;
+
+        if (process.env.NODE_ENV !== "production") {
+            // DEV MODE:: warn about directive positioning
+            if (directives.length) {
+                const directivesPosition = directives.reduce(function(positions, Directive, index){
+                    positions[Directive.name] = index;
+                    positions[`has${Directive.name}`] = true;
+                    return positions;
+                }, {});
+
+                if (directivesPosition.hasEachDirective && directivesPosition.EachDirective !== 0) {
+                    console.warn(`DomDataBind: 'EachDirective' position in 'directives' array should be 0!`); // eslint-disable-line
+                }
+
+                if (!directivesPosition.hasEachDirective && directivesPosition.hasIfDirective) {
+                    if (directivesPosition.hasEachDirective && directivesPosition.IfDirective !== 1) {
+                        console.warn(`DomDataBind: 'IfDirective' position in 'directives' array should be 1 (right after 'EachDirective')!`); // eslint-disable-line
+                    } else if (directivesPosition.IfDirective !== 0) {
+                        console.warn(`DomDataBind: 'IfDirective' position in 'directives' array should be 0!`); // eslint-disable-line
+                    }
+                }
+            }
+        }
+
         this._bindings = getBindingFor(this.ele.content, directives);
     }
 
@@ -104,6 +130,10 @@ export function getBindingFor(ele, directives) {
     const ignoredChildren   = new Set();
     let domEle;
 
+    // FIXME: convert to singleton function
+    //          Arguments should be:
+    //                  Directive, domEle, eleToBindings, ignoreChildren
+    //          Returns a boolean
     const directiveIterator = Directive => {
         let attrName;
         let attrValue;
@@ -139,6 +169,9 @@ export function getBindingFor(ele, directives) {
         return managesNode;
     };
 
+    // FIXME: convert to singleton Function
+    //          Arguments needed:
+    //              child, eleToBindings,
     const processTextNode = child => {
         if (hasToken(child)) {
             reTokenMatch.lastIndex = 0;
@@ -159,8 +192,6 @@ export function getBindingFor(ele, directives) {
                     if (DROPS_NODES_ON_CLONE) {
                         fixEmptyTextNode(child);
                     }
-
-                    // FIXME: need to handle empty node when browser does not do clones correctly (IE for sure... Edge might be fixed now)
 
                     // Split again at the end of token, so that we have a dedicated text node for the token value.
                     // Because this will be used as a template, also need to replace this token value node
@@ -186,6 +217,7 @@ export function getBindingFor(ele, directives) {
         }
     };
 
+    // FIXME: convert to for() loop - Perf!
     findAllNodes(ele).forEach(node => {
         let skip = false;
 
@@ -281,7 +313,7 @@ function getNodeAt(root, path) {
     if (!path.length) {
         return root;
     }
-
+    // FIXME: use for loop here.
     arrayForEach(path, index => root = root.childNodes[index]);
     return root;
 }

@@ -42,6 +42,19 @@ document.body.appendChild(binder);
 </script>
 ```
 
+## `render()`
+
+```javascript
+render(htmlTempltae, data, directives) {
+    // returns DocumentFragment
+}
+```
+
+The `render()` function will return a `DocumentFragment` with the given HTML template provided on input bound the the data provided. A list of directives should also be defined if your template uses any Directive outside of the Token interpolation.
+
+>   __IMPORTANT__: When defining an array of directives, the order in which the directives are in (the `array`) is important. Any directive that manages the DOM elemnet should be at the beginning of the arrary. Example: by default, the `Each` and `If` directives are the begning of the `allDirectives` array (positions `0` and `1` respectively).
+
+ 
 
 ## Template Token Interpolation
 

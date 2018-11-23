@@ -64,10 +64,10 @@ export function createValueGetter(evalCode, name = "runtime") {
         return VALUE_GETTERS.get(evalCode);
     }
 
-    const fn = new FUNCTION("$$DATA$$", `
-with ($$DATA$$) {
-    if ($$DATA$$.$data) {
-        with ($$DATA$$.$data) {
+    const fn = new FUNCTION("$DATA", `
+with ($DATA) {
+    if ($DATA.$data) {
+        with ($DATA.$data) {
             return (${ evalCode });
         }
     } 

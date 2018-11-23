@@ -13,7 +13,6 @@ import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime
 import {generatePropGetterSetter} from "@purtuga/common/src/jsutils/generatePropGetterSetter.js";
 import {view} from "./view.js"
 import {render} from "./render.js"
-import {allDirectives} from "./index.js";
 
 
 //==============================================================================
@@ -27,13 +26,13 @@ const SHADOW_DOM_SUPPORTED = supportsNativeShadowDom();
 /**
  * Base class around ComponentElement that allows for `template` to
  * take advantage of DomDataBind as its templating engine.
- * Subclasses of this base class should define the `state` instance
- * property to an object during the `init` lifecycle hook.
  *
- * When the template is bound it will passed an object with two properties:
+ * Private state data can be assigned to the `this.state` property (an `Object`),
+ * which will automatically trigger `render()` to be executed if any of its shallow
+ * properties change.
  *
- * -    `props`: the `element.props`
- * -    `state`: the `element._state`
+ * Render templates will be given the entire component instance as input (`data`) for
+ * rendering, thus the entire component members (like `props` and `state`) will be available
  *
  * @extends ComponentElement
  *
@@ -63,6 +62,13 @@ const SHADOW_DOM_SUPPORTED = supportsNativeShadowDom();
  */
 export class DomDataBindElement extends ComponentElement {
 
+    /**
+     * The list of directives that will be used when rendering the template.
+     * By default, no directives are defined
+     * @type {Array}
+     */
+    static directives = [];
+
     //-------------------------------------------------------------
     //
     //                                            INSTANCE MEMBERS
@@ -70,6 +76,9 @@ export class DomDataBindElement extends ComponentElement {
     //-------------------------------------------------------------
 
     _setView(renderOutput) {
+        // the view template is rendered with `this` as the `data` argument
+
+
         // FIXME: needs to handle DOMElements + DocumentFragments?
 
         const binding = getDomDataBindMeta(this);
@@ -86,16 +95,16 @@ export class DomDataBindElement extends ComponentElement {
             renderOutput = scopeTemplate.innerHTML;
         }
 
-        let viewTemplate = view(renderOutput, allDirectives);
+        let viewTemplate = view(renderOutput, this.constructor.directives);
 
         // If it is the same as the template currently displayed - exit; Nothing to do.
         if (binding.current && binding.current.DomDataBind.fromTemplateId === viewTemplate.id) {
-            binding.current.DomDataBind.setData(this._data);
+            binding.current.DomDataBind.setData(this);
             return;
         }
 
         // Create a new instance of this template
-        viewTemplate = render(viewTemplate, this._data, allDirectives);
+        viewTemplate = render(viewTemplate, this, this.constructor.directives);
 
         if (!SHADOW_DOM_SUPPORTED) {
             prepareRenderedContent(viewTemplate, this);
@@ -134,24 +143,6 @@ export class DomDataBindElement extends ComponentElement {
     set state(data) {
         throwIfThisIsPrototype(this);
         return setupState(this, data);
-    }
-
-    get _data() {
-        throwIfThisIsPrototype(this);
-        if (this._data$$) {
-            return undefined;
-        }
-
-        this._data$$ = true;
-
-        const data = {
-            props: this.props,
-            state: this.state
-        };
-
-        defineProperty(this, "_data", data);
-        delete this._data$$;
-        return data;
     }
 }
 
