@@ -45,7 +45,7 @@ document.body.appendChild(binder);
 ## `render()`
 
 ```javascript
-render(htmlTempltae, data, directives) {
+render(htmlTemplate, data, directives) {
     // returns DocumentFragment
 }
 ```
