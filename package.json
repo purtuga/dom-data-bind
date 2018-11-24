@@ -48,7 +48,7 @@
         "@purtuga/component-element": "^2.0.2"
     },
     "devDependencies": {
-        "@purtuga/project-base": "^2.0.3"
+        "@purtuga/project-base": "^2.1.0"
     },
     "dependencies": {
         "@purtuga/common": "^3.3.3"
