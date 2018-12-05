@@ -6,7 +6,7 @@
     "module": "dist/dom-data-bind.esm.min.js",
     "scripts": {
         "serve": "webpack-dev-server --config node_modules/@purtuga/project-base/configs/webpack.config.js --progress --hot --color --entry ./my.dev/index.js",
-        "serve:test": "webpack-dev-server --config node_modules/@purtuga/project-base/configs/webpack.config.js --entry ./test/index.js --output-path ./my.dev --output-filename test.bundle.js",
+        "serve:test": "webpack-dev-server --config node_modules/@purtuga/project-base/configs/webpack.config.js --entry ./test/index.js --output-path ./my.dev --output-filename test.bundle.js --open-page test",
         "build": "webpack --config node_modules/@purtuga/project-base/configs/webpack.config.js",
         "build:ie": "webpack --config node_modules/@purtuga/project-base/configs/webpack.config.js --env.build=prod.legacy.non-minified --entry ./my.dev/index.js --output-path ./my.dev --output-filename ie-test-bundle.js",
         "build:prod": "webpack --config node_modules/@purtuga/project-base/configs/webpack.config.js --env.build=prod.minified --env.build=prod.non-minified",

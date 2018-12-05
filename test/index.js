@@ -1,1 +1,1 @@
-// FIXME: Test cases
+import "./text-binding.test.js"
