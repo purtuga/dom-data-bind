@@ -3,11 +3,13 @@ import {
     UUID,
     createTextNode,
     createValueGetter,
-    createComment
+    createComment,
+    arraySlice
 } from "../utils"
 import {
     isUndefined,
-    isNull
+    isNull,
+    isDocFragment
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
 import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
 import {domRemoveChild} from "@purtuga/common/src/domutils/domRemoveChild.js"
@@ -15,9 +17,9 @@ import {NodeHandler} from "../directives/NodeHandler.js";
 
 //===========================================================
 const ID = "text.binding";
+const isAttached = node => !!node.parentNode;
 
 // FIXME: handle `newValue` being a ViewTemplate. In this case, we render() that template and store the result. On subsquent updates, if result is teh same, only update its value
-// FIXME: handle `newValue` being an HTMLElement (just insert to DOM) - Keep track of the nodes inserted so they can be remove on subsquent updates
 
 class TextBindingNodeHandler extends NodeHandler {
     init(...args) {
@@ -33,7 +35,7 @@ class TextBindingNodeHandler extends NodeHandler {
         if (node.nodeType === 8 && node.nodeValue === UUID) {
             this._placeholderEle = node;
             this._placeholderEle.data = ID;
-            this._node = node =  domInsertBefore(createTextNode(""), this._placeholderEle);
+            this._node = domInsertBefore(createTextNode(""), this._placeholderEle);
             domRemoveChild(this._placeholderEle);
         }
 
@@ -41,25 +43,80 @@ class TextBindingNodeHandler extends NodeHandler {
         if (!this._placeholderEle) {
             this._placeholderEle = createComment(ID);
         }
+
+        this._externalNodes = null; // Array
     }
 
     update(newValue) {
-        if (newValue !== this._node.nodeValue) {
-            // If null or undefined, then remove text node and replace it
-            // with placeholder element
-            if (isNull(newValue) || isUndefined(newValue)) {
-                this._node.nodeValue = "";
-                domInsertBefore(this._placeholderEle, this._node);
-                domRemoveChild(this._node);
-            } else {
-                this._node.nodeValue = newValue;
+        // Null and
+        if (isNull(newValue) || isUndefined(newValue)) {
+            this.clear();
+            this.setPlaceholder();
+            return;
+        }
 
-                // If not attached, then insert it now and remove placeholder
-                if (!this._node.parentNode) {
-                    domInsertBefore(this._node, this._placeholderEle);
-                    domRemoveChild(this._placeholderEle);
-                }
+        // A regular HTML node(s)
+        if (newValue instanceof Node) {
+            // Is it already displayed here? - then do nothing
+            if (this.isCurrentExternal(newValue)) {
+                return;
             }
+
+            this.clear();
+            this.setPlaceholder();
+            this.storeExternals(newValue);
+            domInsertBefore(newValue, this._placeholderEle);
+            return;
+        }
+
+        // ElSE, handle text content (or something can be stringified (toString))
+        if (!isAttached(this._node)) {
+            this.clear();
+            domInsertBefore(this._node, this._placeholderEle);
+            domRemoveChild(this._placeholderEle);
+        }
+        if (newValue !== this._node.nodeValue) {
+            this._node.nodeValue = newValue;
+        }
+    }
+
+    storeExternals(nodeEle) {
+        if (this._externalNodes) {
+            this.removeExternals();
+        }
+        this._externalNodes = isDocFragment(nodeEle) ? arraySlice(nodeEle.childNodes, 0) : [ nodeEle ];
+    }
+
+    removeExternals() {
+        if (this._externalNodes) {
+            for (let i = 0, t = this._externalNodes.length; i < t; i++) {
+                domRemoveChild(this._externalNodes[i]);
+            }
+            this._externalNodes = null;
+        }
+    }
+
+    isCurrentExternal(nodeEle) {
+        return this._externalNodes &&
+            (
+                (
+                    !isDocFragment(nodeEle) &&
+                    this._externalNodes.length === 1 &&
+                    this._externalNodes[0] === nodeEle
+                ) ||
+                arraySlice(nodeEle).every((newNodeEle, i) => newNodeEle === this._externalNodes[i])
+            );
+    }
+
+    clear() {
+        this.removeExternals();
+        this._node.nodeValue = "";
+    }
+
+    setPlaceholder() {
+        if (!isAttached(this._placeholderEle)) {
+            domInsertBefore(this._placeholderEle, this._node);
+            domRemoveChild(this._node);
         }
     }
 }

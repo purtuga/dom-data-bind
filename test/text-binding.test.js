@@ -93,4 +93,59 @@ describe("Text Binding", function () {
             expect(this.$div.childNodes.item(0).nodeType).to.equal(8); // should be the comment node
         });
     });
+
+    describe("Handles values that are HTML Nodes", function () {
+        beforeEach(function () {
+            this.$view = render(`<div>{{title}}</div>`, {title: "test"});
+            this.$div = this.$view.querySelector("div");
+            this.$h1 = document.createElement("h1");
+            this.$h1.textContent = "h1 header";
+        });
+
+        it("should insert a single DOM element", function () {
+            this.$view.DomDataBind.setData({ title: this.$h1 });
+            expect(this.$div.textContent).to.equal("h1 header");
+            expect(this.$div.querySelector("h1")).to.equal(this.$h1);
+
+            this.$view.DomDataBind.setData({ title: "test" });
+            expect(this.$div.textContent).to.equal("test");
+            expect(this.$div.querySelector("h1")).to.equal(null);
+        });
+
+        it("should show a single DOM node (textNode)", function () {
+            const nodeEle = document.createTextNode("node text");
+
+            this.$view.DomDataBind.setData({ title: nodeEle });
+            expect(this.$div.textContent).to.equal("node text");
+
+            this.$view.DomDataBind.setData({ title: "test" });
+            expect(this.$div.textContent).to.equal("test");
+        });
+
+        it("should show content of a documentFragment", function () {
+            const $h2 = document.createElement("h2");
+            $h2.textContent = "h2 header";
+
+            const $frag = document.createDocumentFragment();
+            $frag.appendChild(this.$h1);
+            $frag.appendChild($h2);
+
+            this.$view.DomDataBind.setData({ title: $frag });
+            expect(this.$div.textContent).to.equal("h1 headerh2 header");
+            expect(this.$div.querySelector("h1")).to.equal(this.$h1);
+            expect(this.$div.querySelector("h2")).to.equal($h2);
+
+            // Setting again with same content should not change result
+            this.$view.DomDataBind.setData({ title: $frag });
+            expect(this.$div.textContent).to.equal("h1 headerh2 header", "Second time should not have changed results");
+            expect(this.$div.querySelector("h1")).to.equal(this.$h1);
+            expect(this.$div.querySelector("h2")).to.equal($h2);
+
+            // now replace it with text
+            this.$view.DomDataBind.setData({ title: "test" });
+            expect(this.$div.textContent).to.equal("test", "document fragment content was not cleared!");
+            expect(this.$div.querySelector("h1")).to.equal(null);
+            expect(this.$div.querySelector("h2")).to.equal(null);
+        });
+    });
 });
