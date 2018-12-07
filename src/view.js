@@ -14,7 +14,7 @@ const TEMPLATES = new Map();
  * @param {String|HTMLTemplateElement} html
  * @param {Array<Directive>} directives
  *
- * @returns {HTMLTemplateElement}
+ * @returns {Template}
  */
 export function view(html, directives = view.directives || []) {
     const isHtmlString = isString(html);

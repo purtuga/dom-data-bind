@@ -1,4 +1,4 @@
-import {render} from "../src/index.js"
+import {render, view} from "../src/index.js"
 
 describe("Text Binding", function () {
     describe("Basic usage", function () {
@@ -147,5 +147,40 @@ describe("Text Binding", function () {
             expect(this.$div.querySelector("h1")).to.equal(null);
             expect(this.$div.querySelector("h2")).to.equal(null);
         });
+    });
+
+    describe("Handles values that are View Templates", function () {
+        beforeEach(function () {
+            this.v1 = view(`<h1>View 1: {{title}}</h1>`);
+            this.v2 = view(`<h2>View 2: {{title}}</h2>`);
+            this.data = {title: "test", showView: this.v1};
+            this.$view = render(`<div>{{ showView }}</div>`, this.data);
+            this.$div = this.$view.querySelector("div");
+        });
+
+        it("should display content of a given View Template", function () {
+            expect(this.$div.textContent).to.equal("View 1: test");
+        });
+
+        it("should update existing view with new data if View Template is the same", function () {
+            const $v1Ele = this.$div.querySelector("h1");
+            expect($v1Ele).to.not.be.null;
+
+            this.data.title = "test 2";
+            this.$view.DomDataBind.setData(this.data);
+            expect(this.$div.querySelector("h1")).to.equal($v1Ele);
+            expect(this.$div.textContent).to.equal("View 1: test 2");
+        });
+
+        it("should destroy prior view template if a new one is given as the value", function () {
+            const $v1Ele = this.$div.querySelector("h1");
+            expect($v1Ele).to.not.be.null;
+
+            this.data.showView = this.v2;
+            this.$view.DomDataBind.setData(this.data);
+            expect(this.$div.contains($v1Ele)).to.be.false;
+            expect(this.$div.querySelector("h2")).to.not.be.null;
+        });
+
     });
 });

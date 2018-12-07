@@ -1,19 +1,22 @@
-import Directive from "../directives/Directive"
-import {
-    UUID,
-    createTextNode,
-    createValueGetter,
-    createComment,
-    arraySlice
-} from "../utils"
+import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
+import {domRemoveChild} from "@purtuga/common/src/domutils/domRemoveChild.js"
 import {
     isUndefined,
     isNull,
     isDocFragment
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
-import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
-import {domRemoveChild} from "@purtuga/common/src/domutils/domRemoveChild.js"
+import Directive from "../directives/Directive"
+import {
+    UUID,
+    PRIVATE,
+    createTextNode,
+    createValueGetter,
+    createComment,
+    arraySlice
+} from "../utils"
 import {NodeHandler} from "../directives/NodeHandler.js";
+import {Template} from "../Template.js";
+import {render} from "../render.js";
 
 //===========================================================
 const ID = "text.binding";
@@ -45,13 +48,31 @@ class TextBindingNodeHandler extends NodeHandler {
         }
 
         this._externalNodes = null; // Array
+        this._template = null;
+        this._templateInst = null;
     }
 
     update(newValue) {
-        // Null and
+        // Null and Undefined values
         if (isNull(newValue) || isUndefined(newValue)) {
             this.clear();
             this.setPlaceholder();
+            return;
+        }
+
+        // Is it a Template?
+        if (newValue instanceof Template) {
+            const data = PRIVATE.get(this).data;
+            if (this._template && this._template.id === newValue.id) {
+                this._templateInst.DomDataBind.setData(data);
+                return;
+            }
+
+            this.clear();
+            this.setPlaceholder();
+            this._template = newValue;
+            this._templateInst = render(newValue, data, this._directives);
+            domInsertBefore(this._templateInst, this._placeholderEle);
             return;
         }
 
@@ -108,8 +129,16 @@ class TextBindingNodeHandler extends NodeHandler {
             );
     }
 
+    destroyTemplateView() {
+        if (this._templateInst) {
+            this._templateInst.DomDataBind.destroy();
+            this._templateInst = this._template = null;
+        }
+    }
+
     clear() {
         this.removeExternals();
+        this.destroyTemplateView();
         this._node.nodeValue = "";
     }
 
@@ -118,6 +147,11 @@ class TextBindingNodeHandler extends NodeHandler {
             domInsertBefore(this._placeholderEle, this._node);
             domRemoveChild(this._node);
         }
+    }
+
+    destroy() {
+        super.destroy();
+        this.clear();
     }
 }
 

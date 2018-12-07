@@ -29,6 +29,7 @@ export class TemplateInstance {
      * Destroys all bindings of the Template
      */
     destroy() {
+        this.recover();
         if (this._bindings) {
             for (let i = 0, t = this._bindings.length; i < t; i++) {
                 this._bindings[i].destroy();
