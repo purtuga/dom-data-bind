@@ -15,7 +15,11 @@ describe("ESM Exports", function() {
         });
     });
 
-    it("should have `allDirectives1 as an array", function () {
+    it("should have `allDirectives` as an array", function () {
         expect(domDataBind.allDirectives).to.be.an("array");
+    });
+
+    it("should have all expected directives in allDirectives array", function () {
+        expect(domDataBind.allDirectives.length).to.be.equal(Object.keys(domDataBind.directives).length);
     });
 });

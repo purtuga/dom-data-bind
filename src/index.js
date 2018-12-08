@@ -7,7 +7,14 @@ import * as directives   from "./directives/index.js";
 //----------------------------------------------------------------------
 
 const DomDataBindAll = DomDataBind.extend();
-const allDirectives = Object.keys(directives).map(directiveName => directives[directiveName]);
+const allDirectives = [directives.EachDirective, directives.IfDirective];
+
+Object.keys(directives).forEach(directiveName => {
+    if (allDirectives.indexOf(directives[directiveName]) === -1) {
+        allDirectives.push(directives[directiveName]);
+    }
+});
+
 DomDataBindAll.directives = allDirectives;
 
 export * from "./directives/index.js"
