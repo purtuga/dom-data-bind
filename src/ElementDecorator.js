@@ -23,7 +23,7 @@ const memberToApply = [
  * @dataBoundTemplates()
  * class NewElement extends ComponentElement {}
  */
-export function dataBoundTemplates (optionsOrClassDescriptor) {
+export function dataBoundTemplates(optionsOrClassDescriptor) {
     const opt = optionsOrClassDescriptor;
 
     function applyDirectiveToClass(classDescriptor) {
