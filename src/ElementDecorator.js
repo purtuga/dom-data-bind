@@ -13,6 +13,9 @@ const memberToApply = [
  * uses data binding. (essentially, copies the methods from `DomDataBindElement`
  * to the given class.
  *
+ * @param {Object} [optionsOrClassDescriptor]
+ * @param {Array} [optionsOrClassDescriptor.directives]
+ *
  * @returns {function(*): *}
  *
  * @example
@@ -20,9 +23,10 @@ const memberToApply = [
  * @dataBoundTemplates()
  * class NewElement extends ComponentElement {}
  */
-export function dataBoundTemplates (/*options*/) {
+export function dataBoundTemplates (optionsOrClassDescriptor) {
+    const opt = optionsOrClassDescriptor;
 
-    return function (classDescriptor) {
+    function applyDirectiveToClass(classDescriptor) {
         memberToApply.forEach(memberName => {
             classDescriptor.elements.push({
                 key: memberName,
@@ -32,6 +36,27 @@ export function dataBoundTemplates (/*options*/) {
             });
         });
 
+        // Add directive list if one was set
+        if (opt && opt.directives) {
+            classDescriptor.elements.push({
+                kind: "field",
+                key: "directives",
+                placement: "static",
+                descriptor: { configurable: true },
+                initializer() {
+                    return opt.directives;
+                }
+            });
+        }
+
         return classDescriptor
-    };
+    }
+
+    // If this is being called with the actual Class decoratorDescriptor,
+    // then decorate the class
+    if (optionsOrClassDescriptor && optionsOrClassDescriptor.kind) {
+        applyDirectiveToClass(optionsOrClassDescriptor);
+    }
+
+    return applyDirectiveToClass;
 }
