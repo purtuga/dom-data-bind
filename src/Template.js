@@ -13,7 +13,7 @@ import {
     logError,
     createElement,
     isTemplate
-} from "./utils"
+} from "./utils.js"
 import TextBinding from "./bindings/text-binding.js"
 
 

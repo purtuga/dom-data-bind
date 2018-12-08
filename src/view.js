@@ -1,3 +1,4 @@
+import {Map} from "@purtuga/common/src/jsutils/Map.js";
 import Template from "./Template.js"
 import {isString} from "./utils.js";
 import {isTemplate} from "./utils.js";

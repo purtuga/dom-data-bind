@@ -1,12 +1,12 @@
-import Directive    from "./Directive"
+import Directive    from "./Directive.js"
 import {
     PRIVATE,
     DOM_DATA_BIND_PROP,
     hasAttribute,
     createComment,
     removeChild,
-    createValueGetter } from "../utils"
-import {render} from "../render"
+    createValueGetter } from "../utils.js"
+import {render} from "../render.js"
 import {NodeHandler} from "./NodeHandler.js";
 import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
 

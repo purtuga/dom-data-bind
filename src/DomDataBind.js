@@ -1,7 +1,7 @@
-import Compose from "@purtuga/common/src/jsutils/Compose"
-import { PRIVATE, arrayForEach, isString } from "./utils"
-import { getBindingFor, applyBindingsToTemplateInstance } from "./Template"
-import { render } from "./render";
+import Compose from "@purtuga/common/src/jsutils/Compose.js"
+import { PRIVATE, arrayForEach, isString } from "./utils.js"
+import { getBindingFor, applyBindingsToTemplateInstance } from "./Template.js"
+import { render } from "./render.js";
 
 //======================================================================
 

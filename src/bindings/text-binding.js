@@ -5,7 +5,7 @@ import {
     isNull,
     isDocFragment
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
-import Directive from "../directives/Directive"
+import Directive from "../directives/Directive.js"
 import {
     UUID,
     PRIVATE,
@@ -13,7 +13,7 @@ import {
     createValueGetter,
     createComment,
     arraySlice
-} from "../utils"
+} from "../utils.js"
 import {NodeHandler} from "../directives/NodeHandler.js";
 import {Template} from "../Template.js";
 import {render} from "../render.js";
@@ -21,8 +21,6 @@ import {render} from "../render.js";
 //===========================================================
 const ID = "text.binding";
 const isAttached = node => !!node.parentNode;
-
-// FIXME: handle `newValue` being a ViewTemplate. In this case, we render() that template and store the result. On subsquent updates, if result is teh same, only update its value
 
 class TextBindingNodeHandler extends NodeHandler {
     init(...args) {

@@ -1,11 +1,11 @@
-import Map from "@purtuga/common/src/jsutils/es6-Map"
+import {Map} from "@purtuga/common/src/jsutils/Map.js"
 import {domInsertBefore} from "@purtuga/common/src/domutils/domInsertBefore.js"
 import {
     arraySplice,
     isArray,
     objectKeys
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
-import Directive from "./Directive"
+import Directive from "./Directive.js"
 import {
     arrayForEach,
     createComment,
@@ -19,7 +19,7 @@ import {
     removeChild
 } from "../utils"
 
-import {render} from "../render";
+import {render} from "../render.js";
 import {view} from "../view.js";
 import {NodeHandler} from "./NodeHandler.js";
 

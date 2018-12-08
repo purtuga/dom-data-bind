@@ -1,6 +1,10 @@
 import Compose from "@purtuga/common/src/jsutils/Compose.js";
 import {PRIVATE} from "../utils.js";
 
+//============================================================
+
+// FIXME: replace use of Compose.js
+
 /**
  * A Directive Node handler
  *

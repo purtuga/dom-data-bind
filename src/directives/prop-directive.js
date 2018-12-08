@@ -1,4 +1,6 @@
-import AttrDirective from "./attr-directive"
+import AttrDirective from "./attr-directive.js"
+
+//==========================================================
 
 const matchRegExp = /^_prop\.(.*)/;
 export class PropDirective extends AttrDirective {

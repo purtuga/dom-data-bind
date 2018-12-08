@@ -1,5 +1,5 @@
-import dataStore    from "@purtuga/common/src/jsutils/dataStore"
-import Map          from "@purtuga/common/src/jsutils/es6-Map"
+import dataStore    from "@purtuga/common/src/jsutils/dataStore.js"
+import {Map}        from "@purtuga/common/src/jsutils/Map.js"
 import {
     functionBindCall,
     isObject,
@@ -18,6 +18,7 @@ import {
     functionBind
 } from "@purtuga/common/src/jsutils/runtime-aliases.js"
 import {isTemplateElement} from "@purtuga/common/src/domutils/isTemplateElement.js"
+
 //=====================================================
 const DOCUMENT              = document;
 const FUNCTION              = Function;

@@ -1,11 +1,11 @@
-import domHasClass      from "@purtuga/common/src/domutils/domHasClass"
-import domAddClass      from "@purtuga/common/src/domutils/domAddClass"
-import domRemoveClass   from "@purtuga/common/src/domutils/domRemoveClass"
-import Directive        from "./Directive"
+import domHasClass      from "@purtuga/common/src/domutils/domHasClass.js"
+import domAddClass      from "@purtuga/common/src/domutils/domAddClass.js"
+import domRemoveClass   from "@purtuga/common/src/domutils/domRemoveClass.js"
+import Directive        from "./Directive.js"
 import {
     PRIVATE,
     createValueGetter,
-    hasAttribute  } from "../utils"
+    hasAttribute  } from "../utils.js"
 import {NodeHandler} from "./NodeHandler.js";
 
 //============================================

@@ -14,6 +14,11 @@ const memberToApply = [
  * to the given class.
  *
  * @returns {function(*): *}
+ *
+ * @example
+ *
+ * @dataBoundTemplates()
+ * class NewElement extends ComponentElement {}
  */
 export function dataBoundTemplates (/*options*/) {
 

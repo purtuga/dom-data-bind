@@ -1,7 +1,7 @@
-import Directive        from "./Directive"
+import Directive        from "./Directive.js"
 import {
     createValueGetter,
-    hasAttribute    }   from "../utils"
+    hasAttribute    }   from "../utils.js"
 import {NodeHandler} from "./NodeHandler.js";
 
 //============================================

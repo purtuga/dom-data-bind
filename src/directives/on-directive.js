@@ -1,11 +1,12 @@
-import domAddEventListener  from "@purtuga/common/src/domutils/domAddEventListener"
-import Directive            from "./Directive"
+import domAddEventListener  from "@purtuga/common/src/domutils/domAddEventListener.js"
+import Directive            from "./Directive.js"
 import {
     PRIVATE,
     escapeString,
     createValueGetter,
     getNodeAttrNames,
-    logError } from "../utils"
+    logError
+} from "../utils.js"
 
 //============================================
 const DIRECTIVE             = "_on.";

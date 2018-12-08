@@ -1,9 +1,11 @@
 import {
     createValueGetter,
-    hasAttribute    }   from "../utils"
-import Directive        from "./Directive"
+    hasAttribute
+}   from "../utils.js"
+import Directive        from "./Directive.js"
 import {NodeHandler} from "./NodeHandler.js";
 import {domSetStyle} from "@purtuga/common/src/domutils/domSetStyle.js"
+
 //============================================
 const DIRECTIVE = "_style";
 

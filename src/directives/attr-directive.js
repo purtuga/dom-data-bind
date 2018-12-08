@@ -1,10 +1,10 @@
-import Directive                from "./Directive"
+import Directive                from "./Directive.js"
 import {
     PRIVATE,
     removeAttribute,
     setAttribute,
     createValueGetter,
-    getNodeAttrNames } from "../utils"
+    getNodeAttrNames } from "../utils.js"
 import {NodeHandler} from "./NodeHandler.js";
 
 //============================================

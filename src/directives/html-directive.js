@@ -1,8 +1,8 @@
-import Directive                from "./Directive"
+import Directive                from "./Directive.js"
 import {
     PRIVATE,
     createValueGetter,
-    hasAttribute } from "../utils"
+    hasAttribute } from "../utils.js"
 import {NodeHandler} from "./NodeHandler.js";
 //============================================
 const DIRECTIVE = "_html";

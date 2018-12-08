@@ -1,8 +1,10 @@
-import Compose from "@purtuga/common/src/jsutils/Compose"
-import {logError, PRIVATE, removeAttribute} from "../utils"
+import Compose from "@purtuga/common/src/jsutils/Compose.js"
+import {logError, PRIVATE, removeAttribute} from "../utils.js"
 import {NodeHandler} from "./NodeHandler.js";
 
 //===================================================================================
+
+// FIXME: replace use of Compose.js
 
 /**
  * A DOM element directive.
