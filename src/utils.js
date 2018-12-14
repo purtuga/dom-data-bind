@@ -96,3 +96,23 @@ export function getNodeAttrNames(node){
 
     return attrNames;
 }
+
+/**
+ * Parses a directive string and returns an object with its values.
+ * @param directiveString
+ * @returns {{value: string, hasModifiers: boolean, modifiers: object}}
+ */
+export function parseDirectiveString(directiveString) {
+    const response = {
+        value: "",
+        hasModifiers: true,
+        modifiers: directiveString.split(/\./)
+    };
+    response.value = response.modifiers.shift();
+    response.hasModifiers = Boolean(response.modifiers.length);
+    response.modifiers = response.modifiers.reduce((modifiers, key) => {
+        modifiers[key] = true;
+        return modifiers;
+    }, {});
+    return response;
+}
