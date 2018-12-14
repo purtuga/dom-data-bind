@@ -27,7 +27,7 @@ import {NodeHandler} from "./NodeHandler.js";
 const EACH = Symbol("directive.each.setup");
 const DIRECTIVE     = "_each";
 const KEY_DIRECTIVE = "_key";
-const destroyBinder = binder => binder._destroy();
+const destroyBinder = binder => binder && binder._destroy();
 const defaultRowKey = data => data;
 const isEmptyList   = list => (isArray(list) && !list.length) || (isPureObject(list) && !objectKeys(list).length);
 
