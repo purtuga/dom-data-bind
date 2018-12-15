@@ -41,16 +41,21 @@ export class IfDirective extends Directive {
                 this._renderedEle = render(this._renderTemplate, state.data, this._directives);
                 domInsertBefore(this._renderedEle, this._placeholderEle);
             } else if (!showElement)  {
-                this.destroy_renderedEle();
+                this.teardown();
             }
         }
 
-        destroy_renderedEle() {
+        teardown() {
             if (this._renderedEle) {
                 this._renderedEle[DOM_DATA_BIND_PROP].recover();
                 this._renderedEle[DOM_DATA_BIND_PROP].destroy();
                 this._renderedEle = null;
             }
+        }
+        
+        destroy() {
+            this.teardown();
+            super.destroy();
         }
     };
 
