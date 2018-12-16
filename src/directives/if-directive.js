@@ -52,7 +52,7 @@ export class IfDirective extends Directive {
                 this._renderedEle = null;
             }
         }
-        
+
         destroy() {
             this.teardown();
             super.destroy();
