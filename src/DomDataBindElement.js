@@ -6,7 +6,11 @@
 //
 //------------------------------------------------------------------------
 import {ComponentElement} from "@purtuga/component-element/src/ComponentElement.js"
-import {prepareRenderedContent, supportsNativeShadowDom} from "@purtuga/component-element/src/polyfill-support.js"
+import {
+    prepareRenderedContent,
+    supportsNativeShadowDom,
+    reStyleComponentInstanceSubtree
+} from "@purtuga/component-element/src/polyfill-support.js"
 import {objectExtend} from "@purtuga/common/src/jsutils/objectExtend.js"
 import {throwIfThisIsPrototype} from "@purtuga/common/src/jsutils/throwIfThisIsPrototype.js"
 import {createElement, defineProperty} from "@purtuga/common/src/jsutils/runtime-aliases.js";
@@ -100,24 +104,23 @@ export class DomDataBindElement extends ComponentElement {
         // If it is the same as the template currently displayed - exit; Nothing to do.
         if (binding.current && binding.current.DomDataBind.fromTemplateId === viewTemplate.id) {
             binding.current.DomDataBind.setData(this);
+            reStyleComponentInstanceSubtree(this);
             return;
         }
-
-        // Create a new instance of this template
-        viewTemplate = render(viewTemplate, this, this.constructor.directives);
-
-        if (!SHADOW_DOM_SUPPORTED) {
-            prepareRenderedContent(viewTemplate, this);
-        }
-
-        this.$ui.textContent = "";
-        this.$ui.appendChild(viewTemplate);
 
         if (binding.current) {
             binding.current.DomDataBind.destroy();
         }
 
-        binding.current = viewTemplate;
+        // Create a new instance of this template
+        binding.current = render(viewTemplate, this, this.constructor.directives);
+
+        this.$ui.textContent = "";
+        this.$ui.appendChild(binding.current);
+
+        if (!SHADOW_DOM_SUPPORTED) {
+            reStyleComponentInstanceSubtree(this);
+        }
     }
 
     /**

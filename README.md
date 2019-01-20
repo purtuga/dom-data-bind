@@ -181,25 +181,35 @@ Bind HTML markup to the elements (sets its `innerHTML`). __WARNING__: Inserting 
 
 ## Custom Element Constructor (`DomDataBindElement`)
 
-A Custom Element constructor (base class) is also provided which uses ComponentElement. To use it, ComponentElement must first be installed - installation of his library will not install it automatically.
+A Custom Element constructor (base class) - `src/DomDataBindElement.js` - is also provided which uses `@purtuga/component-element`. This base class is not exported nor is it included in the built bundle, and must be `import`'d explicitly in order to be used. `@purtuga/component-element` must first be installed - installation of his library will not install it automatically.
 
-The `DomDataBindElement` will contain an instance member called `state` which is an `Observable`. The Element's template, when rendered, will be provided with an object containing two properties: `props` and `state`.
+The `DomDataBindElement` will contain an instance member called `state` which should be set component is Mounted and which changes automatically trigger a render lifecycle to be scheduled.
 
-Example:
+### Install
+
+Ensure `@purtuga/component-element` is installed
+```bash
+npm i @purtuga/component-element --save
+```
+
+### Example
 
 ```javascript
 import {DomDataBindElement} from "dom-data-bind/src/DomDataBindElement"
 
 class MyEle extends DomDataBindElement {
-    static get template() {
-        return `<div>{{state.msg}}</div>`;
+    didMount() {
+        this.state = {
+            msg: "Hello World"
+        }
     }
     
-    ready() {
-        this.state.msg = "hello world!";
+    render() {
+        return `<div>{{state.msg}}</div>`;
     }
 }
 ```
+
 
 
 # License
@@ -207,7 +217,4 @@ class MyEle extends DomDataBindElement {
 [MIT](LICENSE)
 
 
-# TODO
-
-- [ ] Support directive `modifiers` - similar to VueJS... like: `.once` (does not bind, but rather only sets one time)
 
