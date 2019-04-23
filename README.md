@@ -1,6 +1,6 @@
 # dom-data-bind
 
-Tiny and supper simple way to bind data to DOM elements. Inspired by VueJS's templating system, which when combined with the [Observables](https://github.com/purtuga/observables) library, provide similar "auto-update-view-as-data-changes" functionality.
+Tiny and supper simple way to bind data to DOM elements. Inspired by VueJS's templating system, which when combined with the [Observables](https://github.com/purtuga/observables) library, provides similar "auto-update-view-as-data-changes" (reactivity) functionality.
 
 [See Todo app demo](http://jsbin.com/qisojaveme/2)
 
@@ -18,8 +18,11 @@ import {render, allDirectives} from "dom-data-bind"
 const data = {
     firstName: "Paul"
 };
-const div = document.createElement("div");
 const divBinder = render(`<div>{{ firstName }}</div>`, data, allDirectives);
+
+
+// Insert data bound rendered templated instance into the document's body
+document.body.appendChild(divBinder);
 
 // Later....
 data.firstName = "Tom";
